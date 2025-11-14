@@ -1,0 +1,54 @@
+# https://taskfile.dev
+
+version: '3'
+
+interval: 250ms
+
+tasks:
+  tools:
+    - go install github.com/go-task/task/v3/cmd/task@latest
+    - go install github.com/a-h/templ/cmd/templ@latest
+
+  build:
+    method: none
+    desc: build the go binary
+    deps:
+      - kill
+      - templ
+    sources:
+      - "**/*.go"
+      - ./web/static/**/*
+    generates:
+      - ./dist/main
+    cmds:
+      - go mod tidy
+      - go build -o ./dist/main ./main.go
+
+  start:
+    desc: Builds and starts the golang app with live reload
+    # watch: true
+    cmds:
+      - task: build
+      - './dist/main'
+    sources: 
+      - ./**/*.go
+      - ./**/*.html
+
+  templ:
+    env:
+      TEMPL_EXPERIMENT: rawgo
+    sources:
+      - "**/*.templ"
+    generates:
+      - "**/*_temple.go"
+    cmds:
+      - templ generate .
+
+  kill:
+    method: none
+    cmds:
+      - fuser -k 8080/tcp > /dev/null 2>&1 || true
+
+  default:
+    cmds:
+      - task: start
