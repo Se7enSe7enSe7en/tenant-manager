@@ -1,13 +1,16 @@
 # https://taskfile.dev
 
+# Setup guide:
+# STEP 1: install task, `go get -tool github.com/go-task/task/v3/cmd/task@latest`
+# STEP 2: use task to run the "setup" command `go tool task setup`
+
 version: '3'
 
 interval: 250ms
 
 tasks:
-  tools:
-    - go install github.com/go-task/task/v3/cmd/task@latest
-    - go install github.com/a-h/templ/cmd/templ@latest
+  setup:
+    - go get -tool github.com/a-h/templ/cmd/templ@latest
 
   build:
     method: none
@@ -42,7 +45,7 @@ tasks:
     generates:
       - "**/*_temple.go"
     cmds:
-      - templ generate .
+      - go tool templ generate .
 
   kill:
     method: none
