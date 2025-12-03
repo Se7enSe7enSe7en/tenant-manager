@@ -1,18 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- note: this meta tag is for auto refreshing every 1sec. remove this on production
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>tenant-manager</title>
+
+  <!-- note: this meta tag is for auto refreshing every 1sec. remove this on production
     or we find a better way to hot reload -->
-    <meta http-equiv="Refresh" content="1" />
-    
-    <title>tenant-manager</title>
-  </head>
-  <body>
-    <main>
-        <h1>Tenant Manager</h1>
-    </main>
-  </body>
+  <meta http-equiv="Refresh" content="1" />
+
+  <style>
+    @import "https://unpkg.com/open-props";
+    @import "https://unpkg.com/open-props/normalize.min.css";
+
+    main {
+      display: flex;
+      flex-flow: row wrap;
+      align-items: flex-start;
+      justify-content: space-around;
+      max-inline-size: calc(var(--size-content-1) * 4);
+      gap: var(--size-5);
+      padding: var(--size-5);
+    }
+
+    .card {
+      flex-basis: var(--size-content-1);
+      display: flex;
+      flex-direction: column;
+      gap: var(--size-2);
+      background: var(--surface-3);
+      border: 1px solid var(--surface-1)
+    }
+  </style>
+</head>
+
+<body>
+  <main>
+    <!-- <h1>Tenant Manager</h1> -->
+
+    <!-- Card  -->
+    <div class="card">
+      <h5>house 1</h5>
+      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed eum quia odit odio obcaecati amet ab nemo. Optio
+        beatae molestias, commodi magni similique expedita, nemo facilis magnam nostrum ullam velit.</p>
+    </div>
+  </main>
+</body>
+
 </html>
