@@ -1,31 +1,30 @@
 package main
 
 import (
-	"embed"
-	"io/fs"
+	"context"
 	"log"
 	"net/http"
 
-	"github.com/benbjohnson/hashfs"
+	web "github.com/Se7enSe7enSe7en/tenant-manager/web/static"
 )
 
 const port = "8080"
-
-//go:embed web/static/*
-var staticFS embed.FS
-
-// hashed static FS, this is for http caching
-var staticSys = hashfs.NewFS(staticFS)
 
 func main() {
 	// create server mux
 	mux := http.NewServeMux()
 
 	// register handlers
+	// mux.Handle("/", templ.Handler(web.MainPage()))
+
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		content, _ := fs.Sub(staticSys, "web/static")
-		http.FileServer(http.FS(content)).ServeHTTP(w, r)
+		web.MainPage().Render(context.Background(), w)
 	})
+
+	// mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+	// 	content, _ := fs.Sub(staticSys, "web/static")
+	// 	http.FileServer(http.FS(content)).ServeHTTP(w, r)
+	// })
 
 	// init server
 	s := &http.Server{

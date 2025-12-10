@@ -2,7 +2,7 @@ module github.com/Se7enSe7enSe7en/tenant-manager
 
 go 1.24.4
 
-require github.com/benbjohnson/hashfs v0.2.2
+require github.com/a-h/templ v0.3.960
 
 require (
 	dario.cat/mergo v1.0.0 // indirect
@@ -11,7 +11,6 @@ require (
 	github.com/Microsoft/go-winio v0.6.2 // indirect
 	github.com/ProtonMail/go-crypto v1.1.6 // indirect
 	github.com/a-h/parse v0.0.0-20250122154542-74294addb73e // indirect
-	github.com/a-h/templ v0.3.960 // indirect
 	github.com/alecthomas/chroma/v2 v2.20.0 // indirect
 	github.com/andybalholm/brotli v1.1.0 // indirect
 	github.com/cenkalti/backoff/v4 v4.3.0 // indirect
@@ -74,6 +73,7 @@ require (
 )
 
 tool (
+	github.com/Se7enSe7enSe7en/tenant-manager
 	github.com/a-h/templ/cmd/templ
 	github.com/go-task/task/v3/cmd/task
 )

@@ -1,0 +1,120 @@
+package web
+
+templ MainPage() {
+	<!DOCTYPE html>
+	<html lang="en">
+		<head>
+			<meta charset="UTF-8"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+			<title>tenant-manager</title>
+			<!-- note: this meta tag is for auto refreshing every 1sec. remove this on production
+    or we find a better way to hot reload -->
+			<meta http-equiv="Refresh" content="1"/>
+			<style>
+    @import "https://unpkg.com/open-props";
+    @import "https://unpkg.com/open-props/normalize.min.css";
+
+    :root {
+      --card-width: var(--size-content-2);
+      --house-background-grey-color: var(--gray-6);
+      --house-background-green-color: var(--green-6);
+      --house-background-red-color: var(--red-6);
+    }
+
+    main {
+      display: flex;
+      flex-flow: row wrap;
+      align-items: flex-start;
+      gap: var(--size-2);
+      padding: var(--size-2);
+      border: 0.5rem solid var(--gray-7);
+    }
+
+    .card {
+      flex-basis: var(--card-width);
+      display: flex;
+      flex-direction: column;
+      gap: var(--size-2);
+      background: var(--surface-3);
+      border: 1px solid var(--surface-1);
+      padding: var(--size-4);
+      border-radius: var(--radius-3);
+      box-shadow: var(--shadow-2);
+    }
+
+    .house-background {
+      border-radius: var(--radius-3);
+      padding: var(--size-2);
+    }
+
+    .house-background.unpaid {
+      background: var(--house-background-grey-color);
+    }
+
+    .house-background.paid {
+      background: var(--house-background-green-color);
+    }
+
+    .house-background.late {
+      background: var(--house-background-red-color);
+    }
+  </style>
+		</head>
+		<body>
+			<main>
+				<!-- <h1>Tenant Manager</h1> -->
+				<!-- Card  -->
+				<div class="card">
+					<div class="house-background unpaid">
+						<img src="assets/house.svg" alt="house image"/>
+					</div>
+					<h5>house 1000</h5>
+					<p>
+						Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed eum quia odit odio obcaecati amet ab nemo. Optio
+						beatae molestias, commodi magni similique expedita, nemo facilis magnam nostrum ullam velit.
+					</p>
+				</div>
+				<div class="card">
+					<div class="house-background paid">
+						<img src="assets/house.svg" alt="house image"/>
+					</div>
+					<h5>house 2</h5>
+					<p>
+						Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed eum quia odit odio obcaecati amet ab nemo. Optio
+						beatae molestias, commodi magni similique expedita, nemo facilis magnam nostrum ullam velit.
+					</p>
+				</div>
+				<div class="card">
+					<div class="house-background late">
+						<img src="assets/house.svg" alt="house image"/>
+					</div>
+					<h5>house 3</h5>
+					<p>
+						Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed eum quia odit odio obcaecati amet ab nemo. Optio
+						beatae molestias, commodi magni similique expedita, nemo facilis magnam nostrum ullam velit.
+					</p>
+				</div>
+				<div class="card">
+					<div class="house-background unpaid">
+						<img src="assets/house.svg" alt="house image"/>
+					</div>
+					<h5>house 4</h5>
+					<p>
+						Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed eum quia odit odio obcaecati amet ab nemo. Optio
+						beatae molestias, commodi magni similique expedita, nemo facilis magnam nostrum ullam velit.
+					</p>
+				</div>
+				<div class="card">
+					<div class="house-background unpaid">
+						<img src="assets/house.svg" alt="house image"/>
+					</div>
+					<h5>house 5</h5>
+					<p>
+						Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed eum quia odit odio obcaecati amet ab nemo. Optio
+						beatae molestias, commodi magni similique expedita, nemo facilis magnam nostrum ullam velit.
+					</p>
+				</div>
+			</main>
+		</body>
+	</html>
+}

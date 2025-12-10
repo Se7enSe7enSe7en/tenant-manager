@@ -17,7 +17,7 @@ tasks:
     desc: build the go binary
     deps:
       - kill
-      - templ
+      # - templ # TODO: fix issue where this causes the task -w start not working
     sources:
       - "**/*.go"
       - ./web/static/**/*
@@ -46,6 +46,16 @@ tasks:
       - "**/*_temple.go"
     cmds:
       - go tool templ generate .
+
+  templ:watch:
+    env:
+      TEMPL_EXPERIMENT: rawgo
+    sources:
+      - "**/*.templ"
+    generates:
+      - "**/*_temple.go"
+    cmds:
+      - go tool templ generate --watch
 
   kill:
     method: none
