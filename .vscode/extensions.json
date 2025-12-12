@@ -1,7 +1,8 @@
 {
-    "recommendations": [
-        "golang.go",
-        "phoenisx.cssvar",
-        "a-h.templ",
-    ]
+  "recommendations": [
+    "golang.go",
+    "phoenisx.cssvar",
+    "a-h.templ",
+    "esbenp.prettier-vscode"
+  ]
 }

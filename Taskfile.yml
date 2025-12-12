@@ -4,20 +4,33 @@
 # STEP 1: install task, `go get -tool github.com/go-task/task/v3/cmd/task@latest`
 # STEP 2: use task to run the "setup" command `go tool task setup`
 
-version: '3'
+version: "3"
 
-interval: 250ms
+interval: 500ms # note: this is the watch interval, taskfile will watch for changes every 500ms
 
 tasks:
   setup:
     - go get -tool github.com/a-h/templ/cmd/templ@latest
 
-  build:
+  kill:
     method: none
+    cmds:
+      - fuser -k 8080/tcp > /dev/null 2>&1 || true
+
+  templ:
+    sources:
+      - "**/*.templ"
+    generates:
+      - "**/*_templ.go"
+    cmds:
+      - go tool templ generate .
+
+  build:
+    # method: none
     desc: build the go binary
     deps:
       - kill
-      # - templ # TODO: fix issue where this causes the task -w start not working
+      - templ # TODO: fix issue where this causes the task -w start not working
     sources:
       - "**/*.go"
       - ./web/static/**/*
@@ -28,39 +41,41 @@ tasks:
       - go build -o ./dist/main ./main.go
 
   start:
-    desc: Builds and starts the golang app with live reload
-    # watch: true
+    # method: none
+    desc: Builds and starts the golang app
+    deps:
+      - build
     cmds:
-      - task: build
-      - './dist/main'
-    sources: 
+      - "./dist/main"
+    sources:
       - ./**/*.go
       - ./**/*.html
+      - ./**/*.templ
+      - exclude: ./**/*_templ.go
 
-  templ:
-    env:
-      TEMPL_EXPERIMENT: rawgo
-    sources:
-      - "**/*.templ"
-    generates:
-      - "**/*_temple.go"
-    cmds:
-      - go tool templ generate .
+  # start:watch:
+  #   # method: none
+  #   desc: Builds and starts the golang app with live reload
+  #   cmds:
+  #     - task: build
+  #     - task: templ:watch
+  #       background: true
+  #     - "./dist/main"
+  #   sources:
+  #     - ./**/*.go
+  #     - ./**/*.html
+  #   watch: true
 
-  templ:watch:
-    env:
-      TEMPL_EXPERIMENT: rawgo
-    sources:
-      - "**/*.templ"
-    generates:
-      - "**/*_temple.go"
-    cmds:
-      - go tool templ generate --watch
-
-  kill:
-    method: none
-    cmds:
-      - fuser -k 8080/tcp > /dev/null 2>&1 || true
+  # templ:watch:
+  #   env:
+  #     TEMPL_EXPERIMENT: rawgo
+  #   sources:
+  #     - "**/*.templ"
+  #   generates:
+  #     - "**/*_temple.go"
+  #   cmds:
+  #     - go tool templ generate
+  #   watch: true
 
   default:
     cmds:

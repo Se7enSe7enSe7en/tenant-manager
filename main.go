@@ -14,17 +14,13 @@ func main() {
 	// create server mux
 	mux := http.NewServeMux()
 
-	// register handlers
-	// mux.Handle("/", templ.Handler(web.MainPage()))
+	// serve static files
+	fs := http.FileServer(http.Dir("./web/static/assets"))
+	mux.Handle("/assets/", http.StripPrefix("/assets/", fs))
 
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		web.MainPage().Render(context.Background(), w)
 	})
-
-	// mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-	// 	content, _ := fs.Sub(staticSys, "web/static")
-	// 	http.FileServer(http.FS(content)).ServeHTTP(w, r)
-	// })
 
 	// init server
 	s := &http.Server{
