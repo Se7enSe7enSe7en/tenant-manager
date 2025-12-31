@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 
-	web "github.com/Se7enSe7enSe7en/tenant-manager/web/templ"
+	web "github.com/Se7enSe7enSe7en/tenant-manager/web/components"
 )
 
 const port = "8080"

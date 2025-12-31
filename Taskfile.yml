@@ -8,47 +8,65 @@ version: "3"
 
 interval: 500ms # note: this is the watch interval, taskfile will watch for changes every 500ms
 
+vars:
+  PORT: 8080
+
 tasks:
   setup:
     - go get -tool github.com/a-h/templ/cmd/templ@latest
 
   kill:
     method: none
+    desc: Kills process on port 8080
     cmds:
-      - fuser -k 8080/tcp > /dev/null 2>&1 || true
+      # kills process on port 8080 on linux
+      - cmd: fuser -k 8080/tcp > /dev/null 2>&1 || true
+        platforms: [linux]
 
-  templ:
-    sources:
-      - "**/*.templ"
-    generates:
-      - "**/*_templ.go"
-    cmds:
-      - go tool templ generate .
+      # kills process on port 8080 on macOS (darwin)
+      - cmd: (lsof -nti :{{.PORT}} | xargs kill -9) || true
+        platforms: [darwin]
 
   build:
-    # method: none
     desc: build the go binary
-    deps:
-      - kill
-      - templ
     sources:
       - "**/*.go"
-      - ./web/static/**/*
-      - exclude: "**/*_templ.go"
+      - "./web/static/**/*"
+      - "**/*.templ"
+      # TODO: uncomment this when we figure how to wait for the entire "templ generate" process
+      # - exclude: "**/*_templ.go"
+      - exclude: "./dist/**/*"
     generates:
+      - "**/*_templ.go"
       - ./dist/main
     cmds:
+      - go tool templ generate -lazy .
+      # note: the "-lazy" prevents a loop
+
       - go mod tidy
       - go build -o ./dist/main ./main.go
 
   start:
-    # method: none
-    desc: Builds and starts the golang app
-    deps:
-      - build
+    method: none
+    desc: watch, build then start the project
     cmds:
-      - "./dist/main"
+      - task: kill
+      - task: build
+      - ./dist/main
+    watch: true
+    ignore_error: true
+    # note: the "ignore_error" is to prevent the task from failing to start again with "watch" since an error
+    # will occur when the server gets forcefully killed by the "kill" task.
+    # This however will cause a side effect where task will start again after a
+    # fatal error in the server.
+    # TODO: figure out a way to prevent this side effect.
 
   default:
     cmds:
       - task: start
+# Notes:
+# there is a single loop that occurs after the build because of templ generate
+# when the *_templ.go files are generated, the build task is triggered
+# but this only loops once because of the "-lazy" flag of "templ generate -lazy ."
+# because this flag causes the templ generate to only generate when there are changes
+# in the .templ files
