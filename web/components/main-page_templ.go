@@ -8,6 +8,8 @@ package web
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
+import "github.com/Se7enSe7enSe7en/tenant-manager/internal/utils"
+
 func MainPage() templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
@@ -29,7 +31,65 @@ func MainPage() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<!doctype html><html lang=\"en\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>tenant-manager</title><!-- note: this meta tag is for auto refreshing every 1sec. remove this on production\n    or we find a better way to hot reload --><meta http-equiv=\"Refresh\" content=\"2\"><style>\n\t\t@import \"https://unpkg.com/open-props\";\n\t\t@import \"https://unpkg.com/open-props/normalize.min.css\";\n\n\t\t:root {\n\t\t\t--card-width: var(--size-content-2);\n\t\t\t--house-background-gray-color: var(--gray-6);\n\t\t\t--house-background-green-color: var(--green-6);\n\t\t\t--house-background-red-color: var(--red-6);\n\t\t}\n\n\t\tmain {\n\t\t\tdisplay: flex;\n\t\t\tflex-flow: row wrap;\n\t\t\talign-items: flex-start;\n\t\t\tgap: var(--size-2);\n\t\t\tpadding: var(--size-2);\n\t\t\tborder: 0.5rem solid var(--gray-7);\n\t\t}\n\n\t\t.card {\n\t\t\tflex-basis: var(--card-width);\n\t\t\tdisplay: flex;\n\t\t\tflex-direction: column;\n\t\t\tgap: var(--size-2);\n\t\t\tbackground: var(--surface-3);\n\t\t\tborder: 1px solid var(--surface-1);\n\t\t\tpadding: var(--size-4);\n\t\t\tborder-radius: var(--radius-3);\n\t\t\tbox-shadow: var(--shadow-2);\n\t\t}\n\n\t\t.house-background {\n\t\t\tborder-radius: var(--radius-3);\n\t\t\tpadding: var(--size-2);\n\t\t}\n\n\t\t.house-background.unpaid {\n\t\t\tbackground: var(--house-background-gray-color);\n\t\t}\n\n\t\t.house-background.paid {\n\t\t\tbackground: var(--house-background-green-color);\n\t\t}\n\n\t\t.house-background.late {\n\t\t\tbackground: var(--house-background-red-color);\n\t\t}\n\t</style></head><body><main><!-- <h1>Tenant Manager</h1> --><!-- Card  --><div class=\"card\"><div class=\"house-background paid\"><img src=\"assets/house.svg\" alt=\"house image\"></div><h5>house 1</h5><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed eum quia odit odio obcaecati amet ab nemo. Optio beatae molestias, commodi magni similique expedita, nemo facilis magnam nostrum ullam velit.</p></div><div class=\"card\"><div class=\"house-background unpaid\"><img src=\"assets/house.svg\" alt=\"house image\"></div><h5>house 2</h5><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed eum quia odit odio obcaecati amet ab nemo. Optio beatae molestias, commodi magni similique expedita, nemo facilis magnam nostrum ullam velit.</p></div><div class=\"card\"><div class=\"house-background unpaid\"><img src=\"assets/house.svg\" alt=\"house image\"></div><h5>house 3</h5><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed eum quia odit odio obcaecati amet ab nemo. Optio beatae molestias, commodi magni similique expedita, nemo facilis magnam nostrum ullam velit.</p></div><div class=\"card\"><div class=\"house-background unpaid\"><img src=\"assets/house.svg\" alt=\"house image\"></div><h5>house 4</h5><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed eum quia odit odio obcaecati amet ab nemo. Optio beatae molestias, commodi magni similique expedita, nemo facilis magnam nostrum ullam velit.</p></div><div class=\"card\"><div class=\"house-background unpaid\"><img src=\"assets/house.svg\" alt=\"house image\"></div><h5>house 5</h5><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed eum quia odit odio obcaecati amet ab nemo. Optio beatae molestias, commodi magni similique expedita, nemo facilis magnam nostrum ullam velit.</p></div></main></body></html>")
+		templ_7745c5c3_Var2 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
+			templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
+			templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
+			if !templ_7745c5c3_IsBuffer {
+				defer func() {
+					templ_7745c5c3_BufErr := templruntime.ReleaseBuffer(templ_7745c5c3_Buffer)
+					if templ_7745c5c3_Err == nil {
+						templ_7745c5c3_Err = templ_7745c5c3_BufErr
+					}
+				}()
+			}
+			ctx = templ.InitializeContext(ctx)
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<style>\n\t@scope(.page) {\n\n\t\t/* scoped variables */\n\t\t& {\n\t\t\t--card-width: var(--size-content-1);\n\t\t}\t\n\n\t\t.card-container {\n\t\t\tdisplay: flex;\n\t\t\tflex-flow: row wrap;\n\t\t\talign-items: flex-start;\n\t\t\tgap: var(--size-2);\n\t\t\tpadding: var(--size-2);\n\t\t}\n\n\t\t.card {\n\t\t\tflex-basis: var(--card-width);\n\t\t\tdisplay: flex;\n\t\t\tflex-direction: column;\n\t\t\tgap: var(--size-2);\n\t\t\tbackground: var(--bg-card-color);\n\t\t\tborder: var(--border-size-1) solid var(--gray-6);\n\t\t\tpadding: var(--size-4);\n\t\t\tborder-radius: var(--radius-3);\n\t\t\tbox-shadow: var(--shadow-2);\n\t\t}\n\n\t\t.house-background {\n\t\t\tborder-radius: var(--radius-3);\n\t\t\tpadding: var(--size-2);\n\t\t}\n\n\t\t.house-background.unpaid {\n\t\t\tbackground: var(--unpaid-color);\n\t\t}\n\n\t\t.house-background.paid {\n\t\t\tbackground: var(--paid-color);\n\t\t}\n\n\t\t.house-background.late {\n\t\t\tbackground: var(--late-color);\n\t\t}\n\n\t\t.stat-card-container {\n\t\t\tdisplay: flex;\n\t\t\tflex-wrap: wrap;\n\t\t\tgap: var(--size-2);\n\t\t\tpadding: var(--size-2);\n\t\t\talign-items: center;\n\t\t\tjustify-content: center;\n\t\t}\n\t}\n</style> <div class=\"page\"><div class=\"stat-card-container\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = StatCard(StatCardParams{
+				title:    "Total tenants",
+				value:    "5",
+				subtitle: utils.Ptr("Active units"),
+				icon:     utils.Ptr("assets/tenants-icon.svg"),
+			}).Render(ctx, templ_7745c5c3_Buffer)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = StatCard(StatCardParams{
+				title:    "Paid",
+				value:    "1",
+				subtitle: utils.Ptr("₱15,000 collected"),
+				icon:     utils.Ptr("assets/paid-icon.svg"),
+			}).Render(ctx, templ_7745c5c3_Buffer)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = StatCard(StatCardParams{
+				title:    "Unpaid",
+				value:    "3",
+				subtitle: utils.Ptr("Awaiting payment"),
+				icon:     utils.Ptr("assets/unpaid-icon.svg"),
+			}).Render(ctx, templ_7745c5c3_Buffer)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = StatCard(StatCardParams{
+				title:    "Late",
+				value:    "1",
+				subtitle: utils.Ptr("Overdue payments"),
+				icon:     utils.Ptr("assets/late-icon.svg"),
+			}).Render(ctx, templ_7745c5c3_Buffer)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</div><div class=\"card-container\"><div class=\"card\"><div class=\"house-background paid\"><img src=\"assets/house.svg\" alt=\"house image\"></div><h5>Tenant 1</h5><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed eum quia odit odio obcaecati amet ab nemo. Optio beatae molestias, commodi magni similique expedita, nemo facilis magnam nostrum ullam velit.</p></div><div class=\"card\"><div class=\"house-background late\"><img src=\"assets/house.svg\" alt=\"house image\"></div><h5>Tenant 2</h5><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed eum quia odit odio obcaecati amet ab nemo. Optio beatae molestias, commodi magni similique expedita, nemo facilis magnam nostrum ullam velit.</p></div><div class=\"card\"><div class=\"house-background unpaid\"><img src=\"assets/house.svg\" alt=\"house image\"></div><h5>Tenant 3</h5><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed eum quia odit odio obcaecati amet ab nemo. Optio beatae molestias, commodi magni similique expedita, nemo facilis magnam nostrum ullam velit.</p></div><div class=\"card\"><div class=\"house-background unpaid\"><img src=\"assets/house.svg\" alt=\"house image\"></div><h5>Tenant 4</h5><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed eum quia odit odio obcaecati amet ab nemo. Optio beatae molestias, commodi magni similique expedita, nemo facilis magnam nostrum ullam velit.</p></div><div class=\"card\"><div class=\"house-background unpaid\"><img src=\"assets/house.svg\" alt=\"house image\"></div><h5>Tenant 5</h5><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed eum quia odit odio obcaecati amet ab nemo. Optio beatae molestias, commodi magni similique expedita, nemo facilis magnam nostrum ullam velit.</p></div></div></div>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			return nil
+		})
+		templ_7745c5c3_Err = Layout().Render(templ.WithChildren(ctx, templ_7745c5c3_Var2), templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

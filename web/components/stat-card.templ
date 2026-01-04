@@ -1,0 +1,68 @@
+package web
+
+type StatCardParams struct {
+	title    string
+	value    string
+	subtitle *string
+	icon     *string
+}
+
+templ StatCard(params StatCardParams) {
+	<style>
+		@scope (.component) {
+			.stat-card {
+				display: flex;
+				background-color: var(--bg-card-color);
+				padding: var(--size-3);
+				border: var(--border-size-1) solid var(--gray-6);
+				border-radius: var(--size-2);
+				min-width: var(--size-fluid-9);
+				justify-content: space-between;		
+			}
+
+			.content {
+				display: flex;
+				flex-direction: column;
+			}
+
+			.title {
+				font-size: var(--font-size-3);
+				font-weight: var(--font-weight-5);
+			}
+
+			.value {
+				font-size: var(--font-size-5);
+				font-weight: var(--font-weight-7);
+			}
+
+			.subtitle {
+				font-size: var(--font-size-0);
+				font-weight: var(--font-weight-3);
+			}
+
+			.icon-container {
+				background-color: var(--surface-3);
+				border-radius: var(--size-2);
+				padding: var(--size-2);
+				block-size: var(--size-8);
+				inline-size: var(--size-8);
+			}
+		}
+    </style>
+	<div class="component">
+		<div class="stat-card">
+			<div class="content">
+				<p class="title">{ params.title }</p>
+				<p class="value">{ params.value }</p>
+				if params.subtitle != nil {
+					<p class="subtitle">{ *params.subtitle }</p>
+				}
+			</div>
+			if params.icon != nil {
+				<div class="icon-container">
+					<img src={ *params.icon }/>
+				</div>
+			}
+		</div>
+	</div>
+}
