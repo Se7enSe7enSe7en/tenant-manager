@@ -7,9 +7,13 @@ templ Layout() {
 			<meta charset="UTF-8"/>
 			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 			<title>tenant-manager</title>
-			<!-- note: this meta tag is for auto refreshing every 1sec. remove this on production
-    		or we find a better way to hot reload -->
+			// note: this meta tag is for auto refreshing every 2sec. remove this on production
+			// or we find a better way to hot reload
 			<meta http-equiv="Refresh" content="2"/>
+			// note: these tags below are for preventing caching so we can see the changes immedietely
+			<meta http-equiv="cache-control" content="no-cache, must-revalidate, post-check=0, pre-check=0"/>
+			<meta http-equiv="expires" content="0"/>
+			<meta http-equiv="pragma" content="no-cache"/>
 			<style>
 				@import "https://unpkg.com/open-props";
 				@import "https://unpkg.com/open-props/normalize.min.css";
