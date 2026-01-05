@@ -47,16 +47,17 @@ tasks:
 
   start:
     method: none
-    desc: build then start the project
-    sources:
-      - "**/*.go"
-      - "./web/static/**/*"
-      - "**/*.templ"
-      # TODO: uncomment this when we figure how to wait for the entire "templ generate" process
-      # - exclude: "**/*_templ.go"
-      - exclude: "./dist/**/*"
+    desc: watch for changes and start the project
     cmds:
-      - go tool templ generate --watch --cmd="go run ." --proxy="http://localhost:{{.PORT}}"
+      - go tool templ generate --watch --proxy="http://localhost:{{.PORT}}" --cmd="go run -tags=debug ."
+
+  start-prod:
+    method: none
+    desc: build and start the project for production
+    cmds:
+      - task: build
+      - ./dist/main
+
   default:
     cmds:
       - task: start

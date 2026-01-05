@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/Se7enSe7enSe7en/go-toolkit/pkg/logger"
 	web "github.com/Se7enSe7enSe7en/tenant-manager/web/components"
 )
 
@@ -30,7 +31,8 @@ func main() {
 	}
 
 	// start server
-	log.Printf("Actual Port: http://localhost:%v", port)
-	log.Printf("Proxy Port (Templ hot reload): http://localhost:%v", proxy_port)
+	log.Printf("For Production, open the actual port: http://localhost:%v", port)
+	logger.Debug("For Development, open the proxy port (for templ hot reload): http://localhost:%v", proxy_port)
+
 	log.Fatalln(s.ListenAndServe())
 }
