@@ -9,6 +9,7 @@ import (
 )
 
 const port = "8080"
+const proxy_port = "7331"
 
 func main() {
 	// create server mux
@@ -29,6 +30,7 @@ func main() {
 	}
 
 	// start server
-	log.Printf("Open browser to: http://localhost:%v", port)
+	log.Printf("Actual Port: http://localhost:%v", port)
+	log.Printf("Proxy Port (Templ hot reload): http://localhost:%v", proxy_port)
 	log.Fatalln(s.ListenAndServe())
 }

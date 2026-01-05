@@ -10,6 +10,7 @@ interval: 500ms # note: this is the watch interval, taskfile will watch for chan
 
 vars:
   PORT: 8080
+  PROXY_PORT: 7331
 
 tasks:
   setup:
@@ -41,18 +42,21 @@ tasks:
       - ./dist/main
     cmds:
       - go tool templ generate -lazy .
-      # note: the "-lazy" prevents a loop
-
       - go mod tidy
       - go build -o ./dist/main ./main.go
 
   start:
     method: none
     desc: build then start the project
+    sources:
+      - "**/*.go"
+      - "./web/static/**/*"
+      - "**/*.templ"
+      # TODO: uncomment this when we figure how to wait for the entire "templ generate" process
+      # - exclude: "**/*_templ.go"
+      - exclude: "./dist/**/*"
     cmds:
-      - task: build
-      - ./dist/main
-
+      - go tool templ generate --watch --cmd="go run ." --proxy="http://localhost:{{.PORT}}"
   default:
     cmds:
       - task: start

@@ -7,21 +7,15 @@ templ Layout() {
 			<meta charset="UTF-8"/>
 			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 			<title>tenant-manager</title>
-			// note: this meta tag is for auto refreshing every 2sec. remove this on production
-			// or we find a better way to hot reload
-			<meta http-equiv="Refresh" content="2"/>
-			// note: these tags below are for preventing caching so we can see the changes immedietely
 			// TODO: set these in the response header instead, create some sort of middleware
 			// it is not recommended to use meta tags for this, explaination: https://stackoverflow.com/a/2068407
 			<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
-			// <meta http-equiv="Pragma" content="no-cache"/>
-			// <meta http-equiv="Expires" content="0"/>
 			<style>
 				@import "https://unpkg.com/open-props";
 				@import "https://unpkg.com/open-props/normalize.min.css";
 				@import "https://unpkg.com/open-props/theme.light.switch.min.css";
 				@import "https://unpkg.com/open-props/theme.dark.switch.min.css";
-
+				
 				:root {
 					--bg-card-color: var(--surface-2);
 
