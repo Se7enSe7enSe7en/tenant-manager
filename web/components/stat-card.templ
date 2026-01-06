@@ -1,13 +1,13 @@
 package web
 
-type StatCardParams struct {
+type StatCardProps struct {
 	title    string
 	value    string
 	subtitle *string
 	icon     *string
 }
 
-templ StatCard(params StatCardParams) {
+templ StatCard(params StatCardProps) {
 	<style>
 		@scope (.component) {
 			.stat-card {

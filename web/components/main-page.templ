@@ -5,144 +5,99 @@ import "github.com/Se7enSe7enSe7en/tenant-manager/internal/utils"
 templ MainPage() {
 	@Layout() {
 		<style>
-	@scope(.page) {
+			@scope(.page) {
 
-		/* scoped variables */
-		& {
-			--card-width: var(--size-content-1);
-		}	
+			& {
+				/* scoped variables */
+				--card-width: var(--size-content-1);
 
-		.card-container {
-			display: flex;
-			flex-flow: row wrap;
-			align-items: flex-start;
-			gap: var(--size-2);
-			padding: var(--size-2);
+				padding: var(--size-3);
+			}
+
+			.card-container {
+				display: flex;
+				flex-flow: row wrap;
+				align-items: flex-start;
+				gap: var(--size-2);
+				padding-top: var(--size-2);
+				padding-bottom: var(--size-2);
+			}
+
+			.card {
+				flex-basis: var(--card-width);
+				display: flex;
+				flex-direction: column;
+				gap: var(--size-2);
+				background: var(--bg-card-color);
+				border: var(--border-size-1) solid var(--gray-6);
+				padding: var(--size-4);
+				border-radius: var(--radius-3);
+				box-shadow: var(--shadow-2);
+			}
+
+			.house-background {
+				border-radius: var(--radius-3);
+				padding: var(--size-2);
+			}
+
+			.house-background.unpaid {
+				background: var(--unpaid-color);
+			}
+
+			.house-background.paid {
+				background: var(--paid-color);
+			}
+
+			.house-background.late {
+				background: var(--late-color);
+			}
+
+			.stat-card-container {
+				display: flex;
+				flex-wrap: wrap;
+				gap: var(--size-2);
+				padding-top: var(--size-2);
+				padding-bottom: var(--size-2);
+				align-items: center;
+				justify-content: center;
+			}
+
+			.card-container-label {
+				font-size: var(--font-size-3);
+				padding-top: var(--size-4);
+				padding-bottom: var(--size-4);
+			}
 		}
-
-		.card {
-			flex-basis: var(--card-width);
-			display: flex;
-			flex-direction: column;
-			gap: var(--size-2);
-			background: var(--bg-card-color);
-			border: var(--border-size-1) solid var(--gray-6);
-			padding: var(--size-4);
-			border-radius: var(--radius-3);
-			box-shadow: var(--shadow-2);
-		}
-
-		.house-background {
-			border-radius: var(--radius-3);
-			padding: var(--size-2);
-		}
-
-		.house-background.unpaid {
-			background: var(--unpaid-color);
-		}
-
-		.house-background.paid {
-			background: var(--paid-color);
-		}
-
-		.house-background.late {
-			background: var(--late-color);
-		}
-
-		.stat-card-container {
-			display: flex;
-			flex-wrap: wrap;
-			gap: var(--size-2);
-			padding: var(--size-2);
-			align-items: center;
-			justify-content: center;
-		}
-	}
-</style>
+		</style>
 		<div class="page">
 			<div class="stat-card-container">
-				@StatCard(StatCardParams{
+				@StatCard(StatCardProps{
 					title:    "Total tenants",
 					value:    "5",
 					subtitle: utils.Ptr("Active units"),
 					icon:     utils.Ptr("assets/tenants-icon.svg"),
 				})
-				@StatCard(StatCardParams{
+				@StatCard(StatCardProps{
 					title:    "Paid",
 					value:    "1",
 					subtitle: utils.Ptr("₱15,000 collected"),
 					icon:     utils.Ptr("assets/paid-icon.svg"),
 				})
-				@StatCard(StatCardParams{
+				@StatCard(StatCardProps{
 					title:    "Unpaid",
 					value:    "3",
 					subtitle: utils.Ptr("Awaiting payment"),
 					icon:     utils.Ptr("assets/unpaid-icon.svg"),
 				})
-				@StatCard(StatCardParams{
+				@StatCard(StatCardProps{
 					title:    "Late",
 					value:    "1",
 					subtitle: utils.Ptr("Overdue payments"),
 					icon:     utils.Ptr("assets/late-icon.svg"),
 				})
 			</div>
-			<div class="card-container">
-				<div class="card">
-					<div class="house-background paid">
-						<img src="assets/house.svg" alt="house image"/>
-					</div>
-					<h5>Tenant 1</h5>
-					<p>
-						Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed eum quia odit odio obcaecati amet ab nemo.
-						Optio
-						beatae molestias, commodi magni similique expedita, nemo facilis magnam nostrum ullam velit.
-					</p>
-				</div>
-				<div class="card">
-					<div class="house-background late">
-						<img src="assets/house.svg" alt="house image"/>
-					</div>
-					<h5>Tenant 2</h5>
-					<p>
-						Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed eum quia odit odio obcaecati amet ab nemo.
-						Optio
-						beatae molestias, commodi magni similique expedita, nemo facilis magnam nostrum ullam velit.
-					</p>
-				</div>
-				<div class="card">
-					<div class="house-background unpaid">
-						<img src="assets/house.svg" alt="house image"/>
-					</div>
-					<h5>Tenant 3</h5>
-					<p>
-						Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed eum quia odit odio obcaecati amet ab nemo.
-						Optio
-						beatae molestias, commodi magni similique expedita, nemo facilis magnam nostrum ullam velit.
-					</p>
-				</div>
-				<div class="card">
-					<div class="house-background unpaid">
-						<img src="assets/house.svg" alt="house image"/>
-					</div>
-					<h5>Tenant 4</h5>
-					<p>
-						Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed eum quia odit odio obcaecati amet ab nemo.
-						Optio
-						beatae molestias, commodi magni similique expedita, nemo facilis magnam nostrum ullam velit.
-					</p>
-				</div>
-				<div class="card">
-					<div class="house-background unpaid">
-						<img src="assets/house.svg" alt="house image"/>
-					</div>
-					<h5>Tenant 5</h5>
-					<p>
-						Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed eum quia odit odio obcaecati amet ab nemo.
-						Optio
-						beatae molestias, commodi magni similique expedita, nemo facilis magnam nostrum ullam velit.
-					</p>
-				</div>
-			</div>
+			<p class="card-container-label">All Tenants</p>
+			<div class="card-container"></div>
 		</div>
 	}
 }

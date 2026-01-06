@@ -43,11 +43,11 @@ func MainPage() templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<style>\n\t@scope(.page) {\n\n\t\t/* scoped variables */\n\t\t& {\n\t\t\t--card-width: var(--size-content-1);\n\t\t}\t\n\n\t\t.card-container {\n\t\t\tdisplay: flex;\n\t\t\tflex-flow: row wrap;\n\t\t\talign-items: flex-start;\n\t\t\tgap: var(--size-2);\n\t\t\tpadding: var(--size-2);\n\t\t}\n\n\t\t.card {\n\t\t\tflex-basis: var(--card-width);\n\t\t\tdisplay: flex;\n\t\t\tflex-direction: column;\n\t\t\tgap: var(--size-2);\n\t\t\tbackground: var(--bg-card-color);\n\t\t\tborder: var(--border-size-1) solid var(--gray-6);\n\t\t\tpadding: var(--size-4);\n\t\t\tborder-radius: var(--radius-3);\n\t\t\tbox-shadow: var(--shadow-2);\n\t\t}\n\n\t\t.house-background {\n\t\t\tborder-radius: var(--radius-3);\n\t\t\tpadding: var(--size-2);\n\t\t}\n\n\t\t.house-background.unpaid {\n\t\t\tbackground: var(--unpaid-color);\n\t\t}\n\n\t\t.house-background.paid {\n\t\t\tbackground: var(--paid-color);\n\t\t}\n\n\t\t.house-background.late {\n\t\t\tbackground: var(--late-color);\n\t\t}\n\n\t\t.stat-card-container {\n\t\t\tdisplay: flex;\n\t\t\tflex-wrap: wrap;\n\t\t\tgap: var(--size-2);\n\t\t\tpadding: var(--size-2);\n\t\t\talign-items: center;\n\t\t\tjustify-content: center;\n\t\t}\n\t}\n</style> <div class=\"page\"><div class=\"stat-card-container\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<style>\n\t\t\t@scope(.page) {\n\n\t\t\t& {\n\t\t\t\t/* scoped variables */\n\t\t\t\t--card-width: var(--size-content-1);\n\n\t\t\t\tpadding: var(--size-3);\n\t\t\t}\n\n\t\t\t.card-container {\n\t\t\t\tdisplay: flex;\n\t\t\t\tflex-flow: row wrap;\n\t\t\t\talign-items: flex-start;\n\t\t\t\tgap: var(--size-2);\n\t\t\t\tpadding-top: var(--size-2);\n\t\t\t\tpadding-bottom: var(--size-2);\n\t\t\t}\n\n\t\t\t.card {\n\t\t\t\tflex-basis: var(--card-width);\n\t\t\t\tdisplay: flex;\n\t\t\t\tflex-direction: column;\n\t\t\t\tgap: var(--size-2);\n\t\t\t\tbackground: var(--bg-card-color);\n\t\t\t\tborder: var(--border-size-1) solid var(--gray-6);\n\t\t\t\tpadding: var(--size-4);\n\t\t\t\tborder-radius: var(--radius-3);\n\t\t\t\tbox-shadow: var(--shadow-2);\n\t\t\t}\n\n\t\t\t.house-background {\n\t\t\t\tborder-radius: var(--radius-3);\n\t\t\t\tpadding: var(--size-2);\n\t\t\t}\n\n\t\t\t.house-background.unpaid {\n\t\t\t\tbackground: var(--unpaid-color);\n\t\t\t}\n\n\t\t\t.house-background.paid {\n\t\t\t\tbackground: var(--paid-color);\n\t\t\t}\n\n\t\t\t.house-background.late {\n\t\t\t\tbackground: var(--late-color);\n\t\t\t}\n\n\t\t\t.stat-card-container {\n\t\t\t\tdisplay: flex;\n\t\t\t\tflex-wrap: wrap;\n\t\t\t\tgap: var(--size-2);\n\t\t\t\tpadding-top: var(--size-2);\n\t\t\t\tpadding-bottom: var(--size-2);\n\t\t\t\talign-items: center;\n\t\t\t\tjustify-content: center;\n\t\t\t}\n\n\t\t\t.card-container-label {\n\t\t\t\tfont-size: var(--font-size-3);\n\t\t\t\tpadding-top: var(--size-4);\n\t\t\t\tpadding-bottom: var(--size-4);\n\t\t\t}\n\t\t}\n\t\t</style> <div class=\"page\"><div class=\"stat-card-container\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = StatCard(StatCardParams{
+			templ_7745c5c3_Err = StatCard(StatCardProps{
 				title:    "Total tenants",
 				value:    "5",
 				subtitle: utils.Ptr("Active units"),
@@ -56,7 +56,7 @@ func MainPage() templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = StatCard(StatCardParams{
+			templ_7745c5c3_Err = StatCard(StatCardProps{
 				title:    "Paid",
 				value:    "1",
 				subtitle: utils.Ptr("₱15,000 collected"),
@@ -65,7 +65,7 @@ func MainPage() templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = StatCard(StatCardParams{
+			templ_7745c5c3_Err = StatCard(StatCardProps{
 				title:    "Unpaid",
 				value:    "3",
 				subtitle: utils.Ptr("Awaiting payment"),
@@ -74,7 +74,7 @@ func MainPage() templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = StatCard(StatCardParams{
+			templ_7745c5c3_Err = StatCard(StatCardProps{
 				title:    "Late",
 				value:    "1",
 				subtitle: utils.Ptr("Overdue payments"),
@@ -83,7 +83,7 @@ func MainPage() templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</div><div class=\"card-container\"><div class=\"card\"><div class=\"house-background paid\"><img src=\"assets/house.svg\" alt=\"house image\"></div><h5>Tenant 1</h5><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed eum quia odit odio obcaecati amet ab nemo. Optio beatae molestias, commodi magni similique expedita, nemo facilis magnam nostrum ullam velit.</p></div><div class=\"card\"><div class=\"house-background late\"><img src=\"assets/house.svg\" alt=\"house image\"></div><h5>Tenant 2</h5><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed eum quia odit odio obcaecati amet ab nemo. Optio beatae molestias, commodi magni similique expedita, nemo facilis magnam nostrum ullam velit.</p></div><div class=\"card\"><div class=\"house-background unpaid\"><img src=\"assets/house.svg\" alt=\"house image\"></div><h5>Tenant 3</h5><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed eum quia odit odio obcaecati amet ab nemo. Optio beatae molestias, commodi magni similique expedita, nemo facilis magnam nostrum ullam velit.</p></div><div class=\"card\"><div class=\"house-background unpaid\"><img src=\"assets/house.svg\" alt=\"house image\"></div><h5>Tenant 4</h5><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed eum quia odit odio obcaecati amet ab nemo. Optio beatae molestias, commodi magni similique expedita, nemo facilis magnam nostrum ullam velit.</p></div><div class=\"card\"><div class=\"house-background unpaid\"><img src=\"assets/house.svg\" alt=\"house image\"></div><h5>Tenant 5</h5><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed eum quia odit odio obcaecati amet ab nemo. Optio beatae molestias, commodi magni similique expedita, nemo facilis magnam nostrum ullam velit.</p></div></div></div>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</div><p class=\"card-container-label\">All Tenants</p><div class=\"card-container\"></div></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
