@@ -43,7 +43,7 @@ func MainPage() templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<style>\n\t\t\t@scope(.page) {\n\n\t\t\t& {\n\t\t\t\t/* scoped variables */\n\t\t\t\t--card-width: var(--size-content-1);\n\n\t\t\t\tpadding: var(--size-3);\n\t\t\t}\n\n\t\t\t.card-container {\n\t\t\t\tdisplay: flex;\n\t\t\t\tflex-flow: row wrap;\n\t\t\t\talign-items: flex-start;\n\t\t\t\tgap: var(--size-2);\n\t\t\t\tpadding-top: var(--size-2);\n\t\t\t\tpadding-bottom: var(--size-2);\n\t\t\t}\n\n\t\t\t.card {\n\t\t\t\tflex-basis: var(--card-width);\n\t\t\t\tdisplay: flex;\n\t\t\t\tflex-direction: column;\n\t\t\t\tgap: var(--size-2);\n\t\t\t\tbackground: var(--bg-card-color);\n\t\t\t\tborder: var(--border-size-1) solid var(--gray-6);\n\t\t\t\tpadding: var(--size-4);\n\t\t\t\tborder-radius: var(--radius-3);\n\t\t\t\tbox-shadow: var(--shadow-2);\n\t\t\t}\n\n\t\t\t.house-background {\n\t\t\t\tborder-radius: var(--radius-3);\n\t\t\t\tpadding: var(--size-2);\n\t\t\t}\n\n\t\t\t.house-background.unpaid {\n\t\t\t\tbackground: var(--unpaid-color);\n\t\t\t}\n\n\t\t\t.house-background.paid {\n\t\t\t\tbackground: var(--paid-color);\n\t\t\t}\n\n\t\t\t.house-background.late {\n\t\t\t\tbackground: var(--late-color);\n\t\t\t}\n\n\t\t\t.stat-card-container {\n\t\t\t\tdisplay: flex;\n\t\t\t\tflex-wrap: wrap;\n\t\t\t\tgap: var(--size-2);\n\t\t\t\tpadding-top: var(--size-2);\n\t\t\t\tpadding-bottom: var(--size-2);\n\t\t\t\talign-items: center;\n\t\t\t\tjustify-content: center;\n\t\t\t}\n\n\t\t\t.card-container-label {\n\t\t\t\tfont-size: var(--font-size-3);\n\t\t\t\tpadding-top: var(--size-4);\n\t\t\t\tpadding-bottom: var(--size-4);\n\t\t\t}\n\t\t}\n\t\t</style> <div class=\"page\"><div class=\"stat-card-container\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<style>\n\t\t\t@scope(.page) {\n\n\t\t\t& {\n\t\t\t\t/* scoped variables */\n\t\t\t\t--card-width: var(--size-content-1);\n\n\t\t\t\tpadding: var(--size-3);\n\t\t\t}\n\n\t\t\t.card-container {\n\t\t\t\tdisplay: flex;\n\t\t\t\tflex-flow: row wrap;\n\t\t\t\talign-items: flex-start;\n\t\t\t\tgap: var(--size-2);\n\t\t\t\tpadding-top: var(--size-2);\n\t\t\t\tpadding-bottom: var(--size-2);\n\t\t\t}\n\n\t\t\t.stat-card-container {\n\t\t\t\tdisplay: flex;\n\t\t\t\tflex-wrap: wrap;\n\t\t\t\tgap: var(--size-2);\n\t\t\t\tpadding-top: var(--size-2);\n\t\t\t\tpadding-bottom: var(--size-2);\n\t\t\t\talign-items: center;\n\t\t\t\tjustify-content: center;\n\t\t\t}\n\n\t\t\t.card-container-label {\n\t\t\t\tfont-size: var(--font-size-3);\n\t\t\t\tpadding-top: var(--size-4);\n\t\t\t\tpadding-bottom: var(--size-4);\n\t\t\t}\n\t\t}\n\t\t</style> <div class=\"page\"><div class=\"stat-card-container\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -83,7 +83,23 @@ func MainPage() templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</div><p class=\"card-container-label\">All Tenants</p><div class=\"card-container\"></div></div>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</div><p class=\"card-container-label\">All Tenants</p><div class=\"card-container\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = TenantCard(TenantCardProps{
+				name:            "Nikola Tesla",
+				unit:            "Apt #1",
+				status:          "UNPAID",
+				rentAmount:      "₱19,000",
+				lastPaymentDate: "2026-01-10",
+				email:           utils.Ptr("email@email.com"),
+				phoneNumber:     utils.Ptr("(+63)98 765 4321"),
+			}).Render(ctx, templ_7745c5c3_Buffer)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "</div></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

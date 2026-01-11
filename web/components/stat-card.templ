@@ -7,10 +7,10 @@ type StatCardProps struct {
 	icon     *string
 }
 
-templ StatCard(params StatCardProps) {
+templ StatCard(props StatCardProps) {
 	<style>
-		@scope (.component) {
-			.stat-card {
+		@scope (.stat-card) {
+			& {
 				display: flex;
 				background-color: var(--bg-card-color);
 				padding: var(--size-3);
@@ -49,20 +49,18 @@ templ StatCard(params StatCardProps) {
 			}
 		}
     </style>
-	<div class="component">
-		<div class="stat-card">
-			<div class="content">
-				<p class="title">{ params.title }</p>
-				<p class="value">{ params.value }</p>
-				if params.subtitle != nil {
-					<p class="subtitle">{ *params.subtitle }</p>
-				}
-			</div>
-			if params.icon != nil {
-				<div class="icon-container">
-					<img src={ *params.icon }/>
-				</div>
+	<div class="stat-card">
+		<div class="content">
+			<p class="title">{ props.title }</p>
+			<p class="value">{ props.value }</p>
+			if props.subtitle != nil {
+				<p class="subtitle">{ *props.subtitle }</p>
 			}
 		</div>
+		if props.icon != nil {
+			<div class="icon-container">
+				<img src={ *props.icon }/>
+			</div>
+		}
 	</div>
 }

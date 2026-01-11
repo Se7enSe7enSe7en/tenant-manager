@@ -23,35 +23,6 @@ templ MainPage() {
 				padding-bottom: var(--size-2);
 			}
 
-			.card {
-				flex-basis: var(--card-width);
-				display: flex;
-				flex-direction: column;
-				gap: var(--size-2);
-				background: var(--bg-card-color);
-				border: var(--border-size-1) solid var(--gray-6);
-				padding: var(--size-4);
-				border-radius: var(--radius-3);
-				box-shadow: var(--shadow-2);
-			}
-
-			.house-background {
-				border-radius: var(--radius-3);
-				padding: var(--size-2);
-			}
-
-			.house-background.unpaid {
-				background: var(--unpaid-color);
-			}
-
-			.house-background.paid {
-				background: var(--paid-color);
-			}
-
-			.house-background.late {
-				background: var(--late-color);
-			}
-
 			.stat-card-container {
 				display: flex;
 				flex-wrap: wrap;
@@ -97,7 +68,17 @@ templ MainPage() {
 				})
 			</div>
 			<p class="card-container-label">All Tenants</p>
-			<div class="card-container"></div>
+			<div class="card-container">
+				@TenantCard(TenantCardProps{
+					name: "Nikola Tesla",
+					unit: "Apt #1",
+					status: "UNPAID",
+					rentAmount: "₱19,000",
+					lastPaymentDate: "2026-01-10",
+					email: utils.Ptr("email@email.com"),
+					phoneNumber: utils.Ptr("(+63)98 765 4321"),
+				})
+			</div>
 		</div>
 	}
 }

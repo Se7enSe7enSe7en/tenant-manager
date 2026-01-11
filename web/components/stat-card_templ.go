@@ -15,7 +15,7 @@ type StatCardProps struct {
 	icon     *string
 }
 
-func StatCard(params StatCardProps) templ.Component {
+func StatCard(props StatCardProps) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -36,14 +36,14 @@ func StatCard(params StatCardProps) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<style>\n\t\t@scope (.component) {\n\t\t\t.stat-card {\n\t\t\t\tdisplay: flex;\n\t\t\t\tbackground-color: var(--bg-card-color);\n\t\t\t\tpadding: var(--size-3);\n\t\t\t\tborder: var(--border-size-1) solid var(--gray-6);\n\t\t\t\tborder-radius: var(--size-2);\n\t\t\t\tmin-width: var(--size-fluid-9);\n\t\t\t\tjustify-content: space-between;\t\t\n\t\t\t}\n\n\t\t\t.content {\n\t\t\t\tdisplay: flex;\n\t\t\t\tflex-direction: column;\n\t\t\t}\n\n\t\t\t.title {\n\t\t\t\tfont-size: var(--font-size-3);\n\t\t\t\tfont-weight: var(--font-weight-5);\n\t\t\t}\n\n\t\t\t.value {\n\t\t\t\tfont-size: var(--font-size-5);\n\t\t\t\tfont-weight: var(--font-weight-7);\n\t\t\t}\n\n\t\t\t.subtitle {\n\t\t\t\tfont-size: var(--font-size-0);\n\t\t\t\tfont-weight: var(--font-weight-3);\n\t\t\t}\n\n\t\t\t.icon-container {\n\t\t\t\tbackground-color: var(--surface-3);\n\t\t\t\tborder-radius: var(--size-2);\n\t\t\t\tpadding: var(--size-2);\n\t\t\t\tblock-size: var(--size-8);\n\t\t\t\tinline-size: var(--size-8);\n\t\t\t}\n\t\t}\n    </style><div class=\"component\"><div class=\"stat-card\"><div class=\"content\"><p class=\"title\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<style>\n\t\t@scope (.stat-card) {\n\t\t\t& {\n\t\t\t\tdisplay: flex;\n\t\t\t\tbackground-color: var(--bg-card-color);\n\t\t\t\tpadding: var(--size-3);\n\t\t\t\tborder: var(--border-size-1) solid var(--gray-6);\n\t\t\t\tborder-radius: var(--size-2);\n\t\t\t\tmin-width: var(--size-fluid-9);\n\t\t\t\tjustify-content: space-between;\t\t\n\t\t\t}\n\n\t\t\t.content {\n\t\t\t\tdisplay: flex;\n\t\t\t\tflex-direction: column;\n\t\t\t}\n\n\t\t\t.title {\n\t\t\t\tfont-size: var(--font-size-3);\n\t\t\t\tfont-weight: var(--font-weight-5);\n\t\t\t}\n\n\t\t\t.value {\n\t\t\t\tfont-size: var(--font-size-5);\n\t\t\t\tfont-weight: var(--font-weight-7);\n\t\t\t}\n\n\t\t\t.subtitle {\n\t\t\t\tfont-size: var(--font-size-0);\n\t\t\t\tfont-weight: var(--font-weight-3);\n\t\t\t}\n\n\t\t\t.icon-container {\n\t\t\t\tbackground-color: var(--surface-3);\n\t\t\t\tborder-radius: var(--size-2);\n\t\t\t\tpadding: var(--size-2);\n\t\t\t\tblock-size: var(--size-8);\n\t\t\t\tinline-size: var(--size-8);\n\t\t\t}\n\t\t}\n    </style><div class=\"stat-card\"><div class=\"content\"><p class=\"title\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var2 string
-		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(params.title)
+		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(props.title)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/components/stat-card.templ`, Line: 55, Col: 35}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/components/stat-card.templ`, Line: 54, Col: 33}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
@@ -54,9 +54,9 @@ func StatCard(params StatCardProps) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var3 string
-		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(params.value)
+		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(props.value)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/components/stat-card.templ`, Line: 56, Col: 35}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/components/stat-card.templ`, Line: 55, Col: 33}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 		if templ_7745c5c3_Err != nil {
@@ -66,15 +66,15 @@ func StatCard(params StatCardProps) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		if params.subtitle != nil {
+		if props.subtitle != nil {
 			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "<p class=\"subtitle\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var4 string
-			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(*params.subtitle)
+			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(*props.subtitle)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/components/stat-card.templ`, Line: 58, Col: 43}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/components/stat-card.templ`, Line: 57, Col: 41}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 			if templ_7745c5c3_Err != nil {
@@ -89,15 +89,15 @@ func StatCard(params StatCardProps) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		if params.icon != nil {
+		if props.icon != nil {
 			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "<div class=\"icon-container\"><img src=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var5 string
-			templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(*params.icon)
+			templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(*props.icon)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/components/stat-card.templ`, Line: 63, Col: 28}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/components/stat-card.templ`, Line: 62, Col: 26}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 			if templ_7745c5c3_Err != nil {
@@ -108,7 +108,7 @@ func StatCard(params StatCardProps) templ.Component {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "</div></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "</div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
