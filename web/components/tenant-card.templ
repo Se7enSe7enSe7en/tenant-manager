@@ -2,6 +2,17 @@ package web
 
 import "strings"
 
+func takeInitialsOfName(name string) string {
+	words := strings.Fields(name)
+
+	// Only take the Initials of the first 2 words
+	if len(words) >= 2 {
+		return strings.Join([]string{strings.ToUpper(string(words[0][0])), strings.ToUpper(string(words[1][0]))}, "")
+	}
+
+	return strings.ToUpper(string(words[0][0]))
+}
+
 type TenantCardProps struct {
 	name            string
 	unit            string
@@ -41,29 +52,30 @@ templ TenantCard(props TenantCardProps) {
 				text: var(--text-1);
 				font-size: var(--font-size-3);
 			}
+
+            .card-header-group {
+                display: flex;
+                gap: var(--size-3);
+            }
+
+            .card-header-words-group {
+                display: flex;
+                flex-direction: column;
+            }
 		}
     </style>
 	<div class="tenant-card">
 		<div class="card">
-			<div class="" >
-			<div class="profile-image">
-				// TODO: add if no image condition in the future
-				<span class="profile-text-placeholder">{ takeInitialsOfName(props.name) }</span>
-			</div>
-			<p class="name">{ props.name }</p>
-			<p class="value">{ props.unit }</p>
+			<div class="flex gap-3">
+				<div class="profile-image">
+					// TODO: add if no image condition in the future
+					<span class="profile-text-placeholder">{ takeInitialsOfName(props.name) }</span>
+				</div>
+				<div class="card-header-word-group">
+					<p class="name">{ props.name }</p>
+					<p class="value">{ props.unit }</p>
+				</div>
 			</div>
 		</div>
 	</div>
-}
-
-func takeInitialsOfName(name string) string {
-	words := strings.Fields(name)
-
-	// Only take the Initials of the first 2 words
-	if len(words) >= 2 {
-		return strings.Join([]string{strings.ToUpper(string(words[0][0])), strings.ToUpper(string(words[1][0]))}, "")
-	}
-
-	return strings.ToUpper(string(words[0][0]))
 }

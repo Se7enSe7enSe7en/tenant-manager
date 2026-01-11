@@ -4,6 +4,8 @@
 # STEP 1: install task, `go get -tool github.com/go-task/task/v3/cmd/task@latest`
 # STEP 2: use task to run the "setup" command `go tool task setup`
 
+# Setup tailwind without npm: https://tailwindcss.com/blog/standalone-cli
+
 version: "3"
 
 interval: 500ms # note: this is the watch interval, taskfile will watch for changes every 500ms
@@ -11,10 +13,35 @@ interval: 500ms # note: this is the watch interval, taskfile will watch for chan
 vars:
   PORT: 8080
   PROXY_PORT: 7331
+  TAILWIND_INPUT_CSS_PATH: ./web/static/assets/styles/input.css
+  TAILWIND_OUTPUT_CSS_PATH: ./web/static/assets/css/output.css
 
 tasks:
+  setup-tailwind-cli-mac:
+    platforms: [darwin]
+    cmds:
+      - curl -sLO https://github.com/tailwindlabs/tailwindcss/releases/latest/download/tailwindcss-macos-arm64
+      - chmod +x tailwindcss-macos-arm64
+      - mv tailwindcss-macos-arm64 tailwindcss
+
+  setup-tailwind-cli-linux:
+    platforms: [linux]
+    cmds:
+      - curl -sLO https://github.com/tailwindlabs/tailwindcss/releases/download/v4.1.18/tailwindcss-linux-x64
+      - chmod +x tailwindcss-linux-x64
+      - mv tailwindcss-linux-x64 tailwindcss
+
+  setup-tailwind:
+    deps:
+      - task: setup-tailwind-cli-mac
+      - task: setup-tailwind-cli-linux
+    cmds:
+      - ./tailwindcss init
+
   setup:
-    - go get -tool github.com/a-h/templ/cmd/templ@latest
+    deps:
+      - task: setup-tailwind
+      - go get -tool github.com/a-h/templ/cmd/templ@latest
 
   kill:
     method: none
@@ -42,14 +69,32 @@ tasks:
       - ./dist/main
     cmds:
       - go tool templ generate -lazy .
+      - ./tailwindcss --input {{.TAILWIND_INPUT_CSS_PATH}} --output {{.TAILWIND_OUTPUT_CSS_PATH}} --minify
       - go mod tidy
       - go build -o ./dist/main ./main.go
 
+  start-tailwind-watch:
+    cmds:
+      - ./tailwindcss --input {{.TAILWIND_INPUT_CSS_PATH}} --output {{.TAILWIND_OUTPUT_CSS_PATH}} --minify --watch
+
+  start-templ-watch:
+    cmds:
+      - go tool templ generate --watch --proxy="http://localhost:{{.PORT}}" --open-browser=false --cmd="go run -tags=debug ."
+
+  start-server:
+    cmds:
+      - go run -tags=debug .
+
+  # TODO: investigate further
+  # For some reason we can't parallel run the 3 tasks:
+  # 1. start-server
+  # 2. start-templ-watch
+  # 3. start-tailwind-watch
+  # hence we need `--cmd="go run -tags=debug ."` (start-server) to be in start-templ-watch
   start:
     method: none
     desc: watch for changes and start the project
-    cmds:
-      - go tool templ generate --watch --proxy="http://localhost:{{.PORT}}" --cmd="go run -tags=debug ."
+    deps: [start-tailwind-watch, start-templ-watch]
 
   start-prod:
     method: none
@@ -59,11 +104,4 @@ tasks:
       - ./dist/main
 
   default:
-    cmds:
-      - task: start
-# Notes:
-# there is a single loop that occurs after the build because of templ generate
-# when the *_templ.go files are generated, the build task is triggered
-# but this only loops once because of the "-lazy" flag of "templ generate -lazy ."
-# because this flag causes the templ generate to only generate when there are changes
-# in the .templ files
+    - task: start

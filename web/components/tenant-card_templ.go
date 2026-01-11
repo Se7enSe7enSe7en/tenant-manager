@@ -10,6 +10,17 @@ import templruntime "github.com/a-h/templ/runtime"
 
 import "strings"
 
+func takeInitialsOfName(name string) string {
+	words := strings.Fields(name)
+
+	// Only take the Initials of the first 2 words
+	if len(words) >= 2 {
+		return strings.Join([]string{strings.ToUpper(string(words[0][0])), strings.ToUpper(string(words[1][0]))}, "")
+	}
+
+	return strings.ToUpper(string(words[0][0]))
+}
+
 type TenantCardProps struct {
 	name            string
 	unit            string
@@ -41,27 +52,27 @@ func TenantCard(props TenantCardProps) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<style>\n\t\t@scope(.tenant-card) {\n\t\t\t.card {\n\t\t\t\tflex-basis: var(--card-width);\n\t\t\t\tdisplay: flex;\n\t\t\t\tflex-direction: column;\n\t\t\t\tgap: var(--size-2);\n\t\t\t\tbackground: var(--bg-card-color);\n\t\t\t\tborder: var(--border-size-1) solid var(--gray-6);\n\t\t\t\tpadding: var(--size-4);\n\t\t\t\tborder-radius: var(--radius-3);\n\t\t\t\tbox-shadow: var(--shadow-2);\n\t\t\t}\n\n\t\t\t.profile-image {\n\t\t\t\tdisplay: flex;\n\t\t\t\tjustify-content: center;\n\t\t\t\talign-items: center;\n\t\t\t\twidth: var(--size-8);\n\t\t\t\theight: var(--size-8);\n\t\t\t\tborder-radius: var(--radius-round);\n\t\t\t\tbackground-color: var(--surface-4);\n\t\t\t}\n\n\t\t\t.profile-text-placeholder {\n\t\t\t\ttext: var(--text-1);\n\t\t\t\tfont-size: var(--font-size-3);\n\t\t\t}\n\t\t}\n    </style><div class=\"tenant-card\"><div class=\"card\"><div class=\"\"><div class=\"profile-image\"><span class=\"profile-text-placeholder\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<style>\n\t\t@scope(.tenant-card) {\n\t\t\t.card {\n\t\t\t\tflex-basis: var(--card-width);\n\t\t\t\tdisplay: flex;\n\t\t\t\tflex-direction: column;\n\t\t\t\tgap: var(--size-2);\n\t\t\t\tbackground: var(--bg-card-color);\n\t\t\t\tborder: var(--border-size-1) solid var(--gray-6);\n\t\t\t\tpadding: var(--size-4);\n\t\t\t\tborder-radius: var(--radius-3);\n\t\t\t\tbox-shadow: var(--shadow-2);\n\t\t\t}\n\n\t\t\t.profile-image {\n\t\t\t\tdisplay: flex;\n\t\t\t\tjustify-content: center;\n\t\t\t\talign-items: center;\n\t\t\t\twidth: var(--size-8);\n\t\t\t\theight: var(--size-8);\n\t\t\t\tborder-radius: var(--radius-round);\n\t\t\t\tbackground-color: var(--surface-4);\n\t\t\t}\n\n\t\t\t.profile-text-placeholder {\n\t\t\t\ttext: var(--text-1);\n\t\t\t\tfont-size: var(--font-size-3);\n\t\t\t}\n\n            .card-header-group {\n                display: flex;\n                gap: var(--size-3);\n            }\n\n            .card-header-words-group {\n                display: flex;\n                flex-direction: column;\n            }\n\t\t}\n    </style><div class=\"tenant-card\"><div class=\"card\"><div class=\"flex gap-3 bg-amber-500\"><div class=\"profile-image\"><span class=\"profile-text-placeholder\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var2 string
 		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(takeInitialsOfName(props.name))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/components/tenant-card.templ`, Line: 51, Col: 75}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/components/tenant-card.templ`, Line: 72, Col: 76}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</span></div><p class=\"name\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</span></div><div class=\"card-header-word-group\"><p class=\"name\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var3 string
 		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(props.name)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/components/tenant-card.templ`, Line: 53, Col: 31}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/components/tenant-card.templ`, Line: 75, Col: 33}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 		if templ_7745c5c3_Err != nil {
@@ -74,29 +85,18 @@ func TenantCard(props TenantCardProps) templ.Component {
 		var templ_7745c5c3_Var4 string
 		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(props.unit)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/components/tenant-card.templ`, Line: 54, Col: 32}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/components/tenant-card.templ`, Line: 76, Col: 34}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "</p></div></div></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "</p></div></div></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		return nil
 	})
-}
-
-func takeInitialsOfName(name string) string {
-	words := strings.Fields(name)
-
-	// Only take the Initials of the first 2 words
-	if len(words) >= 2 {
-		return strings.Join([]string{strings.ToUpper(string(words[0][0])), strings.ToUpper(string(words[1][0]))}, "")
-	}
-
-	return strings.ToUpper(string(words[0][0]))
 }
 
 var _ = templruntime.GeneratedTemplate
