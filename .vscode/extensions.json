@@ -3,6 +3,7 @@
     "golang.go",
     "phoenisx.cssvar",
     "a-h.templ",
-    "esbenp.prettier-vscode"
+    "esbenp.prettier-vscode",
+    "bradlc.vscode-tailwindcss"
   ]
 }

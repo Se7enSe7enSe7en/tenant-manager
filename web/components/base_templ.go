@@ -8,7 +8,7 @@ package web
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-func Layout() templ.Component {
+func Base() templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -29,7 +29,7 @@ func Layout() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<!doctype html><html lang=\"en\" data-theme=\"dark\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>tenant-manager</title><meta http-equiv=\"Cache-Control\" content=\"no-cache, no-store, must-revalidate\"><link href=\"assets/css/output.css\" rel=\"stylesheet\"><style>\n\t\t\t\t@import \"https://unpkg.com/open-props\";\n\t\t\t\t@import \"https://unpkg.com/open-props/normalize.min.css\";\n\t\t\t\t@import \"https://unpkg.com/open-props/theme.light.switch.min.css\";\n\t\t\t\t@import \"https://unpkg.com/open-props/theme.dark.switch.min.css\";\n\t\t\t\t\n\t\t\t\t:root {\n\t\t\t\t\t--bg-card-color: var(--surface-2);\n\n\t\t\t\t\t--unpaid-color: var(--gray-7);\n\t\t\t\t\t--paid-color: var(--green-7);\n\t\t\t\t\t--late-color: var(--red-7);\n\t\t\t\t}\n\t\t\t</style></head><body><main>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<!doctype html><html lang=\"en\" data-theme=\"dark\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>tenant-manager</title><meta http-equiv=\"Cache-Control\" content=\"no-cache, no-store, must-revalidate\"><link href=\"assets/css/output.css\" rel=\"stylesheet\"><style>\n\t\t\t\t@import \"https://unpkg.com/open-props\";\n\t\t\t\t@import \"https://unpkg.com/open-props/theme.light.switch.min.css\";\n\t\t\t\t@import \"https://unpkg.com/open-props/theme.dark.switch.min.css\";\n\t\t\t\t@import \"tailwindcss\";\n\t\t\t\t\n\t\t\t\t:root {\n\t\t\t\t\t--bg-card-color: var(--surface-2);\n\n\t\t\t\t\t--unpaid-color: var(--gray-7);\n\t\t\t\t\t--paid-color: var(--green-7);\n\t\t\t\t\t--late-color: var(--red-7);\n\n\t\t\t\t\tbackground-color: var(--surface-1);\n\t\t\t\t}\n\t\t\t\t\n\t\t\t</style></head><body><main>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

@@ -1,2 +1,7 @@
 @import "tailwindcss";
 @source "./web/components/**/*.templ";
+
+.card {
+  background: var(--bg-card-color);
+  @apply rounded-xl p-5 border shadow-sm transition-all duration-200 hover:shadow-md;
+}

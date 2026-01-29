@@ -26,6 +26,8 @@ type TenantCardProps struct {
 templ TenantCard(props TenantCardProps) {
 	<style>
 		@scope(.tenant-card) {
+			
+			/*
 			.card {
 				flex-basis: var(--card-width);
 				display: flex;
@@ -37,6 +39,9 @@ templ TenantCard(props TenantCardProps) {
 				border-radius: var(--radius-3);
 				box-shadow: var(--shadow-2);
 			}
+			*/
+
+			
 
 			.profile-image {
 				display: flex;
@@ -62,18 +67,40 @@ templ TenantCard(props TenantCardProps) {
                 display: flex;
                 flex-direction: column;
             }
+
+			.top-border-separator {
+				border-top: var(--border-size-1) solid var(--gray-1);
+			}
 		}
     </style>
 	<div class="tenant-card">
 		<div class="card">
+		<div class="flex justify-between mb-2">
 			<div class="flex gap-3">
 				<div class="profile-image">
 					// TODO: add if no image condition in the future
 					<span class="profile-text-placeholder">{ takeInitialsOfName(props.name) }</span>
 				</div>
-				<div class="card-header-word-group">
+				<div class="flex-col">
 					<p class="name">{ props.name }</p>
 					<p class="value">{ props.unit }</p>
+				</div>
+				// TODO: status badge component
+			</div>
+				<div class="flex border rounded-full items-center"><p>status</p></div>
+		</div>
+			<div class="flex-col">
+				<p>{ *props.email }</p>
+				<p>{ *props.phoneNumber }</p>
+			</div>
+			<div class="flex justify-between border-t pt-2">
+				<div class="flex-col">
+					<p>Monthly Rent</p>
+					<p>{ props.rentAmount }</p>
+				</div>
+				<div class="flex-col">
+					<p>Last Payment</p>
+					<p>{ props.lastPaymentDate }</p>
 				</div>
 			</div>
 		</div>

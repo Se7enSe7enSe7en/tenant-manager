@@ -1,6 +1,6 @@
 package web
 
-templ Layout() {
+templ Base() {
 	<!DOCTYPE html>
 	<html lang="en" data-theme="dark">
 		<head>
@@ -14,9 +14,9 @@ templ Layout() {
 			<link href="assets/css/output.css" rel="stylesheet"/>
 			<style>
 				@import "https://unpkg.com/open-props";
-				@import "https://unpkg.com/open-props/normalize.min.css";
 				@import "https://unpkg.com/open-props/theme.light.switch.min.css";
 				@import "https://unpkg.com/open-props/theme.dark.switch.min.css";
+				@import "tailwindcss";
 				
 				:root {
 					--bg-card-color: var(--surface-2);
@@ -24,7 +24,10 @@ templ Layout() {
 					--unpaid-color: var(--gray-7);
 					--paid-color: var(--green-7);
 					--late-color: var(--red-7);
+
+					background-color: var(--surface-1);
 				}
+				
 			</style>
 		</head>
 		<body>
