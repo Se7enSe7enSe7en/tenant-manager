@@ -35,8 +35,6 @@ tasks:
     deps:
       - task: setup-tailwind-cli-mac
       - task: setup-tailwind-cli-linux
-    cmds:
-      - ./tailwindcss init
 
   setup:
     deps:
