@@ -41,8 +41,6 @@ templ TenantCard(props TenantCardProps) {
 			}
 			*/
 
-			
-
 			.profile-image {
 				display: flex;
 				justify-content: center;
@@ -58,23 +56,9 @@ templ TenantCard(props TenantCardProps) {
 				font-size: var(--font-size-3);
 			}
 
-            .card-header-group {
-                display: flex;
-                gap: var(--size-3);
-            }
-
-            .card-header-words-group {
-                display: flex;
-                flex-direction: column;
-            }
-
-			.top-border-separator {
-				border-top: var(--border-size-1) solid var(--gray-1);
-			}
 		}
     </style>
 	<div class="tenant-card">
-		<div class="card">
 		<div class="flex justify-between mb-2">
 			<div class="flex gap-3">
 				<div class="profile-image">
@@ -87,21 +71,20 @@ templ TenantCard(props TenantCardProps) {
 				</div>
 				// TODO: status badge component
 			</div>
-				<div class="flex border rounded-full items-center"><p>status</p></div>
+			<div class="flex border rounded-full items-center"><p>status</p></div>
 		</div>
+		<div class="flex-col">
+			<p>{ *props.email }</p>
+			<p>{ *props.phoneNumber }</p>
+		</div>
+		<div class="flex justify-between border-t pt-2">
 			<div class="flex-col">
-				<p>{ *props.email }</p>
-				<p>{ *props.phoneNumber }</p>
+				<p>Monthly Rent</p>
+				<p>{ props.rentAmount }</p>
 			</div>
-			<div class="flex justify-between border-t pt-2">
-				<div class="flex-col">
-					<p>Monthly Rent</p>
-					<p>{ props.rentAmount }</p>
-				</div>
-				<div class="flex-col">
-					<p>Last Payment</p>
-					<p>{ props.lastPaymentDate }</p>
-				</div>
+			<div class="flex-col">
+				<p>Last Payment</p>
+				<p>{ props.lastPaymentDate }</p>
 			</div>
 		</div>
 	</div>
