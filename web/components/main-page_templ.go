@@ -43,13 +43,13 @@ func MainPage() templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<style>\n\t\t\t@scope(.page) {\n\n\t\t\t& {\n\t\t\t\t/* scoped variables */\n\t\t\t\t--card-width: var(--size-content-1);\n\n\t\t\t\tpadding: var(--size-3);\n\t\t\t}\n\n\t\t\t.card-container {\n\t\t\t\tdisplay: flex;\n\t\t\t\tflex-flow: row wrap;\n\t\t\t\talign-items: flex-start;\n\t\t\t\tgap: var(--size-2);\n\t\t\t\tpadding-top: var(--size-2);\n\t\t\t\tpadding-bottom: var(--size-2);\n\t\t\t}\n\n\t\t\t.stat-card-container {\n\t\t\t\tdisplay: flex;\n\t\t\t\tflex-wrap: wrap;\n\t\t\t\tgap: var(--size-2);\n\t\t\t\tpadding-top: var(--size-2);\n\t\t\t\tpadding-bottom: var(--size-2);\n\t\t\t\talign-items: center;\n\t\t\t\tjustify-content: center;\n\t\t\t}\n\n\t\t\t.card-container-label {\n\t\t\t\tfont-size: var(--font-size-3);\n\t\t\t\tpadding-top: var(--size-4);\n\t\t\t\tpadding-bottom: var(--size-4);\n\t\t\t}\n\t\t}\n\t\t</style> <div class=\"page\"><div class=\"stat-card-container\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"page p-4 max-w-7xl mx-auto \"><div class=\"grid grid-cols-1 md:grid-cols-2 lg:grid-col-3 xl:grid-cols-4 gap-4 mb-8\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			templ_7745c5c3_Err = StatCard(StatCardProps{
 				title:    "Total tenants",
-				value:    "5",
+				value:    "4",
 				subtitle: utils.Ptr("Active units"),
 				icon:     utils.Ptr("assets/tenants-icon.svg"),
 			}).Render(ctx, templ_7745c5c3_Buffer)
@@ -67,7 +67,7 @@ func MainPage() templ.Component {
 			}
 			templ_7745c5c3_Err = StatCard(StatCardProps{
 				title:    "Unpaid",
-				value:    "3",
+				value:    "2",
 				subtitle: utils.Ptr("Awaiting payment"),
 				icon:     utils.Ptr("assets/unpaid-icon.svg"),
 			}).Render(ctx, templ_7745c5c3_Buffer)
@@ -83,13 +83,49 @@ func MainPage() templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</div><p class=\"card-container-label\">All Tenants</p><div class=\"card-container\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</div><p class=\"text-2xl my-3\">Tenants</p><div class=\"grid grid-cols-1 md:grid-cols-2 lg:grid-col-3 xl:grid-cols-4 gap-4\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			templ_7745c5c3_Err = TenantCard(TenantCardProps{
-				name:            "Nikola Tesla",
+				name:            "Chim Chay",
 				unit:            "Apt #1",
+				status:          "UNPAID",
+				rentAmount:      "₱19,000",
+				lastPaymentDate: "2026-01-10",
+				email:           utils.Ptr("email@email.com"),
+				phoneNumber:     utils.Ptr("(+63)98 765 4321"),
+			}).Render(ctx, templ_7745c5c3_Buffer)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = TenantCard(TenantCardProps{
+				name:            "Dum Dith",
+				unit:            "Apt #2",
+				status:          "UNPAID",
+				rentAmount:      "₱19,000",
+				lastPaymentDate: "2026-01-10",
+				email:           utils.Ptr("email@email.com"),
+				phoneNumber:     utils.Ptr("(+63)98 765 4321"),
+			}).Render(ctx, templ_7745c5c3_Buffer)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = TenantCard(TenantCardProps{
+				name:            "Dud Li",
+				unit:            "Apt #3",
+				status:          "UNPAID",
+				rentAmount:      "₱19,000",
+				lastPaymentDate: "2026-01-10",
+				email:           utils.Ptr("email@email.com"),
+				phoneNumber:     utils.Ptr("(+63)98 765 4321"),
+			}).Render(ctx, templ_7745c5c3_Buffer)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = TenantCard(TenantCardProps{
+				name:            "Dudz And Guy Inc.",
+				unit:            "Apt #4",
 				status:          "UNPAID",
 				rentAmount:      "₱19,000",
 				lastPaymentDate: "2026-01-10",

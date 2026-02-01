@@ -8,57 +8,16 @@ type StatCardProps struct {
 }
 
 templ StatCard(props StatCardProps) {
-	<style>
-		@scope (.stat-card) {
-			& {
-				display: flex;
-				background-color: var(--bg-card-color);
-				padding: var(--size-3);
-				border: var(--border-size-1) solid var(--gray-6);
-				border-radius: var(--size-2);
-				min-width: var(--size-fluid-9);
-				justify-content: space-between;		
-			}
-
-			.content {
-				display: flex;
-				flex-direction: column;
-			}
-
-			.title {
-				font-size: var(--font-size-3);
-				font-weight: var(--font-weight-5);
-			}
-
-			.value {
-				font-size: var(--font-size-5);
-				font-weight: var(--font-weight-7);
-			}
-
-			.subtitle {
-				font-size: var(--font-size-0);
-				font-weight: var(--font-weight-3);
-			}
-
-			.icon-container {
-				background-color: var(--surface-3);
-				border-radius: var(--size-2);
-				padding: var(--size-2);
-				block-size: var(--size-8);
-				inline-size: var(--size-8);
-			}
-		}
-    </style>
-	<div class="stat-card">
-		<div class="content">
-			<p class="title">{ props.title }</p>
-			<p class="value">{ props.value }</p>
+	<div class="stat-card bg-(--bg-card-color) flex min-w-4 p-3 border rounded-lg justify-between">
+		<div class="flex-col">
+			<p class="text-xl font-semibold">{ props.title }</p>
+			<p class="text-3xl font-bold ">{ props.value }</p>
 			if props.subtitle != nil {
-				<p class="subtitle">{ *props.subtitle }</p>
+				<p class="text-xs">{ *props.subtitle }</p>
 			}
 		</div>
 		if props.icon != nil {
-			<div class="icon-container">
+			<div class="bg-(--surface-3) rounded-lg size-12 p-2">
 				<img src={ *props.icon }/>
 			</div>
 		}

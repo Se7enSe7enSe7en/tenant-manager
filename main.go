@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/Se7enSe7enSe7en/go-toolkit/pkg/logger"
+	"github.com/Se7enSe7enSe7en/tenant-manager/internal/utils"
 	web "github.com/Se7enSe7enSe7en/tenant-manager/web/components"
 )
 
@@ -18,7 +19,7 @@ func main() {
 
 	// serve static files
 	fs := http.FileServer(http.Dir("./web/static/assets"))
-	mux.Handle("/assets/", http.StripPrefix("/assets/", fs))
+	mux.Handle("/assets/", utils.DisableCacheInDevMode(http.StripPrefix("/assets/", fs)))
 
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		web.MainPage().Render(context.Background(), w)

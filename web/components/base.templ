@@ -7,19 +7,16 @@ templ Base() {
 			<meta charset="UTF-8"/>
 			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 			<title>tenant-manager</title>
-			// TODO: set these in the response header instead, create some sort of middleware
-			// it is not recommended to use meta tags for this, explaination: https://stackoverflow.com/a/2068407
-			<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
 			// tailwind
 			<link href="assets/css/output.css" rel="stylesheet"/>
 			<style>
 				@import "https://unpkg.com/open-props";
 				@import "https://unpkg.com/open-props/theme.light.switch.min.css";
 				@import "https://unpkg.com/open-props/theme.dark.switch.min.css";
-				@import "tailwindcss";
-				
+
 				:root {
 					--bg-card-color: var(--surface-2);
+					--card-border-color: var(--surface-3);
 
 					--unpaid-color: var(--gray-7);
 					--paid-color: var(--green-7);
@@ -27,8 +24,8 @@ templ Base() {
 
 					background-color: var(--surface-1);
 				}
-				
 			</style>
+
 		</head>
 		<body>
 			<main>

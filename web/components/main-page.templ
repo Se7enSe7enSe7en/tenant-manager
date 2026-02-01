@@ -4,47 +4,11 @@ import "github.com/Se7enSe7enSe7en/tenant-manager/internal/utils"
 
 templ MainPage() {
 	@Base() {
-		<style>
-			@scope(.page) {
-
-			& {
-				/* scoped variables */
-				--card-width: var(--size-content-1);
-
-				padding: var(--size-3);
-			}
-
-			.card-container {
-				display: flex;
-				flex-flow: row wrap;
-				align-items: flex-start;
-				gap: var(--size-2);
-				padding-top: var(--size-2);
-				padding-bottom: var(--size-2);
-			}
-
-			.stat-card-container {
-				display: flex;
-				flex-wrap: wrap;
-				gap: var(--size-2);
-				padding-top: var(--size-2);
-				padding-bottom: var(--size-2);
-				align-items: center;
-				justify-content: center;
-			}
-
-			.card-container-label {
-				font-size: var(--font-size-3);
-				padding-top: var(--size-4);
-				padding-bottom: var(--size-4);
-			}
-		}
-		</style>
-		<div class="page">
-			<div class="stat-card-container">
+		<div class="page p-4 max-w-7xl mx-auto ">
+			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-col-3 xl:grid-cols-4 gap-4 mb-8">
 				@StatCard(StatCardProps{
 					title:    "Total tenants",
-					value:    "5",
+					value:    "4",
 					subtitle: utils.Ptr("Active units"),
 					icon:     utils.Ptr("assets/tenants-icon.svg"),
 				})
@@ -56,7 +20,7 @@ templ MainPage() {
 				})
 				@StatCard(StatCardProps{
 					title:    "Unpaid",
-					value:    "3",
+					value:    "2",
 					subtitle: utils.Ptr("Awaiting payment"),
 					icon:     utils.Ptr("assets/unpaid-icon.svg"),
 				})
@@ -67,16 +31,43 @@ templ MainPage() {
 					icon:     utils.Ptr("assets/late-icon.svg"),
 				})
 			</div>
-			<p class="card-container-label">All Tenants</p>
-			<div class="card-container">
+			<p class="text-2xl my-3">Tenants</p>
+			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-col-3 xl:grid-cols-4 gap-4">
 				@TenantCard(TenantCardProps{
-					name: "Nikola Tesla",
-					unit: "Apt #1",
-					status: "UNPAID",
-					rentAmount: "₱19,000",
+					name:            "Chim Chay",
+					unit:            "Apt #1",
+					status:          "UNPAID",
+					rentAmount:      "₱19,000",
 					lastPaymentDate: "2026-01-10",
-					email: utils.Ptr("email@email.com"),
-					phoneNumber: utils.Ptr("(+63)98 765 4321"),
+					email:           utils.Ptr("email@email.com"),
+					phoneNumber:     utils.Ptr("(+63)98 765 4321"),
+				})
+				@TenantCard(TenantCardProps{
+					name:            "Dum Dith",
+					unit:            "Apt #2",
+					status:          "UNPAID",
+					rentAmount:      "₱19,000",
+					lastPaymentDate: "2026-01-10",
+					email:           utils.Ptr("email@email.com"),
+					phoneNumber:     utils.Ptr("(+63)98 765 4321"),
+				})
+				@TenantCard(TenantCardProps{
+					name:            "Dud Li",
+					unit:            "Apt #3",
+					status:          "UNPAID",
+					rentAmount:      "₱19,000",
+					lastPaymentDate: "2026-01-10",
+					email:           utils.Ptr("email@email.com"),
+					phoneNumber:     utils.Ptr("(+63)98 765 4321"),
+				})
+				@TenantCard(TenantCardProps{
+					name:            "Dudz And Guy Inc.",
+					unit:            "Apt #4",
+					status:          "UNPAID",
+					rentAmount:      "₱19,000",
+					lastPaymentDate: "2026-01-10",
+					email:           utils.Ptr("email@email.com"),
+					phoneNumber:     utils.Ptr("(+63)98 765 4321"),
 				})
 			</div>
 		</div>

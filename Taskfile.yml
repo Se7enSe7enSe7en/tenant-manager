@@ -83,12 +83,9 @@ tasks:
     cmds:
       - go run -tags=debug .
 
-  # TODO: investigate further
-  # For some reason we can't parallel run the 3 tasks:
-  # 1. start-server
-  # 2. start-templ-watch
-  # 3. start-tailwind-watch
-  # hence we need `--cmd="go run -tags=debug ."` (start-server) to be in start-templ-watch
+  # TODO: investigate further (dev only issue)
+  # potential race condition here since the watchers in deps are running in parallel
+  # find a way to make the dev hot reloading work sequentially
   start:
     method: none
     desc: watch for changes and start the project

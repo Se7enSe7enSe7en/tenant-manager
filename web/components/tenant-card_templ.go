@@ -10,17 +10,6 @@ import templruntime "github.com/a-h/templ/runtime"
 
 import "strings"
 
-func takeInitialsOfName(name string) string {
-	words := strings.Fields(name)
-
-	// Only take the Initials of the first 2 words
-	if len(words) >= 2 {
-		return strings.Join([]string{strings.ToUpper(string(words[0][0])), strings.ToUpper(string(words[1][0]))}, "")
-	}
-
-	return strings.ToUpper(string(words[0][0]))
-}
-
 type TenantCardProps struct {
 	name            string
 	unit            string
@@ -52,14 +41,14 @@ func TenantCard(props TenantCardProps) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<style>\n\t\t@scope(.tenant-card) {\n\t\t\t\n\t\t\t/*\n\t\t\t.card {\n\t\t\t\tflex-basis: var(--card-width);\n\t\t\t\tdisplay: flex;\n\t\t\t\tflex-direction: column;\n\t\t\t\tgap: var(--size-2);\n\t\t\t\tbackground: var(--bg-card-color);\n\t\t\t\tborder: var(--border-size-1) solid var(--gray-6);\n\t\t\t\tpadding: var(--size-4);\n\t\t\t\tborder-radius: var(--radius-3);\n\t\t\t\tbox-shadow: var(--shadow-2);\n\t\t\t}\n\t\t\t*/\n\n\t\t\t.profile-image {\n\t\t\t\tdisplay: flex;\n\t\t\t\tjustify-content: center;\n\t\t\t\talign-items: center;\n\t\t\t\twidth: var(--size-8);\n\t\t\t\theight: var(--size-8);\n\t\t\t\tborder-radius: var(--radius-round);\n\t\t\t\tbackground-color: var(--surface-4);\n\t\t\t}\n\n\t\t\t.profile-text-placeholder {\n\t\t\t\ttext: var(--text-1);\n\t\t\t\tfont-size: var(--font-size-3);\n\t\t\t}\n\n\t\t}\n    </style><div class=\"tenant-card\"><div class=\"flex justify-between mb-2\"><div class=\"flex gap-3\"><div class=\"profile-image\"><span class=\"profile-text-placeholder\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"bg-(--bg-card-color) rounded-xl p-5 border shadow-sm transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5\"><div class=\"flex justify-between mb-2\"><div class=\"flex gap-3\"><div class=\"flex bg-(--surface-4) items-center justify-center size-12 rounded-full \"><span class=\"text-xl\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var2 string
 		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(takeInitialsOfName(props.name))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/components/tenant-card.templ`, Line: 66, Col: 76}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/components/tenant-card.templ`, Line: 21, Col: 59}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
@@ -72,7 +61,7 @@ func TenantCard(props TenantCardProps) templ.Component {
 		var templ_7745c5c3_Var3 string
 		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(props.name)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/components/tenant-card.templ`, Line: 69, Col: 33}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/components/tenant-card.templ`, Line: 24, Col: 33}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 		if templ_7745c5c3_Err != nil {
@@ -85,7 +74,7 @@ func TenantCard(props TenantCardProps) templ.Component {
 		var templ_7745c5c3_Var4 string
 		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(props.unit)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/components/tenant-card.templ`, Line: 70, Col: 34}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/components/tenant-card.templ`, Line: 25, Col: 34}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 		if templ_7745c5c3_Err != nil {
@@ -98,7 +87,7 @@ func TenantCard(props TenantCardProps) templ.Component {
 		var templ_7745c5c3_Var5 string
 		templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(*props.email)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/components/tenant-card.templ`, Line: 77, Col: 20}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/components/tenant-card.templ`, Line: 32, Col: 20}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 		if templ_7745c5c3_Err != nil {
@@ -111,7 +100,7 @@ func TenantCard(props TenantCardProps) templ.Component {
 		var templ_7745c5c3_Var6 string
 		templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(*props.phoneNumber)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/components/tenant-card.templ`, Line: 78, Col: 26}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/components/tenant-card.templ`, Line: 33, Col: 26}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 		if templ_7745c5c3_Err != nil {
@@ -124,7 +113,7 @@ func TenantCard(props TenantCardProps) templ.Component {
 		var templ_7745c5c3_Var7 string
 		templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(props.rentAmount)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/components/tenant-card.templ`, Line: 83, Col: 25}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/components/tenant-card.templ`, Line: 38, Col: 25}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 		if templ_7745c5c3_Err != nil {
@@ -137,7 +126,7 @@ func TenantCard(props TenantCardProps) templ.Component {
 		var templ_7745c5c3_Var8 string
 		templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(props.lastPaymentDate)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/components/tenant-card.templ`, Line: 87, Col: 30}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/components/tenant-card.templ`, Line: 42, Col: 30}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
 		if templ_7745c5c3_Err != nil {
@@ -149,6 +138,17 @@ func TenantCard(props TenantCardProps) templ.Component {
 		}
 		return nil
 	})
+}
+
+func takeInitialsOfName(name string) string {
+	words := strings.Fields(name)
+
+	// Only take the Initials of the first 2 words
+	if len(words) >= 2 {
+		return strings.Join([]string{strings.ToUpper(string(words[0][0])), strings.ToUpper(string(words[1][0]))}, "")
+	}
+
+	return strings.ToUpper(string(words[0][0]))
 }
 
 var _ = templruntime.GeneratedTemplate
