@@ -2,7 +2,10 @@
   "tailwindCSS.includeLanguages": {
     "templ": "html"
   },
+  "tailwindCSS.classFunctions": [
+    ".*ClassName"
+  ],
   "emmet.includeLanguages": {
     "templ": "html"
-  }
+  },
 }

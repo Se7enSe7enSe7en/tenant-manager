@@ -1,0 +1,36 @@
+package web
+
+import (
+    "github.com/Se7enSe7enSe7en/tenant-manager/internal/constants"
+	"github.com/Se7enSe7enSe7en/tenant-manager/internal/utils"
+)
+
+type StatusBadgeProps struct {
+    status constants.PaymentStatus
+}
+
+templ StatusBadge(props StatusBadgeProps) {
+    <span class={ utils.ClassNameJoin(
+            "inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wide", 
+            statusBadgeClassName(props.status))}>
+        // <span class={utils.ClassNameJoin("w-2 h-2 rounded-full", )}></span>
+        { props.status.String() }
+    </span>
+}
+
+func statusBadgeClassName(paymentStatus constants.PaymentStatus) string {
+    className := ""
+
+    switch paymentStatus {
+        case constants.PAID:
+            className = "bg-[hsl(var(--status-paid-bg))] text-[hsl(var(--status-paid))]"
+        case constants.UNPAID:
+            className = "bg-[hsl(var(--status-unpaid-bg))] text-[hsl(var(--status-unpaid))]"
+        case constants.LATE: 
+            className = "bg-[hsl(var(--status-late-bg))] text-[hsl(var(--status-late))]"
+    }
+
+    return className
+    // note: notice how we didn't do early return in the switch, 
+    // the reason is we need the "className" variable for tailwindcss intellisense to work
+}

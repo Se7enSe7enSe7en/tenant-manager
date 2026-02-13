@@ -9,6 +9,7 @@ import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
 import "github.com/Se7enSe7enSe7en/tenant-manager/internal/utils"
+import "github.com/Se7enSe7enSe7en/tenant-manager/internal/constants"
 
 func MainPage() templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
@@ -90,7 +91,7 @@ func MainPage() templ.Component {
 			templ_7745c5c3_Err = TenantCard(TenantCardProps{
 				name:            "Chim Chay",
 				unit:            "Apt #1",
-				status:          "UNPAID",
+				status:          constants.PAID,
 				rentAmount:      "₱19,000",
 				lastPaymentDate: "2026-01-10",
 				email:           utils.Ptr("email@email.com"),
@@ -102,7 +103,7 @@ func MainPage() templ.Component {
 			templ_7745c5c3_Err = TenantCard(TenantCardProps{
 				name:            "Dum Dith",
 				unit:            "Apt #2",
-				status:          "UNPAID",
+				status:          constants.LATE,
 				rentAmount:      "₱19,000",
 				lastPaymentDate: "2026-01-10",
 				email:           utils.Ptr("email@email.com"),
@@ -114,7 +115,7 @@ func MainPage() templ.Component {
 			templ_7745c5c3_Err = TenantCard(TenantCardProps{
 				name:            "Dud Li",
 				unit:            "Apt #3",
-				status:          "UNPAID",
+				status:          constants.UNPAID,
 				rentAmount:      "₱19,000",
 				lastPaymentDate: "2026-01-10",
 				email:           utils.Ptr("email@email.com"),
@@ -126,7 +127,7 @@ func MainPage() templ.Component {
 			templ_7745c5c3_Err = TenantCard(TenantCardProps{
 				name:            "Dudz And Guy Inc.",
 				unit:            "Apt #4",
-				status:          "UNPAID",
+				status:          constants.UNPAID,
 				rentAmount:      "₱19,000",
 				lastPaymentDate: "2026-01-10",
 				email:           utils.Ptr("email@email.com"),

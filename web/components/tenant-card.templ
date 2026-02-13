@@ -1,11 +1,12 @@
 package web
 
 import "strings"
+import "github.com/Se7enSe7enSe7en/tenant-manager/internal/constants"
 
 type TenantCardProps struct {
 	name            string
 	unit            string
-	status          string // TODO: change to status enum
+	status          constants.PaymentStatus
 	rentAmount      string
 	lastPaymentDate string // TODO: change type to datetime
 	email           *string
@@ -21,12 +22,15 @@ templ TenantCard(props TenantCardProps) {
 					<span class="text-xl">{ takeInitialsOfName(props.name) }</span>
 				</div>
 				<div class="flex-col">
-					<p class="name">{ props.name }</p>
-					<p class="value">{ props.unit }</p>
+					<p class="">{ props.name }</p>
+					<p class="">{ props.unit }</p>
 				</div>
 				// TODO: status badge component
 			</div>
-			<div class="flex border rounded-full items-center"><p>status</p></div>
+			// <div class="flex border rounded-full items-center"><p>status</p></div>
+			<div class="flex justify-end align-top w-12 h-6">
+				@StatusBadge(StatusBadgeProps{status: props.status})
+			</div>
 		</div>
 		<div class="flex-col">
 			<p>{ *props.email }</p>
