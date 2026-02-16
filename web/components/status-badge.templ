@@ -11,10 +11,14 @@ type StatusBadgeProps struct {
 
 templ StatusBadge(props StatusBadgeProps) {
     <span class={ utils.ClassNameJoin(
-            "inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wide", 
+            "inline-flex items-center gap-1.5 px-3 rounded-full text-xs font-semibold uppercase tracking-wide", 
             statusBadgeClassName(props.status))}>
-        // <span class={utils.ClassNameJoin("w-2 h-2 rounded-full", )}></span>
-        { props.status.String() }
+        <span class="flex items-center justify-center">
+            // all this... just for a pulsing-ping effect... sigh
+            <span class={utils.ClassNameJoin("absolute", statusDotClassName(props.status))}>⬤</span>        
+            <span>⬤</span>        
+        </span>
+        <span>{ props.status.String() }</span>
     </span>
 }
 
@@ -31,6 +35,16 @@ func statusBadgeClassName(paymentStatus constants.PaymentStatus) string {
     }
 
     return className
-    // note: notice how we didn't do early return in the switch, 
-    // the reason is we need the "className" variable for tailwindcss intellisense to work
+    // note: notice how we didn't do early return in the switch, this is because
+    // we need the "className" variable for tailwindcss intellisense to work
+}
+
+func statusDotClassName(paymentStatus constants.PaymentStatus) string {
+    className := ""
+
+    if paymentStatus == constants.LATE {
+        className = "animate-ping"
+    }
+
+    return className
 }
