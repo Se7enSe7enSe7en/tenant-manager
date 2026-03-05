@@ -15,6 +15,7 @@ vars:
   PROXY_PORT: 7331
   TAILWIND_INPUT_CSS_PATH: ./web/static/assets/styles/input.css
   TAILWIND_OUTPUT_CSS_PATH: ./web/static/assets/css/output.css
+  SERVER_PATH: ./cmd/server
 
 tasks:
   setup-tailwind-cli-mac:
@@ -69,7 +70,7 @@ tasks:
       - go tool templ generate -lazy .
       - ./tailwindcss --input {{.TAILWIND_INPUT_CSS_PATH}} --output {{.TAILWIND_OUTPUT_CSS_PATH}} --minify
       - go mod tidy
-      - go build -o ./dist/main ./main.go
+      - go build -o ./dist/main {{.SERVER_PATH}}/main.go
 
   start-tailwind-watch:
     cmds:
@@ -77,11 +78,11 @@ tasks:
 
   start-templ-watch:
     cmds:
-      - go tool templ generate --watch --proxy="http://localhost:{{.PORT}}" --open-browser=false --cmd="go run -tags=debug ."
+      - go tool templ generate --watch --proxy="http://localhost:{{.PORT}}" --open-browser=false --cmd="go run -tags=debug {{.SERVER_PATH}}"
 
   start-server:
     cmds:
-      - go run -tags=debug .
+      - go run -tags=debug {{.SERVER_PATH}}
 
   # TODO: investigate further (dev only issue)
   # potential race condition here since the watchers in deps are running in parallel
