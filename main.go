@@ -20,7 +20,6 @@ func main() {
 	// serve static files
 	fs := http.FileServer(http.Dir("./web/static/assets"))
 	mux.Handle("/assets/", utils.DisableCacheInDevMode(http.StripPrefix("/assets/", fs)))
-
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		web.MainPage().Render(context.Background(), w)
 	})
