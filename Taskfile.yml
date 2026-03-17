@@ -1,8 +1,8 @@
 # https://taskfile.dev
 
 # Setup guide:
-# STEP 1: install task, `go get -tool github.com/go-task/task/v3/cmd/task@latest`
-# STEP 2: use task to run the "setup" command `go tool task setup`
+# STEP 1: install task, `go install github.com/go-task/task/v3/cmd/task@latest`
+# STEP 2: use task to run the "setup" command `task setup`
 
 # Setup tailwind without npm: https://tailwindcss.com/blog/standalone-cli
 
@@ -38,9 +38,13 @@ tasks:
       - task: setup-tailwind-cli-linux
 
   setup:
-    deps:
+    cmds:
+      # # Alternatively install them directly (not through go get -tool):
       - task: setup-tailwind
-      - go get -tool github.com/a-h/templ/cmd/templ@latest
+      - go install github.com/a-h/templ/cmd/templ@latest # setup templ
+      - go install github.com/sqlc-dev/sqlc/cmd/sqlc@latest # setup sqlc
+      - go install github.com/pressly/goose/v3/cmd/goose@latest # setup goose
+      - go mod tidy
 
   kill:
     method: none
@@ -67,7 +71,7 @@ tasks:
       - "**/*_templ.go"
       - ./dist/main
     cmds:
-      - go tool templ generate -lazy .
+      - templ generate -lazy .
       - ./tailwindcss --input {{.TAILWIND_INPUT_CSS_PATH}} --output {{.TAILWIND_OUTPUT_CSS_PATH}} --minify
       - go mod tidy
       - go build -o ./dist/main {{.SERVER_PATH}}/main.go
@@ -78,7 +82,7 @@ tasks:
 
   start-templ-watch:
     cmds:
-      - go tool templ generate --watch --proxy="http://localhost:{{.PORT}}" --open-browser=false --cmd="go run -tags=debug {{.SERVER_PATH}}"
+      - templ generate --watch --proxy="http://localhost:{{.PORT}}" --open-browser=false --cmd="go run -tags=debug {{.SERVER_PATH}}"
 
   start-server:
     cmds:
@@ -89,7 +93,7 @@ tasks:
   # find a way to make the dev hot reloading work sequentially
   start:
     method: none
-    desc: watch for changes and start the project
+    desc: watch for changes and start the project for development
     deps: [start-tailwind-watch, start-templ-watch]
 
   start-prod:

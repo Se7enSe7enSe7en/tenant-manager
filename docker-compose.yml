@@ -1,0 +1,16 @@
+services:
+  # this is for dev, later create prod container
+  postgres:
+    image: postgres:16-alpine
+    container_name: tenant-manager-postgres-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+volumes:
+  postgres-data:

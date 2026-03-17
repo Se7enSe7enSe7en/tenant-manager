@@ -4,6 +4,7 @@
     "phoenisx.cssvar",
     "a-h.templ",
     "esbenp.prettier-vscode",
-    "bradlc.vscode-tailwindcss"
+    "bradlc.vscode-tailwindcss",
+    "cweijan.vscode-postgresql-client2"
   ]
 }
