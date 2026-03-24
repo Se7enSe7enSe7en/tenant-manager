@@ -66,3 +66,7 @@
   - `trade2.start_date` should be set to the last months' `trade1.end_date`
 
 - start_date should always just use the previous months end_date
+
+## UI library: templUI
+
+- ref: https://templui.io/docs/how-to-use
