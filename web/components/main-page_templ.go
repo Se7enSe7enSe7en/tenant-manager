@@ -8,10 +8,7 @@ package web
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-import "github.com/Se7enSe7enSe7en/tenant-manager/internal/utils"
-import "github.com/Se7enSe7enSe7en/tenant-manager/internal/constants"
-
-func MainPage() templ.Component {
+func MainPage(tenantList []TenantCardProps) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -51,8 +48,8 @@ func MainPage() templ.Component {
 			templ_7745c5c3_Err = StatCard(StatCardProps{
 				title:    "Total tenants",
 				value:    "4",
-				subtitle: utils.Ptr("Active units"),
-				icon:     utils.Ptr("assets/tenants-icon.svg"),
+				subtitle: new("Active units"),
+				icon:     new("assets/tenants-icon.svg"),
 			}).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
@@ -60,8 +57,8 @@ func MainPage() templ.Component {
 			templ_7745c5c3_Err = StatCard(StatCardProps{
 				title:    "Paid",
 				value:    "1",
-				subtitle: utils.Ptr("₱15,000 collected"),
-				icon:     utils.Ptr("assets/paid-icon.svg"),
+				subtitle: new("₱15,000 collected"),
+				icon:     new("assets/paid-icon.svg"),
 			}).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
@@ -69,8 +66,8 @@ func MainPage() templ.Component {
 			templ_7745c5c3_Err = StatCard(StatCardProps{
 				title:    "Unpaid",
 				value:    "2",
-				subtitle: utils.Ptr("Awaiting payment"),
-				icon:     utils.Ptr("assets/unpaid-icon.svg"),
+				subtitle: new("Awaiting payment"),
+				icon:     new("assets/unpaid-icon.svg"),
 			}).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
@@ -78,8 +75,8 @@ func MainPage() templ.Component {
 			templ_7745c5c3_Err = StatCard(StatCardProps{
 				title:    "Late",
 				value:    "1",
-				subtitle: utils.Ptr("Overdue payments"),
-				icon:     utils.Ptr("assets/late-icon.svg"),
+				subtitle: new("Overdue payments"),
+				icon:     new("assets/late-icon.svg"),
 			}).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
@@ -88,53 +85,11 @@ func MainPage() templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = TenantCard(TenantCardProps{
-				name:            "Chim Chay",
-				unit:            "Apt #1",
-				status:          constants.PAID,
-				rentAmount:      "₱19,000",
-				lastPaymentDate: "2026-01-10",
-				email:           utils.Ptr("email@email.com"),
-				phoneNumber:     utils.Ptr("(+63)98 765 4321"),
-			}).Render(ctx, templ_7745c5c3_Buffer)
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			templ_7745c5c3_Err = TenantCard(TenantCardProps{
-				name:            "Dum Dith",
-				unit:            "Apt #2",
-				status:          constants.LATE,
-				rentAmount:      "₱19,000",
-				lastPaymentDate: "2026-01-10",
-				email:           utils.Ptr("email@email.com"),
-				phoneNumber:     utils.Ptr("(+63)98 765 4321"),
-			}).Render(ctx, templ_7745c5c3_Buffer)
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			templ_7745c5c3_Err = TenantCard(TenantCardProps{
-				name:            "Dud Li",
-				unit:            "Apt #3",
-				status:          constants.UNPAID,
-				rentAmount:      "₱19,000",
-				lastPaymentDate: "2026-01-10",
-				email:           utils.Ptr("email@email.com"),
-				phoneNumber:     utils.Ptr("(+63)98 765 4321"),
-			}).Render(ctx, templ_7745c5c3_Buffer)
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			templ_7745c5c3_Err = TenantCard(TenantCardProps{
-				name:            "Dudz And Guy Inc.",
-				unit:            "Apt #4",
-				status:          constants.UNPAID,
-				rentAmount:      "₱19,000",
-				lastPaymentDate: "2026-01-10",
-				email:           utils.Ptr("email@email.com"),
-				phoneNumber:     utils.Ptr("(+63)98 765 4321"),
-			}).Render(ctx, templ_7745c5c3_Buffer)
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
+			for _, tenant := range tenantList {
+				templ_7745c5c3_Err = TenantCard(tenant).Render(ctx, templ_7745c5c3_Buffer)
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
 			}
 			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "</div></div>")
 			if templ_7745c5c3_Err != nil {

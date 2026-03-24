@@ -12,13 +12,13 @@ import "strings"
 import "github.com/Se7enSe7enSe7en/tenant-manager/internal/constants"
 
 type TenantCardProps struct {
-	name            string
-	unit            string
-	status          constants.PaymentStatus
-	rentAmount      string
-	lastPaymentDate string // TODO: change type to datetime
-	email           *string
-	phoneNumber     *string
+	Name            string
+	Unit            string
+	Status          constants.PaymentStatus
+	RentAmount      string
+	LastPaymentDate string // TODO: change type to datetime
+	Email           *string
+	PhoneNumber     *string
 }
 
 func TenantCard(props TenantCardProps) templ.Component {
@@ -47,7 +47,7 @@ func TenantCard(props TenantCardProps) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var2 string
-		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(takeInitialsOfName(props.name))
+		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(takeInitialsOfName(props.Name))
 		if templ_7745c5c3_Err != nil {
 			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/components/tenant-card.templ`, Line: 22, Col: 59}
 		}
@@ -60,7 +60,7 @@ func TenantCard(props TenantCardProps) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var3 string
-		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(props.name)
+		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(props.Name)
 		if templ_7745c5c3_Err != nil {
 			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/components/tenant-card.templ`, Line: 25, Col: 29}
 		}
@@ -73,7 +73,7 @@ func TenantCard(props TenantCardProps) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var4 string
-		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(props.unit)
+		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(props.Unit)
 		if templ_7745c5c3_Err != nil {
 			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/components/tenant-card.templ`, Line: 26, Col: 29}
 		}
@@ -85,7 +85,7 @@ func TenantCard(props TenantCardProps) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = StatusBadge(StatusBadgeProps{status: props.status}).Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = StatusBadge(StatusBadgeProps{status: props.Status}).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -94,7 +94,7 @@ func TenantCard(props TenantCardProps) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var5 string
-		templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(*props.email)
+		templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(*props.Email)
 		if templ_7745c5c3_Err != nil {
 			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/components/tenant-card.templ`, Line: 36, Col: 20}
 		}
@@ -107,7 +107,7 @@ func TenantCard(props TenantCardProps) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var6 string
-		templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(*props.phoneNumber)
+		templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(*props.PhoneNumber)
 		if templ_7745c5c3_Err != nil {
 			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/components/tenant-card.templ`, Line: 37, Col: 26}
 		}
@@ -120,7 +120,7 @@ func TenantCard(props TenantCardProps) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var7 string
-		templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(props.rentAmount)
+		templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(props.RentAmount)
 		if templ_7745c5c3_Err != nil {
 			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/components/tenant-card.templ`, Line: 42, Col: 25}
 		}
@@ -133,7 +133,7 @@ func TenantCard(props TenantCardProps) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var8 string
-		templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(props.lastPaymentDate)
+		templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(props.LastPaymentDate)
 		if templ_7745c5c3_Err != nil {
 			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/components/tenant-card.templ`, Line: 46, Col: 30}
 		}

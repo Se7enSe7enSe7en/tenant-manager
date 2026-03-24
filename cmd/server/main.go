@@ -6,47 +6,54 @@ import (
 	"net/http"
 
 	"github.com/Se7enSe7enSe7en/go-toolkit/pkg/logger"
+	repo "github.com/Se7enSe7enSe7en/tenant-manager/internal/database/generated"
 	"github.com/Se7enSe7enSe7en/tenant-manager/internal/env"
-	"github.com/Se7enSe7enSe7en/tenant-manager/internal/tenant"
+	"github.com/Se7enSe7enSe7en/tenant-manager/internal/handler"
+	"github.com/Se7enSe7enSe7en/tenant-manager/internal/service"
 	"github.com/Se7enSe7enSe7en/tenant-manager/internal/utils"
 	"github.com/jackc/pgx/v5"
 	"github.com/joho/godotenv"
 )
 
-type DBConfig struct {
-	connStr string
+// think of config as constants, variables inside do not change over time, and is initialized only before starting the application
+type config struct {
+	port       string // our main port (or address) for prod
+	proxy_port string // the port will be used for development with templ
+	dsn        string // Data Source Name, or database connection string
 }
 
-type AppConfig struct {
-	dbConfig DBConfig
+// think of the application as states, variables inside change over time
+type application struct {
+	db *pgx.Conn // db driver
 }
 
 func main() {
-	// constants
-	const port = "8080"
-	const proxy_port = "7331"
-
 	// global context
 	ctx := context.Background()
 
 	// load env variables
 	godotenv.Load()
 
-	// app config
-	cfg := AppConfig{
-		dbConfig: DBConfig{
-			connStr: env.GetString("GOOSE_DBSTRING", "host=localhost user=postgres password=postgres dbname=db sslmode=disable"),
-		},
+	// init app config
+	cfg := config{
+		port:       "8080",
+		proxy_port: "7331",
+		dsn:        env.GetString("GOOSE_DBSTRING", "host=localhost user=postgres password=postgres dbname=db sslmode=disable"),
 	}
 
 	// connect to database
-	conn, err := pgx.Connect(ctx, cfg.dbConfig.connStr)
+	conn, err := pgx.Connect(ctx, cfg.dsn)
 	if err != nil {
 		log.Fatalf("failed to connect to DB: %v", err)
 	}
 	defer conn.Close(ctx)
 
-	logger.Debug("connected to database: %v", cfg.dbConfig.connStr)
+	logger.Debug("connected to database: %v", cfg.dsn)
+
+	// init application variables
+	app := application{
+		db: conn,
+	}
 
 	// create server mux
 	mux := http.NewServeMux()
@@ -55,18 +62,22 @@ func main() {
 	fs := http.FileServer(http.Dir("./web/static/assets"))
 	mux.Handle("/assets/", utils.DisableCacheInDevMode(http.StripPrefix("/assets/", fs)))
 
+	// init services and handlers
+	tenantService := service.NewTenantService(repo.New(app.db))
+	tenantHandler := handler.NewTenantHandler(tenantService)
+
 	// page handlers
-	mux.HandleFunc("/", tenant.ListTenantPage)
+	mux.HandleFunc("/", tenantHandler.ListTenantPage)
 
 	// init server
 	s := &http.Server{
-		Addr:    ":" + port,
+		Addr:    ":" + cfg.port,
 		Handler: mux,
 	}
 
 	// start server
-	logger.Debug("For Production, open the actual port: http://localhost:%v", port)
-	logger.Debug("For Development, open the proxy port (for templ hot reload): http://localhost:%v", proxy_port)
+	logger.Debug("For Production, open the actual port: http://localhost:%v", cfg.port)
+	logger.Debug("For Development, open the proxy port (for templ hot reload): http://localhost:%v", cfg.proxy_port)
 
 	log.Fatalln(s.ListenAndServe())
 }

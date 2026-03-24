@@ -1,75 +1,75 @@
 package web
 
-import "github.com/Se7enSe7enSe7en/tenant-manager/internal/utils"
-import "github.com/Se7enSe7enSe7en/tenant-manager/internal/constants"
-
-templ MainPage() {
+templ MainPage(tenantList []TenantCardProps) {
 	@Base() {
 		<div class="page p-4 max-w-7xl mx-auto ">
 			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-col-4 xl:grid-cols-4 gap-4 mb-8">
 				@StatCard(StatCardProps{
 					title:    "Total tenants",
 					value:    "4",
-					subtitle: utils.Ptr("Active units"),
-					icon:     utils.Ptr("assets/tenants-icon.svg"),
+					subtitle: new("Active units"),
+					icon:     new("assets/tenants-icon.svg"),
 				})
 				@StatCard(StatCardProps{
 					title:    "Paid",
 					value:    "1",
-					subtitle: utils.Ptr("₱15,000 collected"),
-					icon:     utils.Ptr("assets/paid-icon.svg"),
+					subtitle: new("₱15,000 collected"),
+					icon:     new("assets/paid-icon.svg"),
 				})
 				@StatCard(StatCardProps{
 					title:    "Unpaid",
 					value:    "2",
-					subtitle: utils.Ptr("Awaiting payment"),
-					icon:     utils.Ptr("assets/unpaid-icon.svg"),
+					subtitle: new("Awaiting payment"),
+					icon:     new("assets/unpaid-icon.svg"),
 				})
 				@StatCard(StatCardProps{
 					title:    "Late",
 					value:    "1",
-					subtitle: utils.Ptr("Overdue payments"),
-					icon:     utils.Ptr("assets/late-icon.svg"),
+					subtitle: new("Overdue payments"),
+					icon:     new("assets/late-icon.svg"),
 				})
 			</div>
 			<p class="text-2xl my-3">Tenants</p>
 			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-col-3 xl:grid-cols-3 gap-4">
-				@TenantCard(TenantCardProps{
-					name:            "Chim Chay",
-					unit:            "Apt #1",
-					status:          constants.PAID,
-					rentAmount:      "₱19,000",
-					lastPaymentDate: "2026-01-10",
-					email:           utils.Ptr("email@email.com"),
-					phoneNumber:     utils.Ptr("(+63)98 765 4321"),
-				})
-				@TenantCard(TenantCardProps{
-					name:            "Dum Dith",
-					unit:            "Apt #2",
-					status:          constants.LATE,
-					rentAmount:      "₱19,000",
-					lastPaymentDate: "2026-01-10",
-					email:           utils.Ptr("email@email.com"),
-					phoneNumber:     utils.Ptr("(+63)98 765 4321"),
-				})
-				@TenantCard(TenantCardProps{
-					name:            "Dud Li",
-					unit:            "Apt #3",
-					status:          constants.UNPAID,
-					rentAmount:      "₱19,000",
-					lastPaymentDate: "2026-01-10",
-					email:           utils.Ptr("email@email.com"),
-					phoneNumber:     utils.Ptr("(+63)98 765 4321"),
-				})
-				@TenantCard(TenantCardProps{
-					name:            "Dudz And Guy Inc.",
-					unit:            "Apt #4",
-					status:          constants.UNPAID,
-					rentAmount:      "₱19,000",
-					lastPaymentDate: "2026-01-10",
-					email:           utils.Ptr("email@email.com"),
-					phoneNumber:     utils.Ptr("(+63)98 765 4321"),
-				})
+				for _, tenant := range tenantList {
+					@TenantCard(tenant)
+				}
+				// @TenantCard(TenantCardProps{
+				// 	name:            "Chim Chay",
+				// 	unit:            "Apt #1",
+				// 	status:          constants.PAID,
+				// 	rentAmount:      "₱19,000",
+				// 	lastPaymentDate: "2026-01-10",
+				// 	email:           new("email@email.com"),
+				// 	phoneNumber:     new("(+63)98 765 4321"),
+				// })
+				// @TenantCard(TenantCardProps{
+				// 	name:            "Dum Dith",
+				// 	unit:            "Apt #2",
+				// 	status:          constants.LATE,
+				// 	rentAmount:      "₱19,000",
+				// 	lastPaymentDate: "2026-01-10",
+				// 	email:           new("email@email.com"),
+				// 	phoneNumber:     new("(+63)98 765 4321"),
+				// })
+				// @TenantCard(TenantCardProps{
+				// 	name:            "Dud Li",
+				// 	unit:            "Apt #3",
+				// 	status:          constants.UNPAID,
+				// 	rentAmount:      "₱19,000",
+				// 	lastPaymentDate: "2026-01-10",
+				// 	email:           new("email@email.com"),
+				// 	phoneNumber:     new("(+63)98 765 4321"),
+				// })
+				// @TenantCard(TenantCardProps{
+				// 	name:            "Dudz And Guy Inc.",
+				// 	unit:            "Apt #4",
+				// 	status:          constants.UNPAID,
+				// 	rentAmount:      "₱19,000",
+				// 	lastPaymentDate: "2026-01-10",
+				// 	email:           new("email@email.com"),
+				// 	phoneNumber:     new("(+63)98 765 4321"),
+				// })
 			</div>
 		</div>
 	}

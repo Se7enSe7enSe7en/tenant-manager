@@ -4,13 +4,13 @@ import "strings"
 import "github.com/Se7enSe7enSe7en/tenant-manager/internal/constants"
 
 type TenantCardProps struct {
-	name            string
-	unit            string
-	status          constants.PaymentStatus
-	rentAmount      string
-	lastPaymentDate string // TODO: change type to datetime
-	email           *string
-	phoneNumber     *string
+	Name            string
+	Unit            string
+	Status          constants.PaymentStatus
+	RentAmount      string
+	LastPaymentDate string // TODO: change type to datetime
+	Email           *string
+	PhoneNumber     *string
 }
 
 templ TenantCard(props TenantCardProps) {
@@ -19,31 +19,31 @@ templ TenantCard(props TenantCardProps) {
 			<div class="flex gap-3">
 				<div class="flex bg-(--surface-4) items-center justify-center size-12 rounded-full ">
 					// TODO: add if no image condition in the future
-					<span class="text-xl">{ takeInitialsOfName(props.name) }</span>
+					<span class="text-xl">{ takeInitialsOfName(props.Name) }</span>
 				</div>
 				<div class="flex-col">
-					<p class="">{ props.name }</p>
-					<p class="">{ props.unit }</p>
+					<p class="">{ props.Name }</p>
+					<p class="">{ props.Unit }</p>
 				</div>
 				// TODO: status badge component
 			</div>
 			// <div class="flex border rounded-full items-center"><p>status</p></div>
 			<div class="flex justify-end align-top w-12 h-6">
-				@StatusBadge(StatusBadgeProps{status: props.status})
+				@StatusBadge(StatusBadgeProps{status: props.Status})
 			</div>
 		</div>
 		<div class="flex-col">
-			<p>{ *props.email }</p>
-			<p>{ *props.phoneNumber }</p>
+			<p>{ *props.Email }</p>
+			<p>{ *props.PhoneNumber }</p>
 		</div>
 		<div class="flex justify-between border-t pt-2">
 			<div class="flex-col">
 				<p>Monthly Rent</p>
-				<p>{ props.rentAmount }</p>
+				<p>{ props.RentAmount }</p>
 			</div>
 			<div class="flex-col">
 				<p>Last Payment</p>
-				<p>{ props.lastPaymentDate }</p>
+				<p>{ props.LastPaymentDate }</p>
 			</div>
 		</div>
 	</div>
