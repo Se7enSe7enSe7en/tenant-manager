@@ -8,19 +8,21 @@ project/
 ├── internal/            # Private application code
 │   ├── handler/         # HTTP handlers (presentation layer)
 │   ├── service/         # Business logic
-│   ├── repository/      # Data access layer
+│   ├── repository/      # Data access layer (sqlc will generated files based on .query.sql files)
 │   ├── middleware/      # HTTP middleware
 │   ├── routes/          # Route definitions
-│   ├── database/        # Database setup & migrations
+│   ├── database/        # Database setup & migrations (model and repository layer is handled by sqlc)
+│   │   ├── generated/   # sqlc generated files from .query.sql files
+│   │   └── migrations/  # migration files using goose
 │   ├── validation/      # Input validators
 │   ├── config/          # Configuration management
-│   ├── ctxkeys/         # Context key definitions (TODO: research what this is for and how it used)
+│   ├── constants/       # Constant variables
+│   ├── ctxkeys/         # Context key definitions
 │   ├── logger/          # Structured logging
 │   └── utils/           # Shared utilities
 └── web/                 # Front end (templ templates)
     ├── static/          # Public files
     │   └── assets/      # Static files (CSS, JS, images)
-    ├── block/           # Reusable UI blocks (TODO: research what this is for and how it used)
     ├── components/      # Reusable components
     ├── layout/          # Page layouts
     └── pages/           # Full page templates
