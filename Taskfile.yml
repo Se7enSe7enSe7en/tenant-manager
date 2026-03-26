@@ -13,8 +13,8 @@ interval: 500ms # note: this is the watch interval, taskfile will watch for chan
 vars:
   PORT: 8080
   PROXY_PORT: 7331
-  TAILWIND_INPUT_CSS_PATH: ./web/static/assets/styles/input.css
-  TAILWIND_OUTPUT_CSS_PATH: ./web/static/assets/css/output.css
+  TAILWIND_INPUT_CSS_PATH: ./internal/web/static/assets/styles/input.css
+  TAILWIND_OUTPUT_CSS_PATH: ./internal/web/static/assets/css/output.css
   SERVER_PATH: ./cmd/server
 
 tasks:
@@ -62,7 +62,7 @@ tasks:
     desc: build the go binary
     sources:
       - "**/*.go"
-      - "./web/static/**/*"
+      - "./internal/web/static/**/*"
       - "**/*.templ"
       # TODO: uncomment this when we figure how to wait for the entire "templ generate" process
       # - exclude: "**/*_templ.go"

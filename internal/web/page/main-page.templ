@@ -1,38 +1,40 @@
-package web
+package page
 
-templ MainPage(tenantList []TenantCardProps) {
-	@Base() {
+import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component"
+
+templ MainPage(tenantList []component.TenantCardProps) {
+	@component.Base() {
 		<div class="page p-4 max-w-7xl mx-auto ">
 			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-col-4 xl:grid-cols-4 gap-4 mb-8">
-				@StatCard(StatCardProps{
-					title:    "Total tenants",
-					value:    "4",
-					subtitle: new("Active units"),
-					icon:     new("assets/tenants-icon.svg"),
+				@component.StatCard(component.StatCardProps{
+					Title:    "Total tenants",
+					Value:    "4",
+					Subtitle: new("Active units"),
+					Icon:     new("assets/tenants-icon.svg"),
 				})
-				@StatCard(StatCardProps{
-					title:    "Paid",
-					value:    "1",
-					subtitle: new("₱15,000 collected"),
-					icon:     new("assets/paid-icon.svg"),
+				@component.StatCard(component.StatCardProps{
+					Title:    "Paid",
+					Value:    "1",
+					Subtitle: new("₱15,000 collected"),
+					Icon:     new("assets/paid-icon.svg"),
 				})
-				@StatCard(StatCardProps{
-					title:    "Unpaid",
-					value:    "2",
-					subtitle: new("Awaiting payment"),
-					icon:     new("assets/unpaid-icon.svg"),
+				@component.StatCard(component.StatCardProps{
+					Title:    "Unpaid",
+					Value:    "2",
+					Subtitle: new("Awaiting payment"),
+					Icon:     new("assets/unpaid-icon.svg"),
 				})
-				@StatCard(StatCardProps{
-					title:    "Late",
-					value:    "1",
-					subtitle: new("Overdue payments"),
-					icon:     new("assets/late-icon.svg"),
+				@component.StatCard(component.StatCardProps{
+					Title:    "Late",
+					Value:    "1",
+					Subtitle: new("Overdue payments"),
+					Icon:     new("assets/late-icon.svg"),
 				})
 			</div>
 			<p class="text-2xl my-3">Tenants</p>
 			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-col-3 xl:grid-cols-3 gap-4">
 				for _, tenant := range tenantList {
-					@TenantCard(tenant)
+					@component.TenantCard(tenant)
 				}
 				// @TenantCard(TenantCardProps{
 				// 	name:            "Chim Chay",

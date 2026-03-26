@@ -59,7 +59,7 @@ func main() {
 	mux := http.NewServeMux()
 
 	// serve static files
-	fs := http.FileServer(http.Dir("./web/static/assets"))
+	fs := http.FileServer(http.Dir("./internal/web/static/assets"))
 	mux.Handle("/assets/", utils.DisableCacheInDevMode(http.StripPrefix("/assets/", fs)))
 
 	// init services and handlers

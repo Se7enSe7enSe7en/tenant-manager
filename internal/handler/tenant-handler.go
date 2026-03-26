@@ -6,7 +6,8 @@ import (
 
 	"github.com/Se7enSe7enSe7en/go-toolkit/pkg/logger"
 	"github.com/Se7enSe7enSe7en/tenant-manager/internal/service"
-	web "github.com/Se7enSe7enSe7en/tenant-manager/web/components"
+	"github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component"
+	"github.com/Se7enSe7enSe7en/tenant-manager/internal/web/page"
 )
 
 type tenantHandler struct {
@@ -30,10 +31,10 @@ func (h *tenantHandler) ListTenantPage(w http.ResponseWriter, r *http.Request) {
 
 	logger.Debug("ListTenantPage() dbTenantList: %v", dbTenantList)
 
-	// convert []repo.Tenant -> []web.TenantCardProps
-	tenantList := make([]web.TenantCardProps, len(dbTenantList))
+	// convert []repo.Tenant -> []component.TenantCardProps
+	tenantList := make([]component.TenantCardProps, len(dbTenantList))
 	for i, t := range dbTenantList {
-		tenantList[i] = web.TenantCardProps{
+		tenantList[i] = component.TenantCardProps{
 			Name: t.Name,
 			Unit: t.PropertyID.String(), // TODO: should be handled from the query, getting the property connected to the user
 			//  Status: , // TODO: add status
@@ -45,5 +46,5 @@ func (h *tenantHandler) ListTenantPage(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// return tenant page with context in an HTTP response
-	web.MainPage(tenantList).Render(context.Background(), w)
+	page.MainPage(tenantList).Render(context.Background(), w)
 }

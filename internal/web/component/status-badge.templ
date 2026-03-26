@@ -1,0 +1,52 @@
+package component
+
+import (
+	"github.com/Se7enSe7enSe7en/tenant-manager/internal/constants"
+	"github.com/Se7enSe7enSe7en/tenant-manager/internal/utils"
+)
+
+type StatusBadgeProps struct {
+	status constants.PaymentStatus
+}
+
+templ StatusBadge(props StatusBadgeProps) {
+	<span
+		class={ utils.ClassNameJoin(
+            "inline-flex items-center gap-1.5 px-3 rounded-full text-xs font-semibold uppercase tracking-wide", 
+            statusBadgeClassName(props.status)) }
+	>
+		<span class="flex items-center justify-center">
+			// all this... just for a pulsing-ping effect... sigh
+			<span class={ utils.ClassNameJoin("absolute", statusDotClassName(props.status)) }>⬤</span>
+			<span>⬤</span>
+		</span>
+		<span>{ props.status.String() }</span>
+	</span>
+}
+
+func statusBadgeClassName(paymentStatus constants.PaymentStatus) string {
+	className := ""
+
+	switch paymentStatus {
+	case constants.PAID:
+		className = "bg-[hsl(var(--status-paid-bg))] text-[hsl(var(--status-paid))]"
+	case constants.UNPAID:
+		className = "bg-[hsl(var(--status-unpaid-bg))] text-[hsl(var(--status-unpaid))]"
+	case constants.LATE:
+		className = "bg-[hsl(var(--status-late-bg))] text-[hsl(var(--status-late))]"
+	}
+
+	return className
+	// note: notice how we didn't do early return in the switch, this is because
+	// we need the "className" variable for tailwindcss intellisense to work
+}
+
+func statusDotClassName(paymentStatus constants.PaymentStatus) string {
+	className := ""
+
+	if paymentStatus == constants.LATE {
+		className = "animate-ping"
+	}
+
+	return className
+}

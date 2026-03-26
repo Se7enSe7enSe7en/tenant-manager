@@ -1,0 +1,25 @@
+package component
+
+type StatCardProps struct {
+	Title    string
+	Value    string
+	Subtitle *string
+	Icon     *string
+}
+
+templ StatCard(props StatCardProps) {
+	<div class="stat-card bg-(--bg-card-color) flex min-w-4 p-4 border rounded-lg justify-between">
+		<div class="flex-col">
+			<p class="text-xl font-semibold">{ props.Title }</p>
+			<p class="text-3xl font-bold ">{ props.Value }</p>
+			if props.Subtitle != nil {
+				<p class="text-xs">{ *props.Subtitle }</p>
+			}
+		</div>
+		if props.Icon != nil {
+			<div class="bg-(--surface-3) rounded-lg size-12 p-2">
+				<img src={ *props.Icon }/>
+			</div>
+		}
+	</div>
+}
