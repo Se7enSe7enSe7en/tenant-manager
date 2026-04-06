@@ -80,7 +80,7 @@ tasks:
   tailwind:
     desc: Tailwind watch css changes in .templ files
     cmds:
-      - ./tailwindcss --input {{.TAILWIND_INPUT_CSS_PATH}} --output {{.TAILWIND_OUTPUT_CSS_PATH}} --minify --watch
+      - ./tailwindcss --input {{.TAILWIND_INPUT_CSS_PATH}} --output {{.TAILWIND_OUTPUT_CSS_PATH}} --watch
 
   templ:
     desc: Templ hot reload, watches all .go files

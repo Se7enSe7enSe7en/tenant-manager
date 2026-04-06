@@ -45,7 +45,7 @@ func MainPage(tenantList []tenantcard.TenantCardProps) templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"page p-4 max-w-7xl mx-auto\"><div class=\"grid grid-cols-1 md:grid-cols-2 lg:grid-col-4 xl:grid-cols-4 gap-4 mb-8\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"p-4 max-w-7xl mx-auto\"><div class=\"grid grid-cols-1 md:grid-cols-2 lg:grid-col-4 xl:grid-cols-4 gap-4 mb-8\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

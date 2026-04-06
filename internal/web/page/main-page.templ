@@ -6,7 +6,7 @@ import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/statcar
 
 templ MainPage(tenantList []tenantcard.TenantCardProps) {
 	@Base() {
-		<div class="page p-4 max-w-7xl mx-auto ">
+		<div class="p-4 max-w-7xl mx-auto ">
 			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-col-4 xl:grid-cols-4 gap-4 mb-8">
 				@statcard.StatCard(statcard.StatCardProps{
 					Title:    "Total tenants",

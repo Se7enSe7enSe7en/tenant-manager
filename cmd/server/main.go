@@ -70,7 +70,7 @@ func main() {
 	propertyHandler := handler.NewPropertyHandler(propertyService)
 
 	// page handlers
-	mux.HandleFunc("/", tenantHandler.ListTenantPage)
+	mux.HandleFunc("/dashboard", tenantHandler.ListTenantPage)
 	mux.HandleFunc("/property/create", propertyHandler.CreatePropertyPage)
 
 	// init server
