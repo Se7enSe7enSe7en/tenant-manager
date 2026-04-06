@@ -13,7 +13,7 @@ interval: 500ms # note: this is the watch interval, taskfile will watch for chan
 vars:
   PORT: 8080
   PROXY_PORT: 7331
-  TAILWIND_INPUT_CSS_PATH: ./internal/web/static/assets/styles/input.css
+  TAILWIND_INPUT_CSS_PATH: ./internal/web/static/assets/css/input.css
   TAILWIND_OUTPUT_CSS_PATH: ./internal/web/static/assets/css/output.css
   SERVER_PATH: ./cmd/server
 
@@ -39,11 +39,12 @@ tasks:
 
   setup:
     cmds:
-      # # Alternatively install them directly (not through go get -tool):
+      # TODO: improve setup in the future where it just checks if you already have the tool no need to install
       - task: setup-tailwind
       - go install github.com/a-h/templ/cmd/templ@latest # setup templ
       - go install github.com/sqlc-dev/sqlc/cmd/sqlc@latest # setup sqlc
       - go install github.com/pressly/goose/v3/cmd/goose@latest # setup goose
+      - go install github.com/templui/templui/cmd/templui@latest # setup templui
       - go mod tidy
 
   kill:
@@ -76,27 +77,23 @@ tasks:
       - go mod tidy
       - go build -o ./dist/main {{.SERVER_PATH}}/main.go
 
-  start-tailwind-watch:
+  tailwind:
+    desc: Tailwind watch css changes in .templ files
     cmds:
       - ./tailwindcss --input {{.TAILWIND_INPUT_CSS_PATH}} --output {{.TAILWIND_OUTPUT_CSS_PATH}} --minify --watch
 
-  start-templ-watch:
+  templ:
+    desc: Templ hot reload, watches all .go files
     cmds:
       - templ generate --watch --proxy="http://localhost:{{.PORT}}" --open-browser=false --cmd="go run -tags=debug {{.SERVER_PATH}}"
 
-  start-server:
-    cmds:
-      - go run -tags=debug {{.SERVER_PATH}}
-
-  # TODO: investigate further (dev only issue)
-  # potential race condition here since the watchers in deps are running in parallel
-  # find a way to make the dev hot reloading work sequentially
-  start:
+  dev:
     method: none
     desc: watch for changes and start the project for development
-    deps: [start-tailwind-watch, start-templ-watch]
+    cmds:
+      - task --parallel tailwind templ
 
-  start-prod:
+  prod:
     method: none
     desc: build and start the project for production
     cmds:
@@ -104,4 +101,4 @@ tasks:
       - ./dist/main
 
   default:
-    - task: start
+    - task: dev

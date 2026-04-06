@@ -66,8 +66,12 @@ func main() {
 	tenantService := service.NewTenantService(repo.New(app.db))
 	tenantHandler := handler.NewTenantHandler(tenantService)
 
+	propertyService := service.NewPropertyService(repo.New(app.db))
+	propertyHandler := handler.NewPropertyHandler(propertyService)
+
 	// page handlers
 	mux.HandleFunc("/", tenantHandler.ListTenantPage)
+	mux.HandleFunc("/property/create", propertyHandler.CreatePropertyPage)
 
 	// init server
 	s := &http.Server{

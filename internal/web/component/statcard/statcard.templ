@@ -1,4 +1,4 @@
-package component
+package statcard
 
 type StatCardProps struct {
 	Title    string
@@ -8,7 +8,7 @@ type StatCardProps struct {
 }
 
 templ StatCard(props StatCardProps) {
-	<div class="stat-card bg-(--bg-card-color) flex min-w-4 p-4 border rounded-lg justify-between">
+	<div class="stat-card bg-card flex min-w-4 p-4 border rounded-lg justify-between">
 		<div class="flex-col">
 			<p class="text-xl font-semibold">{ props.Title }</p>
 			<p class="text-3xl font-bold ">{ props.Value }</p>

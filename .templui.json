@@ -1,0 +1,7 @@
+{
+  "componentsDir": "internal/web/component",
+  "utilsDir": "internal/utils",
+  "moduleName": "github.com/Se7enSe7enSe7en/tenant-manager",
+  "jsDir": "internal/web/static/assets/js",
+  "jsPublicPath": "/assets/js"
+}

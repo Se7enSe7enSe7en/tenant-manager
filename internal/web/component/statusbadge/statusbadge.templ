@@ -1,4 +1,4 @@
-package component
+package statusbadge
 
 import (
 	"github.com/Se7enSe7enSe7en/tenant-manager/internal/constants"
@@ -6,21 +6,21 @@ import (
 )
 
 type StatusBadgeProps struct {
-	status constants.PaymentStatus
+	Status constants.PaymentStatus
 }
 
 templ StatusBadge(props StatusBadgeProps) {
 	<span
 		class={ utils.ClassNameJoin(
             "inline-flex items-center gap-1.5 px-3 rounded-full text-xs font-semibold uppercase tracking-wide", 
-            statusBadgeClassName(props.status)) }
+            statusBadgeClassName(props.Status)) }
 	>
 		<span class="flex items-center justify-center">
 			// all this... just for a pulsing-ping effect... sigh
-			<span class={ utils.ClassNameJoin("absolute", statusDotClassName(props.status)) }>⬤</span>
+			<span class={ utils.ClassNameJoin("absolute", statusDotClassName(props.Status)) }>⬤</span>
 			<span>⬤</span>
 		</span>
-		<span>{ props.status.String() }</span>
+		<span>{ props.Status.String() }</span>
 	</span>
 }
 

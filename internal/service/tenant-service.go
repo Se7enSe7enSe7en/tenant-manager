@@ -10,14 +10,14 @@ type TenantService interface {
 	ListTenants(ctx context.Context) ([]repo.Tenant, error)
 }
 
-type service struct {
+type tenantService struct {
 	repo repo.Querier
 }
 
-func NewTenantService(repo repo.Querier) TenantService {
-	return &service{repo: repo}
+func NewTenantService(repo repo.Querier) *tenantService {
+	return &tenantService{repo}
 }
 
-func (s *service) ListTenants(ctx context.Context) ([]repo.Tenant, error) {
+func (s *tenantService) ListTenants(ctx context.Context) ([]repo.Tenant, error) {
 	return s.repo.ListTenants(ctx)
 }

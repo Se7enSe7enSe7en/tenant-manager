@@ -1,7 +1,8 @@
-package component
+package tenantcard
 
 import "strings"
 import "github.com/Se7enSe7enSe7en/tenant-manager/internal/constants"
+import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/statusbadge"
 
 type TenantCardProps struct {
 	Name            string
@@ -14,10 +15,10 @@ type TenantCardProps struct {
 }
 
 templ TenantCard(props TenantCardProps) {
-	<div class="bg-(--bg-card-color) rounded-xl p-5 border shadow-sm transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5">
+	<div class="bg-card rounded-xl p-5 border shadow-sm transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5">
 		<div class="flex justify-between mb-2">
 			<div class="flex gap-3">
-				<div class="flex bg-(--surface-4) items-center justify-center size-12 rounded-full ">
+				<div class="flex bg-secondary items-center justify-center size-12 rounded-full ">
 					// TODO: add if no image condition in the future
 					<span class="text-xl">{ takeInitialsOfName(props.Name) }</span>
 				</div>
@@ -29,7 +30,7 @@ templ TenantCard(props TenantCardProps) {
 			</div>
 			// <div class="flex border rounded-full items-center"><p>status</p></div>
 			<div class="flex justify-end align-top w-12 h-6">
-				@StatusBadge(StatusBadgeProps{status: props.Status})
+				@statusbadge.StatusBadge(statusbadge.StatusBadgeProps{Status: props.Status})
 			</div>
 		</div>
 		<div class="flex-col">

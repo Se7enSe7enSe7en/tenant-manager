@@ -8,9 +8,11 @@ package page
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component"
+import "github.com/Se7enSe7enSe7en/tenant-manager/internal/constants"
+import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/tenantcard"
+import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/statcard"
 
-func MainPage(tenantList []component.TenantCardProps) templ.Component {
+func MainPage(tenantList []tenantcard.TenantCardProps) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -47,7 +49,7 @@ func MainPage(tenantList []component.TenantCardProps) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = component.StatCard(component.StatCardProps{
+			templ_7745c5c3_Err = statcard.StatCard(statcard.StatCardProps{
 				Title:    "Total tenants",
 				Value:    "4",
 				Subtitle: new("Active units"),
@@ -56,7 +58,7 @@ func MainPage(tenantList []component.TenantCardProps) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = component.StatCard(component.StatCardProps{
+			templ_7745c5c3_Err = statcard.StatCard(statcard.StatCardProps{
 				Title:    "Paid",
 				Value:    "1",
 				Subtitle: new("₱15,000 collected"),
@@ -65,7 +67,7 @@ func MainPage(tenantList []component.TenantCardProps) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = component.StatCard(component.StatCardProps{
+			templ_7745c5c3_Err = statcard.StatCard(statcard.StatCardProps{
 				Title:    "Unpaid",
 				Value:    "2",
 				Subtitle: new("Awaiting payment"),
@@ -74,7 +76,7 @@ func MainPage(tenantList []component.TenantCardProps) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = component.StatCard(component.StatCardProps{
+			templ_7745c5c3_Err = statcard.StatCard(statcard.StatCardProps{
 				Title:    "Late",
 				Value:    "1",
 				Subtitle: new("Overdue payments"),
@@ -88,10 +90,58 @@ func MainPage(tenantList []component.TenantCardProps) templ.Component {
 				return templ_7745c5c3_Err
 			}
 			for _, tenant := range tenantList {
-				templ_7745c5c3_Err = component.TenantCard(tenant).Render(ctx, templ_7745c5c3_Buffer)
+				templ_7745c5c3_Err = tenantcard.TenantCard(tenant).Render(ctx, templ_7745c5c3_Buffer)
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
+			}
+			templ_7745c5c3_Err = tenantcard.TenantCard(tenantcard.TenantCardProps{
+				Name:            "Chim Chay",
+				Unit:            "Apt #1",
+				Status:          constants.PAID,
+				RentAmount:      "₱19,000",
+				LastPaymentDate: "2026-01-10",
+				Email:           new("email@email.com"),
+				PhoneNumber:     new("(+63)98 765 4321"),
+			}).Render(ctx, templ_7745c5c3_Buffer)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = tenantcard.TenantCard(tenantcard.TenantCardProps{
+				Name:            "Dum Dith",
+				Unit:            "Apt #2",
+				Status:          constants.LATE,
+				RentAmount:      "₱19,000",
+				LastPaymentDate: "2026-01-10",
+				Email:           new("email@email.com"),
+				PhoneNumber:     new("(+63)98 765 4321"),
+			}).Render(ctx, templ_7745c5c3_Buffer)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = tenantcard.TenantCard(tenantcard.TenantCardProps{
+				Name:            "Dud Li",
+				Unit:            "Apt #3",
+				Status:          constants.UNPAID,
+				RentAmount:      "₱19,000",
+				LastPaymentDate: "2026-01-10",
+				Email:           new("email@email.com"),
+				PhoneNumber:     new("(+63)98 765 4321"),
+			}).Render(ctx, templ_7745c5c3_Buffer)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = tenantcard.TenantCard(tenantcard.TenantCardProps{
+				Name:            "Dudz And Guy Inc.",
+				Unit:            "Apt #4",
+				Status:          constants.UNPAID,
+				RentAmount:      "₱19,000",
+				LastPaymentDate: "2026-01-10",
+				Email:           new("email@email.com"),
+				PhoneNumber:     new("(+63)98 765 4321"),
+			}).Render(ctx, templ_7745c5c3_Buffer)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
 			}
 			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "</div></div>")
 			if templ_7745c5c3_Err != nil {
@@ -99,7 +149,7 @@ func MainPage(tenantList []component.TenantCardProps) templ.Component {
 			}
 			return nil
 		})
-		templ_7745c5c3_Err = component.Base().Render(templ.WithChildren(ctx, templ_7745c5c3_Var2), templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = Base().Render(templ.WithChildren(ctx, templ_7745c5c3_Var2), templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

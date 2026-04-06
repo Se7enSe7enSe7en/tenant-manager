@@ -1,0 +1,25 @@
+package page
+
+import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/form"
+import "github.com/templui/templui/components/input"
+
+type CreatePropertyVM struct {
+	Name       string
+	RentAmount float32
+}
+
+templ CreatePropertyPage() {
+	@Base() {
+		@form.Item() {
+			@form.Label(form.LabelProps{
+				For: "property-form",
+			}) {
+				Property
+			}
+			@input.Input(input.Props{
+				ID:   "property-form",
+				Type: input.TypeText,
+			})
+		}
+	}
+}
