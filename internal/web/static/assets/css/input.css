@@ -28,6 +28,12 @@
     --color-border: var(--border);
     --color-input: var(--input);
     --color-ring: var(--ring);
+
+    /* custom props */
+    /* TODO: investigate why not working */
+    --font-headline: "Manrope", sans-serif;
+    --font-body: "Inter", sans-serif;
+    --font-label: "Inter", sans-serif;
 }
 
 :root {
@@ -106,5 +112,5 @@
 
     body {
         @apply bg-background text-foreground;
-    }
+    }   
 }

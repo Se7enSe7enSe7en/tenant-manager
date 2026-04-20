@@ -1,4 +1,4 @@
-// templui util templui.go - version: v1.9.2 installed by templui v1.9.2
+// templui util templui.go - version: v1.10.0 installed by templui v1.10.0
 package utils
 
 import (
@@ -24,9 +24,9 @@ func TwMerge(classes ...string) string {
 	return twmerge.Merge(classes...)
 }
 
-// TwIf returns value if condition is true, otherwise an empty value of type T.
+// If returns value if condition is true, otherwise the zero value of T.
 // Example: true, "bg-red-500" → "bg-red-500"
-func If[T comparable](condition bool, value T) T {
+func If[T any](condition bool, value T) T {
 	var empty T
 	if condition {
 		return value
@@ -34,7 +34,7 @@ func If[T comparable](condition bool, value T) T {
 	return empty
 }
 
-// TwIfElse returns trueValue if condition is true, otherwise falseValue.
+// IfElse returns trueValue if condition is true, otherwise falseValue.
 // Example: true, "bg-red-500", "bg-gray-300" → "bg-red-500"
 func IfElse[T any](condition bool, trueValue T, falseValue T) T {
 	if condition {
@@ -81,7 +81,7 @@ var ScriptURL = func(path string) string {
 
 // componentScriptBasePath is the base public path for component JavaScript files.
 // In the import workflow this stays "/templui/js". The CLI rewrites it to the user's local jsPublicPath.
-var componentScriptBasePath = "./internal/web/static/assets/js"
+var componentScriptBasePath = "/assets/js"
 
 // UseUnminifiedScripts switches component script loading to the unminified files.
 // Leave this false in normal use and set it to true during app startup for debugging.

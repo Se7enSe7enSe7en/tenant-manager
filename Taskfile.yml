@@ -16,6 +16,7 @@ vars:
   TAILWIND_INPUT_CSS_PATH: ./internal/web/static/assets/css/input.css
   TAILWIND_OUTPUT_CSS_PATH: ./internal/web/static/assets/css/output.css
   SERVER_PATH: ./cmd/server
+  BUILD_PATH: ./dist
 
 tasks:
   setup-tailwind-cli-mac:
@@ -50,6 +51,7 @@ tasks:
   kill:
     method: none
     desc: Kills process on port 8080
+    # note: sometimes the server survives a signal interrupt (ctrl + c) from the terminal, this command make sure it is killed
     cmds:
       # kills process on port 8080 on linux
       - cmd: fuser -k {{.PORT}}/tcp > /dev/null 2>&1 || true
@@ -85,7 +87,19 @@ tasks:
   templ:
     desc: Templ hot reload, watches all .go files
     cmds:
-      - templ generate --watch --proxy="http://localhost:{{.PORT}}" --open-browser=false --cmd="go run -tags=debug {{.SERVER_PATH}}"
+      # - templ generate --watch --proxy="http://localhost:{{.PORT}}" --open-browser=false --cmd="go run {{.SERVER_PATH}}"
+      - templ generate --watch --proxy="http://localhost:{{.PORT}}" --open-browser=false --cmd="./scripts/run-dev.sh"
+      # note #1: avoid using --cmd="go run {{.SERVER_PATH}}" since we encounter an issue with the go run cache, see docs/ai-generated/templ-zombie-process-fix.md
+      # note #2: supposedly we simply want to run --cmd="go run build -o {{.BUILD_PATH}}/main-dev {{.SERVER_PATH}} && {{.BUILD_PATH}}/main-dev" here,
+      # however it is currently not possible to run 2 commands as the argument for --cmd.
+      # note #3: doing --cmd="task dev-server" causes a new problem where the task command doesn't restart properly
+      # TODO: find a better way using `templ generate --notify-proxy`
+
+  # dev-server:
+  #   method: none
+  #   cmds:
+  #     - go build -tags=debug -o {{.BUILD_PATH}}/main-dev {{.SERVER_PATH}}
+  #     - "{{.BUILD_PATH}}/main-dev"
 
   dev:
     method: none

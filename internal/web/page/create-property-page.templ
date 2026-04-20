@@ -1,5 +1,11 @@
 package page
 
+import (
+	"github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/button"
+	"github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/form"
+	"github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/input"
+)
+
 type CreatePropertyVM struct {
 	Name       string
 	RentAmount float32
@@ -7,19 +13,39 @@ type CreatePropertyVM struct {
 
 templ CreatePropertyPage() {
 	@Base() {
-		<div class="p-8 w-full justify-center bg-accent border">
-			<h1>HELLO WORLD</h1>
-			// @form.Item() {
-			// 	@form.Label(form.LabelProps{
-			// 		For: "property-form",
-			// 	}) {
-			// 		Property
-			// 	}
-			// 	@input.Input(input.Props{
-			// 		ID:   "property-form",
-			// 		Type: input.TypeText,
-			// 	})
-			// }
+		<div class="grid grid-cols-12 gap-8">
+			<div class="p-4 col-start-2 col-span-8 bg-accent">
+				@form.Item() {
+					@form.Label(form.LabelProps{
+						For: "property-name",
+					}) {
+						Property Name
+					}
+					@input.Input(input.Props{
+						ID:   "property-name",
+						Type: input.TypeText,
+					})
+				}
+				@form.Item() {
+					@form.Label(form.LabelProps{
+						For: "property-rent",
+					}) {
+						Rent Amount
+					}
+					@input.Input(input.Props{
+						ID:   "property-rent-amount",
+						Type: input.TypeNumber,
+					})
+				}
+				<div class="flex py-4 justify-between">
+					@button.Button() {
+						cancel
+					}
+					@button.Button() {
+						submit
+					}
+				</div>
+			</div>
 		</div>
 	}
 }
