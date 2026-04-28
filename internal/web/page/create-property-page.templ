@@ -14,7 +14,7 @@ type CreatePropertyVM struct {
 templ CreatePropertyPage() {
 	@Base() {
 		<div class="grid grid-cols-12 gap-8">
-			<div class="p-4 col-start-2 col-span-8 bg-accent">
+			<div class="p-4 col-span-12 lg:col-start-4 lg:col-span-6 bg-accent">
 				@form.Item() {
 					@form.Label(form.LabelProps{
 						For: "property-name",
@@ -37,11 +37,17 @@ templ CreatePropertyPage() {
 						Type: input.TypeNumber,
 					})
 				}
-				<div class="flex py-4 justify-between">
-					@button.Button() {
+				<div class="flex pt-4 justify-between">
+					@button.Button(button.Props{
+						Variant: button.VariantOutline,
+					}) {
 						cancel
 					}
-					@button.Button() {
+					@button.Button(button.Props{
+						Attributes: templ.Attributes{
+							"data-on:click": "alert('Hello World')",
+						},
+					}) {
 						submit
 					}
 				</div>
