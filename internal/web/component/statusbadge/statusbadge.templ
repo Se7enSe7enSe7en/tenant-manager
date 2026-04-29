@@ -29,11 +29,11 @@ func statusBadgeClassName(paymentStatus constants.PaymentStatus) string {
 
 	switch paymentStatus {
 	case constants.PAID:
-		className = "bg-[hsl(var(--status-paid-bg))] text-[hsl(var(--status-paid))]"
+		className = "bg-(--paid-color) text-(--paid-color)"
 	case constants.UNPAID:
-		className = "bg-[hsl(var(--status-unpaid-bg))] text-[hsl(var(--status-unpaid))]"
+		className = "bg-(--unpaid-color) text-(--unpaid-color)"
 	case constants.LATE:
-		className = "bg-[hsl(var(--status-late-bg))] text-[hsl(var(--status-late))]"
+		className = "bg-(--late-color) text-(--late-color)"
 	}
 
 	return className

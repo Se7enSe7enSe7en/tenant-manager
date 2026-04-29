@@ -5,12 +5,11 @@ package statusbadge
 
 //lint:file-ignore SA4006 This context is only used if a nested component is present.
 
-import "github.com/a-h/templ"
-import templruntime "github.com/a-h/templ/runtime"
-
 import (
 	"github.com/Se7enSe7enSe7en/tenant-manager/internal/constants"
 	"github.com/Se7enSe7enSe7en/tenant-manager/internal/utils"
+	"github.com/a-h/templ"
+	templruntime "github.com/a-h/templ/runtime"
 )
 
 type StatusBadgeProps struct {
@@ -106,11 +105,11 @@ func statusBadgeClassName(paymentStatus constants.PaymentStatus) string {
 
 	switch paymentStatus {
 	case constants.PAID:
-		className = "bg-[hsl(var(--status-paid-bg))] text-[hsl(var(--status-paid))]"
+		className = "bg-(--bg-paid-color) text-(--paid-color)"
 	case constants.UNPAID:
-		className = "bg-[hsl(var(--status-unpaid-bg))] text-[hsl(var(--status-unpaid))]"
+		className = "bg-(--bg-unpaid-color) text-(--unpaid-color)"
 	case constants.LATE:
-		className = "bg-[hsl(var(--status-late-bg))] text-[hsl(var(--status-late))]"
+		className = "bg-(--bg-late-color) text-(--late-color)"
 	}
 
 	return className

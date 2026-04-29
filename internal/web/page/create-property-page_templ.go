@@ -50,7 +50,7 @@ func CreatePropertyPage() templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"grid grid-cols-12 gap-4\"><div class=\"p-4 col-span-12 lg:col-start-4 lg:col-span-6 border\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"grid grid-cols-12 gap-4\"><div class=\"p-4 col-span-12 lg:col-start-4 lg:col-span-6 border bg-card\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
