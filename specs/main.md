@@ -67,6 +67,7 @@
 
 - start_date should always just use the previous months end_date
 
-## UI library: templUI
+## UI library: DatastarUI
 
-- ref: https://templui.io/docs/how-to-use
+- ref: https://datastar-ui.com/docs
+- we just copy paste from the repo

@@ -1,47 +1,18 @@
-// templui component label - version: v1.10.0 installed by templui v1.10.0
-// 📚 Documentation: https://templui.io/docs/components/label
 package label
 
-import "github.com/Se7enSe7enSe7en/tenant-manager/internal/utils"
-
-type Props struct {
-	ID         string
-	Class      string
-	Attributes templ.Attributes
-	For        string
-	Error      string
-}
-
-templ Label(props ...Props) {
-	{{ var p Props }}
-	if len(props) > 0 {
-		{{ p = props[0] }}
-	}
+templ Label(args LabelArgs) {
+	{{
+		// Generate CSS classes
+		classes := labelVariants(args.Class)
+	}}
 	<label
-		if p.ID != "" {
-			id={ p.ID }
+		data-slot="label"
+		class={ classes }
+		if args.For != "" {
+			for={ args.For }
 		}
-		if p.For != "" {
-			for={ p.For }
-		}
-		class={
-			utils.TwMerge(
-				"text-sm font-medium leading-none inline-block",
-				utils.If(len(p.Error) > 0, "text-destructive"),
-				p.Class,
-			),
-		}
-		data-tui-label-disabled-style="opacity-50 cursor-not-allowed"
-		{ p.Attributes... }
+		{ args.Attributes... }
 	>
 		{ children... }
 	</label>
-}
-
-var scriptOnce = templ.NewOnceHandle()
-
-templ Script() {
-	@scriptOnce.Once() {
-		@utils.ComponentScript("label")
-	}
 }

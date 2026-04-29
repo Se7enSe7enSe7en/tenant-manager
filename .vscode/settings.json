@@ -3,8 +3,14 @@
     "templ": "html"
   },
   "tailwindCSS.classFunctions": [
-    ".*ClassName"
+    ".*ClassName",
   ],
+  "tailwindCSS.experimental.classRegex": [
+    ["[Cc]lass:\\s*\"([^\"]*)\""]
+  ],
+  "editor.quickSuggestions": {
+    "strings": true
+  },
   "emmet.includeLanguages": {
     "templ": "html"
   },
