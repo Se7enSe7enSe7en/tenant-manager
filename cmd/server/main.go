@@ -71,7 +71,10 @@ func main() {
 
 	// page handlers
 	mux.HandleFunc("/dashboard", tenantHandler.ListTenantPage)
-	mux.HandleFunc("/property/create", propertyHandler.CreatePropertyPage)
+	mux.HandleFunc("GET /property/create", propertyHandler.CreatePropertyPage)
+
+	// handlers
+	mux.HandleFunc("POST /property/create", propertyHandler.CreateProperty)
 
 	// init server
 	s := &http.Server{

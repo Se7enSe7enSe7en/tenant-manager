@@ -346,15 +346,6 @@
   .border-input {
     border-color: var(--color-input);
   }
-  .bg-\(--bg-late-color\) {
-    background-color: var(--bg-late-color);
-  }
-  .bg-\(--bg-paid-color\) {
-    background-color: var(--bg-paid-color);
-  }
-  .bg-\(--bg-unpaid-color\) {
-    background-color: var(--bg-unpaid-color);
-  }
   .bg-\(--late-color\) {
     background-color: var(--late-color);
   }

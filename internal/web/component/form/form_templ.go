@@ -111,8 +111,8 @@ func Form(args FormArgs) templ.Component {
 				submitHandler = fmt.Sprintf("@post('%s', {contentType: '%s'%s})", templ.SafeURL(args.Action), contentType, target)
 			}
 
-			formAttrs["data-on-submit"] = submitHandler
-			formAttrs["data-indicator-fetching"] = ""
+			formAttrs["data-on:submit"] = submitHandler
+			formAttrs["data-indicator:fetching"] = ""
 		}
 
 		if args.Class != "" {

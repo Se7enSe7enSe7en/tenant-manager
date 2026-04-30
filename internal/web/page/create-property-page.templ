@@ -1,8 +1,10 @@
 package page
 
-import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/form"
-import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/input"
-import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/button"
+import (
+	"github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/button"
+	"github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/form"
+	"github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/input"
+)
 
 type CreatePropertyVM struct {
 	Name       string
@@ -14,30 +16,36 @@ templ CreatePropertyPage() {
 		<div class="grid grid-cols-12 gap-4">
 			<div class="p-4 col-span-12 lg:col-start-4 lg:col-span-6 border bg-card">
 				@form.Form(form.FormArgs{
-					Class: "flex flex-col gap-2",
+					ID:     "property-form",
+					Class:  "flex flex-col gap-2",
+					Action: "/property/create",
 				}) {
 					@form.FormItem(form.FormItemArgs{}) {
-						@form.FormLabel(form.FormLabelArgs{For: "property-name"}) {
+						@form.FormLabel(form.FormLabelArgs{For: "name"}) {
 							Property Name
 						}
 						@input.Input(input.InputArgs{
-							ID:          "property-name",
+							ID:          "name",
+							Name:        "name",
 							Placeholder: "apt #1",
 						})
 					}
 					@form.FormItem(form.FormItemArgs{}) {
-						@form.FormLabel(form.FormLabelArgs{For: "property-rent-amount"}) {
+						@form.FormLabel(form.FormLabelArgs{For: "rent_amount"}) {
 							Rent Amount
 						}
 						@input.Input(input.InputArgs{
-							ID:          "property-rent-amount",
+							ID:          "rent_amount",
+							Name:        "rent_amount",
 							Type:        "number",
 							Placeholder: "15000",
 						})
 					}
 					<div class="flex pt-4 justify-between">
-						@button.Button(button.ButtonArgs{Variant: "outline"}) {
-							cancel
+						@button.Button(button.ButtonArgs{
+							Variant: "outline",
+						}) {
+							clear
 						}
 						@button.Button(button.ButtonArgs{Type: "submit"}) {
 							submit

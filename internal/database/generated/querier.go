@@ -9,6 +9,7 @@ import (
 )
 
 type Querier interface {
+	CreateProperty(ctx context.Context, arg CreatePropertyParams) (Property, error)
 	ListProperties(ctx context.Context) ([]Property, error)
 	ListTenants(ctx context.Context) ([]Tenant, error)
 }

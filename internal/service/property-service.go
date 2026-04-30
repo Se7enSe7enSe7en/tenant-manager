@@ -21,3 +21,7 @@ func NewPropertyService(repo repo.Querier) *propertyService {
 func (s *propertyService) ListProperties(ctx context.Context) ([]repo.Property, error) {
 	return s.repo.ListProperties(ctx)
 }
+
+func (s *propertyService) CreateProperty(ctx context.Context, params repo.CreatePropertyParams) (repo.Property, error) {
+	return s.repo.CreateProperty(ctx, params)
+}

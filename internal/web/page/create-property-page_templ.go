@@ -8,9 +8,11 @@ package page
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/form"
-import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/input"
-import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/button"
+import (
+	"github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/button"
+	"github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/form"
+	"github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/input"
+)
 
 type CreatePropertyVM struct {
 	Name       string
@@ -96,7 +98,7 @@ func CreatePropertyPage() templ.Component {
 						}
 						return nil
 					})
-					templ_7745c5c3_Err = form.FormLabel(form.FormLabelArgs{For: "property-name"}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var5), templ_7745c5c3_Buffer)
+					templ_7745c5c3_Err = form.FormLabel(form.FormLabelArgs{For: "name"}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var5), templ_7745c5c3_Buffer)
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
@@ -105,7 +107,8 @@ func CreatePropertyPage() templ.Component {
 						return templ_7745c5c3_Err
 					}
 					templ_7745c5c3_Err = input.Input(input.InputArgs{
-						ID:          "property-name",
+						ID:          "name",
+						Name:        "name",
 						Placeholder: "apt #1",
 					}).Render(ctx, templ_7745c5c3_Buffer)
 					if templ_7745c5c3_Err != nil {
@@ -151,7 +154,7 @@ func CreatePropertyPage() templ.Component {
 						}
 						return nil
 					})
-					templ_7745c5c3_Err = form.FormLabel(form.FormLabelArgs{For: "property-rent-amount"}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var7), templ_7745c5c3_Buffer)
+					templ_7745c5c3_Err = form.FormLabel(form.FormLabelArgs{For: "rent_amount"}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var7), templ_7745c5c3_Buffer)
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
@@ -160,7 +163,8 @@ func CreatePropertyPage() templ.Component {
 						return templ_7745c5c3_Err
 					}
 					templ_7745c5c3_Err = input.Input(input.InputArgs{
-						ID:          "property-rent-amount",
+						ID:          "rent_amount",
+						Name:        "rent_amount",
 						Type:        "number",
 						Placeholder: "15000",
 					}).Render(ctx, templ_7745c5c3_Buffer)
@@ -189,13 +193,15 @@ func CreatePropertyPage() templ.Component {
 						}()
 					}
 					ctx = templ.InitializeContext(ctx)
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "cancel")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "clear")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
 					return nil
 				})
-				templ_7745c5c3_Err = button.Button(button.ButtonArgs{Variant: "outline"}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var8), templ_7745c5c3_Buffer)
+				templ_7745c5c3_Err = button.Button(button.ButtonArgs{
+					Variant: "outline",
+				}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var8), templ_7745c5c3_Buffer)
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -228,7 +234,9 @@ func CreatePropertyPage() templ.Component {
 				return nil
 			})
 			templ_7745c5c3_Err = form.Form(form.FormArgs{
-				Class: "flex flex-col gap-2",
+				ID:     "property-form",
+				Class:  "flex flex-col gap-2",
+				Action: "/property/create",
 			}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var3), templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
