@@ -70,7 +70,8 @@ func main() {
 	propertyHandler := handler.NewPropertyHandler(propertyService)
 
 	// page handlers
-	mux.HandleFunc("/dashboard", tenantHandler.ListTenantPage)
+	mux.HandleFunc("GET /login", handler.LoginPage)
+	mux.HandleFunc("GET /dashboard", tenantHandler.ListTenantPage)
 	mux.HandleFunc("GET /property/create", propertyHandler.CreatePropertyPage)
 
 	// handlers
