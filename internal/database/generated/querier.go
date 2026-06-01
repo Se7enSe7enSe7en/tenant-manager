@@ -6,10 +6,24 @@ package repo
 
 import (
 	"context"
+
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 type Querier interface {
+	CreateIdentity(ctx context.Context, arg CreateIdentityParams) (Identity, error)
 	CreateProperty(ctx context.Context, arg CreatePropertyParams) (Property, error)
+	CreateSession(ctx context.Context, arg CreateSessionParams) (Session, error)
+	CreateUser(ctx context.Context, arg CreateUserParams) (User, error)
+	DeleteExpiredSessions(ctx context.Context) error
+	DeleteSession(ctx context.Context, id pgtype.UUID) error
+	// params: provider, provider_user_id
+	GetIdentityByProvider(ctx context.Context, arg GetIdentityByProviderParams) (Identity, error)
+	// params: user_id
+	GetLocalIdentityByUserID(ctx context.Context, userID pgtype.UUID) (Identity, error)
+	GetSession(ctx context.Context, id pgtype.UUID) (Session, error)
+	GetUserByEmail(ctx context.Context, email string) (User, error)
+	GetUserByID(ctx context.Context, id pgtype.UUID) (User, error)
 	ListProperties(ctx context.Context) ([]Property, error)
 	ListTenants(ctx context.Context) ([]Tenant, error)
 }

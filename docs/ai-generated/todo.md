@@ -1,57 +1,59 @@
 # TODO — deferred concerns
 
-Things noted while wiring up the property creation flow that we agreed to handle later.
+## Remaining for the auth + user feature
 
-## Auth / `user_id` FK
+### Register UI flow not finished
+POST /register handler is wired and the service is solid, but the UI side is half-done:
+- `http.Error` placeholders still in `auth-handler.go` Register branches (lines 61, 69) — replace with `sse.PatchSignals` for inline error display, matching the Login pattern that's already working.
+- No dedicated register form. The login page has a "Register" button but it doesn't submit to `/register` (it's not even `type="submit"`). Options: build a separate `register-page.templ` with its own form posting to `/register`, **or** make the same login form switch action depending on which button was clicked.
+- Add `registerError` signal + `<p data-show data-text>` display element in whichever templ ends up holding the register form (same shape as the working `loginError` pattern).
 
-The `property` table has `user_id UUID NOT NULL` with an FK to `"user"`. We have no auth yet, so the `CreateProperty` handler currently can't supply a real user.
+### Logout UI button
+Logout works (POST `/logout` clears the cookie and redirects), but there's no way for a user to trigger it from the UI yet — they currently have to delete the cookie in DevTools. Add a logout button somewhere visible after login (dashboard for now, or a shared nav component when one exists). Trigger via Datastar `@post` to `/logout`.
 
-- Short-term plan: simple auth implementation comes next (after the create-property flow is logging end-to-end).
-- Until then: handler/service calls into `CreateProperty` should be left with a TODO comment where `user_id` would be populated.
-- Once auth lands: source `user_id` from session / request context (likely via `internal/ctxkeys`).
+### Property handler — pull `user_id` from authenticated context
+`CreateProperty` in `internal/handler/property-handler.go` still has TODOs at lines 39-41. Once the property service/sqlc work lands (see "Property: sqlc query" below), the user_id integration is straightforward:
+- `user, _ := ctxkeys.UserFrom(r.Context())` (route is RequireAuth-protected, so the user will be present)
+- Pass `user.ID` as the `user_id` field to the service.
 
-## pgx type conversion lives in the handler (for now)
+### Google OAuth flow (LoginWithGoogle)
+Service stub exists in `auth-service.go`; everything else is pending. See `docs/ai-generated/dual-auth-plan.md` for the full plan. Concrete tasks:
+- Implement `LoginWithGoogle` in `auth-service.go` — find-or-create with `emailVerified`-gated account linking.
+- New handler `internal/handler/google-auth-handler.go` with `GoogleStart` (generate state, redirect to Google) and `GoogleCallback` (verify state, exchange code, call service, set cookie, redirect).
+- Routes: `GET /auth/google`, `GET /auth/google/callback` (both unprotected).
+- New deps: `golang.org/x/oauth2`, `golang.org/x/oauth2/google`.
+- Env vars: `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `GOOGLE_REDIRECT_URL` (e.g. `http://localhost:8080/auth/google/callback` in dev).
+- Google Cloud Console: create OAuth Web Application client, configure consent screen (External + Testing while iterating), add own gmail as a test user.
+- "Sign in with Google" button on the login page — a simple `<a href="/auth/google">` works.
 
-Form input is a string; the repo expects `pgtype.Numeric` (and `pgtype.UUID` for `user_id`). We're doing the string → pgtype conversion inside the handler for now.
+### Small auth cleanups
+- **`RequireAuth` signature inconsistency.** Currently `RequireAuth` takes/returns `http.HandlerFunc`, while `AttachUser` uses the standard `http.Handler`. Pick one: either revert `RequireAuth` to `func(http.Handler) http.Handler` and add a small `protect()` helper at call sites, or flip `AttachUser` to match. Right now the package has two middleware shapes.
+- **Extract `middleware.AttachUser(authService)` to a named variable** in `main.go` for readability — the `(svc)(mux)` factory-call double-paren is hard to scan.
+- **Stale comments in `auth-handler.go`**: `// TODO: show inline err message`, `// TODO: prompt email already taken`, etc. — clear these out as the Register UI lands.
 
-- Tradeoff: keeps the service signature tied to repo types, which leaks the data-access layer up into the handler.
-- Future move: introduce a domain input struct (e.g., `service.CreatePropertyInput{Name string, RentAmount decimal.Decimal}`) so the service is decoupled from `pgtype.*`. Conversion to `pgtype.*` then happens at the service ↔ repo boundary.
+### (Stretch) Constant-time defense for Google
+Login already does a dummy bcrypt compare to avoid user-enumeration timing attacks. The Google path's "no such user, no auto-link possible" branch should similarly avoid leaking timing differences. Probably negligible in practice (OAuth flow is much longer than DB-side timing differences) — defer until Google flow is functional.
 
-## Routes still live in `cmd/server/main.go`
+---
 
-Architecture doc (`specs/architecture.md`) calls for centralizing routes in `internal/routes/routes.go`, but they're currently inline in `main.go`.
+## Other deferred concerns (non-auth)
 
-- Acceptable while there are only a handful of routes.
-- Refactor trigger: when we have ~3–4 features wired up, or when `main.go` route registration crosses ~15 lines, move to `internal/routes/SetupRoutes(app)`.
+### pgx type conversion lives in the handler
+Form input is a string; the repo expects `pgtype.Numeric` for rent, `pgtype.UUID` for IDs. Conversion currently happens in the handler. Future move: introduce a domain input struct (e.g. `service.CreatePropertyInput{Name string, RentAmount decimal.Decimal}`) so the service is decoupled from `pgtype.*`. Conversion happens at the service ↔ repo boundary.
 
-## Datastar response strategy not yet decided
+### Routes still live in `cmd/server/main.go`
+Architecture doc (`specs/architecture.md`) calls for `internal/routes/routes.go`. Acceptable while route count is small. Refactor trigger: ≥3-4 feature routes or main.go's route registration crosses ~15 lines — we're close.
 
-`CreateProperty` handler currently only logs — no response written. Datastar expects an HTML fragment, an SSE stream, or a `Datastar-*` header (e.g., `Datastar-Redirect`) rather than a 302.
+### Datastar response strategy — half decided
+Auth flows landed on signal-patch (errors) + SSE redirect (success). The `CreateProperty` handler still doesn't write a response. Decide: render a success partial that swaps into the form container, or redirect to a property list once that view exists.
 
-- Decide once we move past logging: probably render a small success partial that swaps into the form container, or redirect to a property list page once that exists.
+### Validation layer — barely used
+`internal/validation/` now exists with `RegisterInput` only. Extract more helpers as additional handlers need validation (`CreateProperty` is the obvious next caller). Architecture doc anticipates this directory.
 
-## Validation layer unused
+### Property: sqlc query `CreateProperty` not written yet
+Repository only has `ListProperties`. Need to add `CreateProperty` to `internal/repository/property.query.sql` and run `sqlc generate` before the service does anything useful. Decisions still open:
+- UUID generation: SQL-side via `gen_random_uuid()` (no Go dep) vs Go-side via a uuid lib.
+- `:one` (return inserted row, useful for success UI) vs `:exec`.
 
-`internal/validation/` is referenced by the architecture doc but doesn't exist in the tree yet. Inline validation in the handler is fine for now; extract to `internal/validation/` once we have ≥2 handlers doing similar checks.
-
-## Form data shape from Datastar — verify on first run
-
-With `contentType: 'form'` (the default in `form.Form`), Datastar should submit the native `<form>` as `FormData`, so `r.FormValue("name")` and `r.FormValue("rent_amount")` will work. If the logs come back empty, check the browser Network tab — Datastar may be sending signal-pathed keys (e.g., `property_form.name`) instead, in which case the input components need `FormID` set so `data-bind` is applied.
-
-## sqlc query for `CreateProperty` not written yet
-
-Repository only has `ListProperties`. Need to add `CreateProperty` to `internal/repository/property.query.sql` and run `sqlc generate` before the service can do real work.
-
-- Decision pending: generate UUIDs in SQL via `gen_random_uuid()` (no Go dep) or in Go via `github.com/google/uuid`.
-- Decision pending: `:one` (return inserted row, useful for success UI) vs `:exec`.
-
-## Audit copied datastarUI components for pre-v1 Datastar syntax
-
-We hit one of these already on the property form (see `datastarUI-old-datastar-version-issue.md`). The datastarUI repo we're copy-pasting from uses an older Datastar release, so any component we pull in could silently misbehave under v1.0.1.
-
-- One-time sweep: grep `internal/web/component/` for `data-on-`, `data-indicator-`, `data-action-`, `data-store` and convert to v1 syntax.
-- Going forward: smoke-test every newly copied component's interactive behavior (click, submit, bind) before assuming it works — failures are silent.
-
-## Pre-existing: dev user seed
-
-Once auth is deferred-but-not-blocking, we'll likely need a seed migration that inserts a default dev user so FK-bound inserts work in local dev. Open question whether that lives in `migrations/` (goose) or a separate seed script.
+### Audit copied datastarUI components for pre-v1 syntax
+Already hit the form-submit issue once (`data-on-submit` vs `data-on:submit` — see `datastarUI-old-datastar-version-issue.md`). The datastarUI source we're copy-pasting from is older than our Datastar runtime. One-time sweep of `internal/web/component/` for `data-on-`, `data-indicator-`, `data-action-`, `data-store`. Going forward: smoke-test every newly-copied component's interactive behavior — failures are silent.

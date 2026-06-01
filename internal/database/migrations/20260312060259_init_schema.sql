@@ -1,14 +1,15 @@
 -- +goose Up
 CREATE TABLE IF NOT EXISTS "user" (
-    id UUID PRIMARY KEY,
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid (),
     email TEXT NOT NULL,
     name TEXT,
     created_at TIMESTAMP NOT NULL DEFAULT now(),
-    updated_at TIMESTAMP NOT NULL DEFAULT now()
+    updated_at TIMESTAMP NOT NULL DEFAULT now(),
+    UNIQUE (email)
 );
 
 CREATE TABLE IF NOT EXISTS property (
-    id UUID PRIMARY KEY,
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid (),
     user_id UUID NOT NULL,
     CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES "user" (id),
     name TEXT NOT NULL,
@@ -18,7 +19,7 @@ CREATE TABLE IF NOT EXISTS property (
 );
 
 CREATE TABLE IF NOT EXISTS tenant (
-    id UUID PRIMARY KEY,
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid (),
     property_id UUID NOT NULL,
     CONSTRAINT fk_property FOREIGN KEY (property_id) REFERENCES property (id),
     name TEXT NOT NULL,
@@ -30,7 +31,7 @@ CREATE TABLE IF NOT EXISTS tenant (
 );
 
 CREATE TABLE IF NOT EXISTS trade (
-    id UUID PRIMARY KEY,
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid (),
     tenant_id UUID NOT NULL,
     CONSTRAINT fk_tenant FOREIGN KEY (tenant_id) REFERENCES tenant (id),
     property_id UUID NOT NULL,
@@ -44,10 +45,10 @@ CREATE TABLE IF NOT EXISTS trade (
 );
 
 -- +goose Down
-DROP TABLE IF EXISTS tenant;
+DROP TABLE IF EXISTS tenant CASCADE;
 
-DROP TABLE IF EXISTS "user";
+DROP TABLE IF EXISTS "user" CASCADE;
 
-DROP TABLE IF EXISTS property;
+DROP TABLE IF EXISTS property CASCADE;
 
-DROP TABLE IF EXISTS trade;
+DROP TABLE IF EXISTS trade CASCADE;

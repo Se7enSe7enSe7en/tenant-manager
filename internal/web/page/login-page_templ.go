@@ -173,7 +173,7 @@ func LoginPage() templ.Component {
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, " ")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, " <p data-show=\"$loginError\" data-text=\"$loginError\" class=\"text-sm text-destructive\"></p>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -235,6 +235,9 @@ func LoginPage() templ.Component {
 				ID:     "login",
 				Action: "/login",
 				Class:  "flex flex-col gap-4 min-w-xs",
+				Attributes: templ.Attributes{
+					"data-signals": "{loginError: ''}",
+				},
 			}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var3), templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err

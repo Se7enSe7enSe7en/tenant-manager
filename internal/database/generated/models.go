@@ -8,6 +8,15 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
+type Identity struct {
+	ID             pgtype.UUID
+	UserID         pgtype.UUID
+	Provider       string
+	ProviderUserID string
+	PasswordHash   pgtype.Text
+	CreatedAt      pgtype.Timestamp
+}
+
 type Property struct {
 	ID         pgtype.UUID
 	UserID     pgtype.UUID
@@ -15,6 +24,13 @@ type Property struct {
 	RentAmount pgtype.Numeric
 	CreatedAt  pgtype.Timestamp
 	UpdatedAt  pgtype.Timestamp
+}
+
+type Session struct {
+	ID        pgtype.UUID
+	UserID    pgtype.UUID
+	ExpiresAt pgtype.Timestamp
+	CreatedAt pgtype.Timestamp
 }
 
 type Tenant struct {

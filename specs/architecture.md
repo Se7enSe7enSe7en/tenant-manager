@@ -20,6 +20,7 @@ project/
     ├── ctxkeys/         # Context key definitions
     ├── logger/          # Structured logging
     ├── utils/           # Shared utilities
+    ├── auth/            # auth logic
     └── web/             # Front end (templ templates)
         ├── static/      # Public files
         │   └── assets/  # Static files (CSS, JS, images)

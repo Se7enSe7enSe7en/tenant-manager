@@ -4,56 +4,65 @@ import (
 	"context"
 	"log"
 	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
 
 	"github.com/Se7enSe7enSe7en/go-toolkit/pkg/logger"
+	"github.com/Se7enSe7enSe7en/tenant-manager/internal/app"
 	repo "github.com/Se7enSe7enSe7en/tenant-manager/internal/database/generated"
 	"github.com/Se7enSe7enSe7en/tenant-manager/internal/env"
 	"github.com/Se7enSe7enSe7en/tenant-manager/internal/handler"
+	"github.com/Se7enSe7enSe7en/tenant-manager/internal/middleware"
+	"github.com/Se7enSe7enSe7en/tenant-manager/internal/routine"
 	"github.com/Se7enSe7enSe7en/tenant-manager/internal/service"
 	"github.com/Se7enSe7enSe7en/tenant-manager/internal/utils"
-	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/joho/godotenv"
 )
 
-// think of config as constants, variables inside do not change over time, and is initialized only before starting the application
-type config struct {
-	port       string // our main port (or address) for prod
-	proxy_port string // the port will be used for development with templ
-	dsn        string // Data Source Name, or database connection string
-}
-
-// think of the application as states, variables inside change over time
-type application struct {
-	db *pgx.Conn // db driver
+func startServer(s *http.Server, serverErr chan error) {
+	if err := s.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+		serverErr <- err
+	}
 }
 
 func main() {
 	// global context
-	ctx := context.Background()
+	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+	defer stop()
 
 	// load env variables
 	godotenv.Load()
 
 	// init app config
-	cfg := config{
-		port:       "8080",
-		proxy_port: "7331",
-		dsn:        env.GetString("GOOSE_DBSTRING", "host=localhost user=postgres password=postgres dbname=db sslmode=disable"),
+	cfg := app.Config{
+		Port:      "8080",
+		ProxyPort: "7331",
+		Dsn:       env.GetString("GOOSE_DBSTRING", "host=localhost user=postgres password=postgres dbname=db sslmode=disable"),
 	}
 
 	// connect to database
-	conn, err := pgx.Connect(ctx, cfg.dsn)
+	pool, err := pgxpool.New(ctx, cfg.Dsn)
 	if err != nil {
-		log.Fatalf("failed to connect to DB: %v", err)
+		log.Fatalf("failed to create a pool and connect to DB: %v", err)
 	}
-	defer conn.Close(ctx)
+	defer pool.Close()
+	logger.Debug("connected to database: %v", cfg.Dsn)
 
-	logger.Debug("connected to database: %v", cfg.dsn)
+	// check if db container is running
+	if err := pool.Ping(ctx); err != nil {
+		log.Fatalf("[EXIT] failed to reach database (is the docker container for the db running?): %v", err)
+	}
 
 	// init application variables
-	app := application{
-		db: conn,
+	application := app.Application{
+		Db: pool,
 	}
+
+	// init db queries
+	queries := repo.New(application.Db)
 
 	// create server mux
 	mux := http.NewServeMux()
@@ -63,29 +72,70 @@ func main() {
 	mux.Handle("/assets/", utils.DisableCacheInDevMode(http.StripPrefix("/assets/", fs)))
 
 	// init services and handlers
-	tenantService := service.NewTenantService(repo.New(app.db))
+	tenantService := service.NewTenantService(queries)
 	tenantHandler := handler.NewTenantHandler(tenantService)
 
-	propertyService := service.NewPropertyService(repo.New(app.db))
+	propertyService := service.NewPropertyService(queries)
 	propertyHandler := handler.NewPropertyHandler(propertyService)
 
+	authService := service.NewAuthService(application.Db)
+	authHandler := handler.NewAuthHandler(authService)
+
+	// TODO: refactor this later, find a more elegant way to write this to handler multiple middlewares
+	// auth middleware func
+	protect := func(h http.HandlerFunc) http.Handler {
+		return middleware.RequireAuth(http.HandlerFunc(h))
+	}
+
+	// TODO: find a better way to write, .Handle() and HandleFunc(), they both serve the same purpose, only difference is that .Handle() needs you to convert the handler functions you pass
 	// page handlers
-	mux.HandleFunc("GET /login", handler.LoginPage)
-	mux.HandleFunc("GET /dashboard", tenantHandler.ListTenantPage)
-	mux.HandleFunc("GET /property/create", propertyHandler.CreatePropertyPage)
+	mux.HandleFunc("GET /login", authHandler.LoginPage)
+	mux.Handle("GET /dashboard", protect(tenantHandler.ListTenantPage))
+	mux.Handle("GET /property/create", protect(propertyHandler.CreatePropertyPage))
 
 	// handlers
-	mux.HandleFunc("POST /property/create", propertyHandler.CreateProperty)
+	mux.Handle("POST /property/create", protect(propertyHandler.CreateProperty))
+	mux.HandleFunc("POST /login", authHandler.Login)
+	mux.HandleFunc("POST /register", authHandler.Register)
+	mux.HandleFunc("POST /logout", authHandler.Logout)
 
 	// init server
 	s := &http.Server{
-		Addr:    ":" + cfg.port,
-		Handler: mux,
+		Addr: ":" + cfg.Port,
+		Handler: middleware.Chain(mux,
+			middleware.AttachUser(authService),
+			// middleware.RequestLogger, // tmp: this is just an example of adding more middlewares later
+		),
 	}
 
-	// start server
-	logger.Debug("For Production, open the actual port: http://localhost:%v", cfg.port)
-	logger.Debug("For Development, open the proxy port (for templ hot reload): http://localhost:%v", cfg.proxy_port)
+	// init routines
+	go routine.DeleteExpiredSessions(ctx, queries)
 
-	log.Fatalln(s.ListenAndServe())
+	// init server error channel
+	serverErr := make(chan error, 1)
+	defer close(serverErr)
+
+	// start server asynchronously
+	go startServer(s, serverErr)
+	logger.Debug("For Production, open the actual port: http://localhost:%v", cfg.Port)
+	logger.Debug("For Development, open the proxy port (for templ hot reload): http://localhost:%v", cfg.ProxyPort)
+
+	// block here until either: (a) a signal fires ctx.Done, or (b) the server crashes
+	select {
+	case <-ctx.Done():
+		logger.Debug("shutdown signal received")
+	case err := <-serverErr:
+		logger.Error("server failed: ", err)
+	}
+
+	// give in-flight requests up to 30s to finish
+	shutdownCtx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancel()
+
+	if err := s.Shutdown(shutdownCtx); err != nil {
+		logger.Error("server shutdown error: ", err)
+	}
+
+	logger.Debug("server stopped cleanly")
+	// defers fire as main returns: stop(), pool.Close()
 }

@@ -13,6 +13,9 @@ templ LoginPage() {
 					ID:     "login",
 					Action: "/login",
 					Class:  "flex flex-col gap-4 min-w-xs",
+					Attributes: templ.Attributes{
+						"data-signals": "{loginError: ''}",
+					},
 				}) {
 					@form.FormItem(form.FormItemArgs{}) {
 						@form.FormLabel(form.FormLabelArgs{
@@ -38,6 +41,7 @@ templ LoginPage() {
 							ID:   "password",
 						})
 					}
+					<p data-show="$loginError" data-text="$loginError" class="text-sm text-destructive"></p>
 					@button.Button(button.ButtonArgs{
 						Type: "submit",
 					}) {
