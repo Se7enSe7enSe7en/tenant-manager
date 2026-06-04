@@ -5,6 +5,7 @@
     "a-h.templ",
     "esbenp.prettier-vscode",
     "bradlc.vscode-tailwindcss",
-    "cweijan.vscode-postgresql-client2"
+    "cweijan.vscode-postgresql-client2",
+    "starfederation.datastar-vscode"
   ]
 }

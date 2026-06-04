@@ -99,3 +99,7 @@ func (h *authHandler) Logout(w http.ResponseWriter, r *http.Request) {
 func (h *authHandler) LoginPage(w http.ResponseWriter, r *http.Request) {
 	page.LoginPage().Render(r.Context(), w)
 }
+
+func (h *authHandler) RegisterPage(w http.ResponseWriter, r *http.Request) {
+	page.RegisterPage().Render(r.Context(), w)
+}

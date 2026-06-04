@@ -34,3 +34,20 @@ templ Button(args ButtonArgs) {
 		</button>
 	}
 }
+
+templ LinkButton(args LinkButtonArgs) {
+	{{ classes := buttonVariants(args.Variant, args.Size, args.Class) }}
+	<a
+		href={ templ.SafeURL(args.Href) }
+		class={ classes }
+		if args.Target != "" {
+			target={ args.Target }
+		}
+		if args.Rel != "" {
+			rel={ args.Rel }
+		}
+		{ args.Attributes... }
+	>
+		{ children... }
+	</a>
+}

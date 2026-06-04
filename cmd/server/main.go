@@ -90,6 +90,7 @@ func main() {
 	// TODO: find a better way to write, .Handle() and HandleFunc(), they both serve the same purpose, only difference is that .Handle() needs you to convert the handler functions you pass
 	// page handlers
 	mux.HandleFunc("GET /login", authHandler.LoginPage)
+	mux.HandleFunc("GET /register", authHandler.RegisterPage)
 	mux.Handle("GET /dashboard", protect(tenantHandler.ListTenantPage))
 	mux.Handle("GET /property/create", protect(propertyHandler.CreatePropertyPage))
 

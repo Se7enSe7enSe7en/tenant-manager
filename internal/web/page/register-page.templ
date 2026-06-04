@@ -4,17 +4,17 @@ import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/form"
 import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/input"
 import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/button"
 
-templ LoginPage() {
-	@Base() {
-		<div class="flex items-center justify-center w-screen h-screen">
+templ RegisterPage() {
+    @Base() {
+        <div class="flex items-center justify-center w-screen h-screen">
 			<div class="border bg-card items-center justify-center p-4 rounded-md flex flex-col gap-4">
 				<h1 class="text-xl">Tenant manager</h1>
 				@form.Form(form.FormArgs{
-					ID:     "login",
-					Action: "/login",
+					ID:     "register",
+					Action: "/register",
 					Class:  "flex flex-col gap-4 min-w-xs",
 					Attributes: templ.Attributes{
-						"data-signals": "{loginError: ''}",
+						"data-signals": "{registerError: ''}",
 					},
 				}) {
 					@form.FormItem(form.FormItemArgs{}) {
@@ -41,20 +41,32 @@ templ LoginPage() {
 							ID:   "password",
 						})
 					}
-					<p data-show="$loginError" data-text="$loginError" class="text-sm text-destructive"></p>
+					@form.FormItem(form.FormItemArgs{}) {
+						@form.FormLabel(form.FormLabelArgs{
+							For: "name",
+						}) {
+							name
+						}
+						@input.Input(input.InputArgs{
+							Type: "name",
+							Name: "name",
+							ID:   "name",
+						})
+					}
+					<p data-show="$registerError" data-text="$registerError" class="text-sm text-destructive"></p>
 					@button.Button(button.ButtonArgs{
 						Type: "submit",
 					}) {
-						Login
+						Register
 					}
 					@button.LinkButton(button.LinkButtonArgs{
-						Href: "/register",
+						Href: "/login",
 						Variant: "link",
 					}) {
-						Register
+						Back to Login
 					}
 				}
 			</div>
 		</div>
-	}
+    }
 }
