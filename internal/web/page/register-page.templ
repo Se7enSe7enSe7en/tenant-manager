@@ -21,7 +21,7 @@ templ RegisterPage() {
 						@form.FormLabel(form.FormLabelArgs{
 							For: "email",
 						}) {
-							email
+							email *
 						}
 						@input.Input(input.InputArgs{
 							Type: "email",
@@ -33,7 +33,7 @@ templ RegisterPage() {
 						@form.FormLabel(form.FormLabelArgs{
 							For: "password",
 						}) {
-							password
+							password *
 						}
 						@input.Input(input.InputArgs{
 							Type: "password",

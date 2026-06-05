@@ -24,12 +24,16 @@ func (h *authHandler) Login(w http.ResponseWriter, r *http.Request) {
 	email := r.FormValue("email")
 	password := r.FormValue("password")
 
+	type ErrorSignal struct {
+		LoginError string `json:"loginError"`
+	}
+
 	_, session, err := h.svc.Login(r.Context(), email, password)
 	if err != nil {
 		if errors.Is(err, auth.ErrInvalidCredentials) {
 
 			sse := datastar.NewSSE(w, r)
-			sse.PatchSignals([]byte(`{"loginError": "Invalid email or password"}`))
+			sse.MarshalAndPatchSignals(ErrorSignal{LoginError: "invalid email or password"})
 
 			return
 		}
@@ -55,18 +59,26 @@ func (h *authHandler) Register(w http.ResponseWriter, r *http.Request) {
 	password := r.FormValue("password")
 	name := r.FormValue("name") // optional (returns "" if empty)
 
+	type ErrorSignal struct {
+		RegisterError string `json:"registerError"`
+	}
+
 	// validation
 	if err := validation.RegisterInput(email, password, name); err != nil {
-		// TODO: show inline err message through datastar in the form message
-		http.Error(w, "invalid input", http.StatusInternalServerError) // tmp: remove this after setting up datastar + UI
+
+		sse := datastar.NewSSE(w, r)
+		sse.MarshalAndPatchSignals(ErrorSignal{RegisterError: err.Error()})
+
 		return
 	}
 
 	_, session, err := h.svc.Register(r.Context(), email, password, name)
 	if err != nil {
 		if errors.Is(err, auth.ErrEmailAlreadyTaken) {
-			// TODO: prompt email already taken
-			http.Error(w, "invalid input", http.StatusInternalServerError) // tmp: remove this after setting up datastar + UI
+
+			sse := datastar.NewSSE(w, r)
+			sse.MarshalAndPatchSignals(ErrorSignal{RegisterError: "email is already registered"})
+
 			return
 		}
 
