@@ -12,7 +12,7 @@ import "github.com/Se7enSe7enSe7en/tenant-manager/internal/constants"
 import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/tenantcard"
 import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/statcard"
 
-func MainPage(tenantList []tenantcard.TenantCardProps) templ.Component {
+func DashboardPage(tenantList []tenantcard.TenantCardProps) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {

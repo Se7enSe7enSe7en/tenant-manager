@@ -44,5 +44,5 @@ func (h *tenantHandler) ListTenantPage(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// return tenant page with context in an HTTP response
-	page.MainPage(tenantList).Render(context.Background(), w)
+	page.DashboardPage(tenantList).Render(context.Background(), w)
 }

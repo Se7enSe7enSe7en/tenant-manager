@@ -1,4 +1,4 @@
-@import "tailwindcss" source("../../../../web");
+@import "tailwindcss" source("../../../../web");  /* note: the `source("../../../../web")` narrows down where tailwind will look instead of looking through the entire project */
 @source "**/*.templ";
 
 @theme {

@@ -19,8 +19,34 @@ vars:
   BUILD_PATH: ./dist
 
 tasks:
+  setup-watchman-linux:
+    desc: Installs watchman on WSL/Linux if not already present
+    platforms: [linux]
+    status:
+      - which watchman
+    cmds:
+      - echo "Watchman not found. Installing via apt..."
+      - sudo apt update && sudo apt install -y watchman
+
+  setup-watchman-mac:
+    desc: Installs watchman on macOS via Homebrew if not already present
+    platforms: [darwin]
+    status:
+      - which watchman
+    cmds:
+      - echo "Watchman not found. Installing via Homebrew..."
+      - brew install watchman
+
+  setup-watchman:
+  # note: watchman is needed for tailwindcss cli tool (--watch flag) for checking if there are changes project files to rebuild the css output
+    deps:
+      - task: setup-watchman-linux
+      - task: setup-watchman-mac
+
   setup-tailwind-cli-mac:
     platforms: [darwin]
+    status:
+      - test -f tailwindcss
     cmds:
       - curl -sLO https://github.com/tailwindlabs/tailwindcss/releases/latest/download/tailwindcss-macos-arm64
       - chmod +x tailwindcss-macos-arm64
@@ -28,6 +54,8 @@ tasks:
 
   setup-tailwind-cli-linux:
     platforms: [linux]
+    status:
+      - test -f tailwindcss
     cmds:
       - curl -sLO https://github.com/tailwindlabs/tailwindcss/releases/download/v4.1.18/tailwindcss-linux-x64
       - chmod +x tailwindcss-linux-x64
@@ -40,7 +68,7 @@ tasks:
 
   setup:
     cmds:
-      # TODO: improve setup in the future where it just checks if you already have the tool no need to install
+      - task: setup-watchman
       - task: setup-tailwind
       - go install github.com/a-h/templ/cmd/templ@latest # setup templ
       - go install github.com/sqlc-dev/sqlc/cmd/sqlc@latest # setup sqlc
@@ -94,12 +122,6 @@ tasks:
       # however it is currently not possible to run 2 commands as the argument for --cmd.
       # note #3: doing --cmd="task dev-server" causes a new problem where the task command doesn't restart properly
       # TODO: find a better way using `templ generate --notify-proxy`
-
-  # dev-server:
-  #   method: none
-  #   cmds:
-  #     - go build -tags=debug -o {{.BUILD_PATH}}/main-dev {{.SERVER_PATH}}
-  #     - "{{.BUILD_PATH}}/main-dev"
 
   dev:
     method: none
