@@ -14,7 +14,10 @@ type CreatePropertyVM struct {
 templ CreatePropertyPage() {
 	@Base() {
 		<div class="grid grid-cols-12 gap-4">
-			<div class="p-4 col-span-12 lg:col-start-4 lg:col-span-6 border bg-card">
+			<div 
+				class="p-4 col-span-12 lg:col-start-4 lg:col-span-6 border bg-card"
+				data-signals="{property: { name: '', rent_amount: '' }}"
+			>
 				@form.Form(form.FormArgs{
 					ID:     "property-form",
 					Class:  "flex flex-col gap-2",
@@ -22,33 +25,44 @@ templ CreatePropertyPage() {
 				}) {
 					@form.FormItem(form.FormItemArgs{}) {
 						@form.FormLabel(form.FormLabelArgs{For: "name"}) {
-							Property Name
+							Property Name *
 						}
 						@input.Input(input.InputArgs{
 							ID:          "name",
 							Name:        "name",
 							Placeholder: "apt #1",
+							Attributes: templ.Attributes{
+								"data-bind": "property.name",
+							},
 						})
 					}
 					@form.FormItem(form.FormItemArgs{}) {
 						@form.FormLabel(form.FormLabelArgs{For: "rent_amount"}) {
-							Rent Amount
+							Rent Amount *
 						}
 						@input.Input(input.InputArgs{
 							ID:          "rent_amount",
 							Name:        "rent_amount",
 							Type:        "number",
 							Placeholder: "15000",
+							Attributes: templ.Attributes{
+								"data-bind":"property.rent_amount",
+								"step": "0.01", // note: by default the input can only take step = 1, meaning whole numbers
+							},
 						})
 					}
 					<div class="flex pt-4 justify-between">
 						@button.Button(button.ButtonArgs{
+							Type: "button",
 							Variant: "outline",
+							Attributes: templ.Attributes{
+								"data-on:click":"$property = { name: '', rent_amount: '' }",
+							},
 						}) {
-							clear
+							Clear
 						}
 						@button.Button(button.ButtonArgs{Type: "submit"}) {
-							submit
+							Submit
 						}
 					</div>
 				}

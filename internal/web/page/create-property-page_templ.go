@@ -52,7 +52,7 @@ func CreatePropertyPage() templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"grid grid-cols-12 gap-4\"><div class=\"p-4 col-span-12 lg:col-start-4 lg:col-span-6 border bg-card\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"grid grid-cols-12 gap-4\"><div class=\"p-4 col-span-12 lg:col-start-4 lg:col-span-6 border bg-card\" data-signals=\"{property: { name: '', rent_amount: '' }}\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -92,7 +92,7 @@ func CreatePropertyPage() templ.Component {
 							}()
 						}
 						ctx = templ.InitializeContext(ctx)
-						templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "Property Name")
+						templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "Property Name *")
 						if templ_7745c5c3_Err != nil {
 							return templ_7745c5c3_Err
 						}
@@ -110,6 +110,9 @@ func CreatePropertyPage() templ.Component {
 						ID:          "name",
 						Name:        "name",
 						Placeholder: "apt #1",
+						Attributes: templ.Attributes{
+							"data-bind": "property.name",
+						},
 					}).Render(ctx, templ_7745c5c3_Buffer)
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
@@ -148,7 +151,7 @@ func CreatePropertyPage() templ.Component {
 							}()
 						}
 						ctx = templ.InitializeContext(ctx)
-						templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "Rent Amount")
+						templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "Rent Amount *")
 						if templ_7745c5c3_Err != nil {
 							return templ_7745c5c3_Err
 						}
@@ -167,6 +170,10 @@ func CreatePropertyPage() templ.Component {
 						Name:        "rent_amount",
 						Type:        "number",
 						Placeholder: "15000",
+						Attributes: templ.Attributes{
+							"data-bind": "property.rent_amount",
+							"step":      "0.01", // note: by default the input can only take step = 1, meaning whole numbers
+						},
 					}).Render(ctx, templ_7745c5c3_Buffer)
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
@@ -193,14 +200,18 @@ func CreatePropertyPage() templ.Component {
 						}()
 					}
 					ctx = templ.InitializeContext(ctx)
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "clear")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "Clear")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
 					return nil
 				})
 				templ_7745c5c3_Err = button.Button(button.ButtonArgs{
+					Type:    "button",
 					Variant: "outline",
+					Attributes: templ.Attributes{
+						"data-on:click": "$property = { name: '', rent_amount: '' }",
+					},
 				}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var8), templ_7745c5c3_Buffer)
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
@@ -217,7 +228,7 @@ func CreatePropertyPage() templ.Component {
 						}()
 					}
 					ctx = templ.InitializeContext(ctx)
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "submit")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "Submit")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}

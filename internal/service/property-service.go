@@ -8,6 +8,7 @@ import (
 
 type PropertyService interface {
 	ListProperties(ctx context.Context) ([]repo.Property, error)
+	CreateProperty(ctx context.Context, params repo.CreatePropertyParams) (repo.Property, error)
 }
 
 type propertyService struct {

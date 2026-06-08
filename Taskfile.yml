@@ -78,15 +78,15 @@ tasks:
 
   kill:
     method: none
-    desc: Kills process on port 8080
+    desc: Kills process on ports 8080 and 7331
     # note: sometimes the server survives a signal interrupt (ctrl + c) from the terminal, this command make sure it is killed
     cmds:
       # kills process on port 8080 on linux
-      - cmd: fuser -k {{.PORT}}/tcp > /dev/null 2>&1 || true
+      - cmd: fuser -k {{.PORT}}/tcp {{.PROXY_PORT}}/tcp > /dev/null 2>&1 || true
         platforms: [linux]
 
       # kills process on port 8080 on macOS (darwin)
-      - cmd: (lsof -nti :{{.PORT}} | xargs kill -9) || true
+      - cmd: (lsof -nti :{{.PORT}},:{{.PROXY_PORT}} | xargs kill -9) || true
         platforms: [darwin]
 
   build:

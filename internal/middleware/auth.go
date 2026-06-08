@@ -28,7 +28,7 @@ func AttachUser(svc service.AuthService) func(http.Handler) http.Handler {
 	}
 }
 
-func RequireAuth(next http.Handler) http.Handler { // ?: can't I just change the input and output types into this struct instead?
+func RequireAuth(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		_, ok := ctxkeys.UserFrom(r.Context())
 		if !ok {

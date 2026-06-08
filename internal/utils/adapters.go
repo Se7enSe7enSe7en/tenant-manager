@@ -10,3 +10,10 @@ func StringToPgTypeUuid(s string) (pgtype.UUID, error) {
 
 	return uuid, err
 }
+
+func StringToPgTypeNumeric(s string) (pgtype.Numeric, error) {
+	var num pgtype.Numeric
+	err := num.Scan(s)
+
+	return num, err
+}
