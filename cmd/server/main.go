@@ -73,13 +73,18 @@ func main() {
 
 	// init services and handlers
 	tenantService := service.NewTenantService(queries)
-	tenantHandler := handler.NewTenantHandler(tenantService)
+	// tenantHandler := handler.NewTenantHandler(tenantService)
 
 	propertyService := service.NewPropertyService(queries)
 	propertyHandler := handler.NewPropertyHandler(propertyService)
 
 	authService := service.NewAuthService(application.Db)
 	authHandler := handler.NewAuthHandler(authService)
+
+	pageHandler := handler.NewPageHandler(handler.PageHandler{
+		PropertyService: propertyService,
+		TenantService:   tenantService,
+	})
 
 	// TODO: refactor this later, find a more elegant way to write this to handler multiple middlewares
 	// auth middleware func
@@ -91,7 +96,7 @@ func main() {
 	// page handlers
 	mux.HandleFunc("GET /login", authHandler.LoginPage)
 	mux.HandleFunc("GET /register", authHandler.RegisterPage)
-	mux.Handle("GET /dashboard", protect(tenantHandler.ListTenantPage))
+	mux.Handle("GET /dashboard", protect(pageHandler.DashboardPage))
 	mux.Handle("GET /property/create", protect(propertyHandler.CreatePropertyPage))
 
 	// handlers

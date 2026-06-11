@@ -20,7 +20,7 @@
   - can be through their gmail
   - auth can be difficult (based on people in the internet), if it is hard for us as well then we could use a third party to handle this (eg. Auth0)
 
-## Extra Features
+## Planned extra Features
 
 - System for tenants (can be a separate app but uses the same DB)
   1. check status (if paid or not)
@@ -34,8 +34,10 @@
 - Digital payment for tenants
   - payment through the system by entering credit/debit card details (using Stripe perhaps)
 
-- 2 different tenant payment modes "+30 days" mode or "same day of the month" mode
-  - +30 days mode, lets say tenant paid jan 30, their next payment will be
+- Full automation, needs "System for tenants" to be completed first
+  - the system can now act as a middle man between the tenant and the landlord's bank account
+  - When the tenant pays through the system, the system will then confirm (this is the hard part) from the landlord's bank acc. (or we could just do
+  manual confirmation), then the system will acknowledge the tenant as paid (same as running "rent collected" button)
 
 - Family or Group of users, with different roles can share the same group of properties
 

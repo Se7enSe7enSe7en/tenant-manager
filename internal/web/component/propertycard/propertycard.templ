@@ -1,0 +1,50 @@
+package propertycard
+
+import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/button"
+import "fmt"
+
+type PropertyCardProps struct {
+	Id         string
+	Name       string
+	RentAmount string
+}
+
+templ PropertyCard(props PropertyCardProps) {
+	<div class="bg-card rounded-xl p-5 border shadow-sm transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 h-60 flex flex-col justify-between">
+		<div class="flex justify-between mb-2">
+			<div class="flex gap-3">
+				<div class="flex bg-secondary items-center justify-center size-12 rounded-full ">
+					// TODO: add if no image condition in the future
+					<span class="text-xl">P</span>
+				</div>
+				<div class="flex-col">
+					<p class="">{ props.Name }</p>
+				</div>
+			</div>
+			<div class="flex justify-end align-top w-12 h-6">
+				<div class="flex border rounded-full items-center"><p>unoccupied</p></div>
+			</div>
+		</div>
+        <div class="flex justify-between">
+			<p>address here</p>
+		</div>
+		<div class="flex justify-center">
+			@button.Button(button.ButtonArgs{
+				Class: "w-full",
+				Variant: "secondary",
+				Attributes: templ.Attributes{
+
+					"data-on:click": fmt.Sprint("@post(/tenant/create?property_id=", props.Id, ")"), // TODO: how to pass a query
+				},
+			}) {
+				Add tenant
+			}
+		</div>
+		<div class="flex justify-between border-t pt-2">
+			<div class="flex-col">
+				<p>Monthly Rent</p>
+				<p>{ props.RentAmount }</p>
+			</div>
+		</div>
+	</div>
+}

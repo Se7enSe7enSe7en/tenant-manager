@@ -157,7 +157,7 @@ func (s *authService) Login(ctx context.Context, email string, password string) 
 }
 
 func (s *authService) Logout(ctx context.Context, sessionID string) error {
-	pgUuidSessionID, err := utils.StringToPgTypeUuid(sessionID)
+	pgUuidSessionID, err := utils.StringToPgtypeUuid(sessionID)
 	if err != nil {
 		return err // malformed cookie - treat as "not logged in"
 	}
@@ -176,7 +176,7 @@ func (s *authService) LoginWithGoogle(ctx context.Context, googleSub string, ema
 }
 
 func (s *authService) UserFromSession(ctx context.Context, sessionID string) (repo.User, error) {
-	pgUuidSessionID, err := utils.StringToPgTypeUuid(sessionID)
+	pgUuidSessionID, err := utils.StringToPgtypeUuid(sessionID)
 	if err != nil {
 		return repo.User{}, err
 	}

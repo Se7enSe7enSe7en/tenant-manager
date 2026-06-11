@@ -44,7 +44,7 @@ func (h *propertyHandler) CreateProperty(w http.ResponseWriter, r *http.Request)
 
 	// TODO: make adapters or combine with validation step to make these more straight forward
 	// string conversions
-	rentAmountNumeric, err := utils.StringToPgTypeNumeric(rentAmount)
+	rentAmountNumeric, err := utils.StringToPgtypeNumeric(rentAmount)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

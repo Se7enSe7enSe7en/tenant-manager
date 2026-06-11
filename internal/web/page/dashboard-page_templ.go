@@ -11,8 +11,14 @@ import templruntime "github.com/a-h/templ/runtime"
 import "github.com/Se7enSe7enSe7en/tenant-manager/internal/constants"
 import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/tenantcard"
 import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/statcard"
+import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/propertycard"
 
-func DashboardPage(tenantList []tenantcard.TenantCardProps) templ.Component {
+type DashboardPageProps struct {
+	TenantList   []tenantcard.TenantCardProps
+	PropertyList []propertycard.PropertyCardProps
+}
+
+func DashboardPage(props DashboardPageProps) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -85,11 +91,17 @@ func DashboardPage(tenantList []tenantcard.TenantCardProps) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</div><p class=\"text-2xl my-3\">Tenants</p><div class=\"grid grid-cols-1 md:grid-cols-2 lg:grid-col-3 xl:grid-cols-3 gap-4\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</div><p class=\"text-2xl my-3\">Tenants and Properties</p><div class=\"grid grid-cols-1 md:grid-cols-2 lg:grid-col-3 xl:grid-cols-3 gap-4\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			for _, tenant := range tenantList {
+			for _, property := range props.PropertyList {
+				templ_7745c5c3_Err = propertycard.PropertyCard(property).Render(ctx, templ_7745c5c3_Buffer)
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+			}
+			for _, tenant := range props.TenantList {
 				templ_7745c5c3_Err = tenantcard.TenantCard(tenant).Render(ctx, templ_7745c5c3_Buffer)
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
