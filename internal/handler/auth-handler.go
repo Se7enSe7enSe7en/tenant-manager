@@ -8,7 +8,6 @@ import (
 	"github.com/Se7enSe7enSe7en/tenant-manager/internal/auth"
 	"github.com/Se7enSe7enSe7en/tenant-manager/internal/service"
 	"github.com/Se7enSe7enSe7en/tenant-manager/internal/validation"
-	"github.com/Se7enSe7enSe7en/tenant-manager/internal/web/page"
 	"github.com/starfederation/datastar-go/datastar"
 )
 
@@ -106,12 +105,4 @@ func (h *authHandler) Logout(w http.ResponseWriter, r *http.Request) {
 
 	sse := datastar.NewSSE(w, r) // (!)
 	sse.Redirect("/login")
-}
-
-func (h *authHandler) LoginPage(w http.ResponseWriter, r *http.Request) {
-	page.LoginPage().Render(r.Context(), w)
-}
-
-func (h *authHandler) RegisterPage(w http.ResponseWriter, r *http.Request) {
-	page.RegisterPage().Render(r.Context(), w)
 }

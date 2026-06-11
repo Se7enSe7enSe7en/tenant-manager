@@ -19,6 +19,14 @@ func NewPageHandler(h PageHandler) *PageHandler {
 	return &h
 }
 
+func (h *PageHandler) LoginPage(w http.ResponseWriter, r *http.Request) {
+	page.LoginPage().Render(r.Context(), w)
+}
+
+func (h *PageHandler) RegisterPage(w http.ResponseWriter, r *http.Request) {
+	page.RegisterPage().Render(r.Context(), w)
+}
+
 func (h *PageHandler) DashboardPage(w http.ResponseWriter, r *http.Request) {
 	// // call the service -> ListTenant
 	// dbTenantList, err := h.tenantService.ListTenants(r.Context())
@@ -68,4 +76,8 @@ func (h *PageHandler) DashboardPage(w http.ResponseWriter, r *http.Request) {
 		// TenantList: tenantList,
 
 	}).Render(context.Background(), w)
+}
+
+func (h *PageHandler) CreatePropertyPage(w http.ResponseWriter, r *http.Request) {
+	page.CreatePropertyPage().Render(r.Context(), w)
 }

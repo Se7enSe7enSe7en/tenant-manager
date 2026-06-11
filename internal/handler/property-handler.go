@@ -8,7 +8,6 @@ import (
 	"github.com/Se7enSe7enSe7en/tenant-manager/internal/service"
 	"github.com/Se7enSe7enSe7en/tenant-manager/internal/utils"
 	"github.com/Se7enSe7enSe7en/tenant-manager/internal/validation"
-	"github.com/Se7enSe7enSe7en/tenant-manager/internal/web/page"
 	"github.com/starfederation/datastar-go/datastar"
 )
 
@@ -18,10 +17,6 @@ type propertyHandler struct {
 
 func NewPropertyHandler(service service.PropertyService) *propertyHandler {
 	return new(propertyHandler{service})
-}
-
-func (h *propertyHandler) CreatePropertyPage(w http.ResponseWriter, r *http.Request) {
-	page.CreatePropertyPage().Render(r.Context(), w)
 }
 
 func (h *propertyHandler) CreateProperty(w http.ResponseWriter, r *http.Request) {
