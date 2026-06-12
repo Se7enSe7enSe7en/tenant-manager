@@ -4,6 +4,7 @@ import (
 	"context"
 	"net/http"
 
+	"github.com/Se7enSe7enSe7en/go-toolkit/pkg/logger"
 	"github.com/Se7enSe7enSe7en/tenant-manager/internal/service"
 	"github.com/Se7enSe7enSe7en/tenant-manager/internal/utils"
 	"github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/propertycard"
@@ -80,4 +81,14 @@ func (h *PageHandler) DashboardPage(w http.ResponseWriter, r *http.Request) {
 
 func (h *PageHandler) CreatePropertyPage(w http.ResponseWriter, r *http.Request) {
 	page.CreatePropertyPage().Render(r.Context(), w)
+}
+
+func (h *PageHandler) CreateTenantPage(w http.ResponseWriter, r *http.Request) {
+	propertyId := r.URL.Query().Get("property_id")
+
+	logger.Debug("vibe check propertyId: %v", propertyId)
+
+	page.CreateTenantPage(page.CreateTenantPageProps{
+		PropertyId: propertyId,
+	}).Render(r.Context(), w)
 }

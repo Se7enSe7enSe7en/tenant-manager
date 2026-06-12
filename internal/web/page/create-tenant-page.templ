@@ -1,5 +1,122 @@
 package page
 
-templ CreateTenantPage() {
-	<div></div>
+import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/form"
+import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/input"
+import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/button"
+
+type CreateTenantPageProps struct {
+	PropertyId string
+}
+
+templ CreateTenantPage(props CreateTenantPageProps) {
+	@Base() {
+		<div class="grid grid-cols-12 gap-4">
+			<div 
+				class="p-4 col-span-12 lg:col-start-4 lg:col-span-6 border bg-card"
+				data-signals={ templ.JSONString(map[string]string{
+					"property_id":   props.PropertyId,
+				}) }
+				data-signals="{
+					tenant: { 
+						name: '', 
+						email: '', 
+						phone_number: '', 
+						expected_rent_day: '',
+					}
+				}"
+			>
+				@form.Form(form.FormArgs{
+					ID:     "tenant-form",
+					Class:  "flex flex-col gap-2",
+					Action: "/tenant/create",
+					Attributes: templ.Attributes{
+						"data-on:submit__prevent":"@post('/tenant/create')",
+					},
+				}) {
+					@form.FormItem(form.FormItemArgs{}) {
+						@form.FormLabel(form.FormLabelArgs{For: "name"}) {
+							tenant name *
+						}
+						@input.Input(input.InputArgs{
+							ID:          "name",
+							Name:        "name",
+							Placeholder: "",
+							Attributes: templ.Attributes{
+								"data-bind": "tenant.name",
+							},
+						})
+					}
+					@form.FormItem(form.FormItemArgs{}) {
+						@form.FormLabel(form.FormLabelArgs{For: "email"}) {
+							tenant email *
+						}
+						@input.Input(input.InputArgs{
+							ID:          "email",
+							Name:        "email",
+							Placeholder: "email@email.com",
+							Attributes: templ.Attributes{
+								"data-bind": "tenant.email",
+							},
+						})
+					}
+					@form.FormItem(form.FormItemArgs{}) {
+						@form.FormLabel(form.FormLabelArgs{For: "phone_number"}) {
+							tenant phone number
+						}
+						@input.Input(input.InputArgs{
+							ID:          "phone_number",
+							Name:        "phone_number",
+							Placeholder: "0987 654 3210",
+							Attributes: templ.Attributes{
+								"data-bind": "tenant.phone_number",
+							},
+						})
+					}
+					@form.FormItem(form.FormItemArgs{}) {
+						@form.FormLabel(form.FormLabelArgs{For: "expected_rent_day"}) {
+							tenant rent day
+						}
+						@input.Input(input.InputArgs{
+							ID:          "expected_rent_day",
+							Name:        "expected_rent_day",
+							Placeholder: "1",
+							Attributes: templ.Attributes{
+								"data-bind": "tenant.expected_rent_day",
+							},
+						})
+						@form.FormDescription(form.FormDescriptionArgs{}) {
+							Choose a number from 1 to 31, If empty, this will default to the first day of the month which is 1
+						}
+					}
+					// // TODO: Property rent amount can also be edited in this form
+					// @form.FormItem(form.FormItemArgs{}) {
+					// 	@form.FormLabel(form.FormLabelArgs{For: "rent_amount"}) {
+					// 		Rent Amount *
+					// 	}
+					// 	@input.Input(input.InputArgs{
+					// 		ID:          "rent_amount",
+					// 		Name:        "rent_amount",
+					// 		Type:        "number",
+					// 		Placeholder: "15000",
+					// 		Attributes: templ.Attributes{
+					// 			"data-bind":"property.rent_amount",
+					// 			"step": "0.01", // note: by default the input can only take step = 1, meaning whole numbers
+					// 		},
+					// 	})
+					// }
+					<div class="flex pt-4 justify-between">
+						@button.LinkButton(button.LinkButtonArgs{
+							Variant: "outline",
+							Href: "/dashboard",
+						}) {
+							Back
+						}
+						@button.Button(button.ButtonArgs{Type: "submit"}) {
+							Submit
+						}
+					</div>
+				}
+			</div>
+		</div>
+	}
 }

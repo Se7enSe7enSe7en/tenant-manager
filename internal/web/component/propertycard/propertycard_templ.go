@@ -9,7 +9,6 @@ import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
 import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/button"
-import "fmt"
 
 type PropertyCardProps struct {
 	Id         string
@@ -45,7 +44,7 @@ func PropertyCard(props PropertyCardProps) templ.Component {
 		var templ_7745c5c3_Var2 string
 		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(props.Name)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/web/component/propertycard/propertycard.templ`, Line: 21, Col: 29}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/web/component/propertycard/propertycard.templ`, Line: 20, Col: 29}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
@@ -73,13 +72,10 @@ func PropertyCard(props PropertyCardProps) templ.Component {
 			}
 			return nil
 		})
-		templ_7745c5c3_Err = button.Button(button.ButtonArgs{
+		templ_7745c5c3_Err = button.LinkButton(button.LinkButtonArgs{
 			Class:   "w-full",
 			Variant: "secondary",
-			Attributes: templ.Attributes{
-
-				"data-on:click": fmt.Sprint("@post(/tenant/create?property_id=", props.Id, ")"), // TODO: how to pass a query
-			},
+			Href:    "/tenant/create?property_id=" + props.Id,
 		}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var3), templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
@@ -91,7 +87,7 @@ func PropertyCard(props PropertyCardProps) templ.Component {
 		var templ_7745c5c3_Var4 string
 		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(props.RentAmount)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/web/component/propertycard/propertycard.templ`, Line: 46, Col: 25}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/web/component/propertycard/propertycard.templ`, Line: 51, Col: 25}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 		if templ_7745c5c3_Err != nil {

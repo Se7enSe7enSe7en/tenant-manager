@@ -1,7 +1,6 @@
 package propertycard
 
 import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/button"
-import "fmt"
 
 type PropertyCardProps struct {
 	Id         string
@@ -29,16 +28,22 @@ templ PropertyCard(props PropertyCardProps) {
 			<p>address here</p>
 		</div>
 		<div class="flex justify-center">
-			@button.Button(button.ButtonArgs{
+			@button.LinkButton(button.LinkButtonArgs{
 				Class: "w-full",
 				Variant: "secondary",
-				Attributes: templ.Attributes{
-
-					"data-on:click": fmt.Sprint("@post(/tenant/create?property_id=", props.Id, ")"), // TODO: how to pass a query
-				},
+				Href: "/tenant/create?property_id=" + props.Id,
 			}) {
 				Add tenant
 			}
+			// @button.Button(button.ButtonArgs{
+			// 	Class: "w-full",
+			// 	Variant: "secondary",
+			// 	Attributes: templ.Attributes{
+			// 		"data-on:click": fmt.Sprint(`@get("/tenant/create?property_id=`, props.Id, `")`), // TODO: how to pass a query
+			// 	},
+			// }) {
+			// 	Add tenant
+			// }
 		</div>
 		<div class="flex justify-between border-t pt-2">
 			<div class="flex-col">

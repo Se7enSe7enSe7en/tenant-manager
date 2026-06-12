@@ -73,7 +73,7 @@ func main() {
 
 	// init services and handlers
 	tenantService := service.NewTenantService(queries)
-	// tenantHandler := handler.NewTenantHandler(tenantService)
+	tenantHandler := handler.NewTenantHandler(tenantService)
 
 	propertyService := service.NewPropertyService(queries)
 	propertyHandler := handler.NewPropertyHandler(propertyService)
@@ -98,9 +98,11 @@ func main() {
 	mux.HandleFunc("GET /register", pageHandler.RegisterPage)
 	mux.Handle("GET /dashboard", protect(pageHandler.DashboardPage))
 	mux.Handle("GET /property/create", protect(pageHandler.CreatePropertyPage))
+	mux.Handle("GET /tenant/create", protect(pageHandler.CreateTenantPage))
 
 	// handlers
 	mux.Handle("POST /property/create", protect(propertyHandler.CreateProperty))
+	mux.Handle("POST /tenant/create", protect(tenantHandler.CreateTenant))
 	mux.HandleFunc("POST /login", authHandler.Login)
 	mux.HandleFunc("POST /register", authHandler.Register)
 	mux.HandleFunc("POST /logout", authHandler.Logout)
