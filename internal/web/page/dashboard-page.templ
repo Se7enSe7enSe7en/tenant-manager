@@ -1,6 +1,5 @@
 package page
 
-import "github.com/Se7enSe7enSe7en/tenant-manager/internal/constants"
 import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/tenantcard"
 import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/statcard"
 import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/propertycard"
@@ -49,42 +48,43 @@ templ DashboardPage(props DashboardPageProps) {
 				for _, tenant := range props.TenantList {
 					@tenantcard.TenantCard(tenant)
 				}
-				@tenantcard.TenantCard(tenantcard.TenantCardProps{
-					Name:            "Chim Chay",
-					Unit:            "Apt #1",
-					Status:          constants.PAID,
-					RentAmount:      "₱19,000",
-					LastPaymentDate: "2026-01-10",
-					Email:           new("email@email.com"),
-					PhoneNumber:     new("(+63)98 765 4321"),
-				})
-				@tenantcard.TenantCard(tenantcard.TenantCardProps{
-					Name:            "Dum Dith",
-					Unit:            "Apt #2",
-					Status:          constants.LATE,
-					RentAmount:      "₱19,000",
-					LastPaymentDate: "2026-01-10",
-					Email:           new("email@email.com"),
-					PhoneNumber:     new("(+63)98 765 4321"),
-				})
-				@tenantcard.TenantCard(tenantcard.TenantCardProps{
-					Name:            "Dud Li",
-					Unit:            "Apt #3",
-					Status:          constants.UNPAID,
-					RentAmount:      "₱19,000",
-					LastPaymentDate: "2026-01-10",
-					Email:           new("email@email.com"),
-					PhoneNumber:     new("(+63)98 765 4321"),
-				})
-				@tenantcard.TenantCard(tenantcard.TenantCardProps{
-					Name:            "Dudz And Guy Inc.",
-					Unit:            "Apt #4",
-					Status:          constants.UNPAID,
-					RentAmount:      "₱19,000",
-					LastPaymentDate: "2026-01-10",
-					Email:           new("email@email.com"),
-					PhoneNumber:     new("(+63)98 765 4321"),
-				})
+
+				// @tenantcard.TenantCard(tenantcard.TenantCardProps{
+				// 	Name:            "Chim Chay",
+				// 	Unit:            "Apt #1",
+				// 	Status:          constants.PAID,
+				// 	RentAmount:      "₱19,000",
+				// 	LastPaymentDate: "2026-01-10",
+				// 	Email:           new("email@email.com"),
+				// 	PhoneNumber:     new("(+63)98 765 4321"),
+				// })
+				// @tenantcard.TenantCard(tenantcard.TenantCardProps{
+				// 	Name:            "Dum Dith",
+				// 	Unit:            "Apt #2",
+				// 	Status:          constants.LATE,
+				// 	RentAmount:      "₱19,000",
+				// 	LastPaymentDate: "2026-01-10",
+				// 	Email:           new("email@email.com"),
+				// 	PhoneNumber:     new("(+63)98 765 4321"),
+				// })
+				// @tenantcard.TenantCard(tenantcard.TenantCardProps{
+				// 	Name:            "Dud Li",
+				// 	Unit:            "Apt #3",
+				// 	Status:          constants.UNPAID,
+				// 	RentAmount:      "₱19,000",
+				// 	LastPaymentDate: "2026-01-10",
+				// 	Email:           new("email@email.com"),
+				// 	PhoneNumber:     new("(+63)98 765 4321"),
+				// })
+				// @tenantcard.TenantCard(tenantcard.TenantCardProps{
+				// 	Name:            "Dudz And Guy Inc.",
+				// 	Unit:            "Apt #4",
+				// 	Status:          constants.UNPAID,
+				// 	RentAmount:      "₱19,000",
+				// 	LastPaymentDate: "2026-01-10",
+				// 	Email:           new("email@email.com"),
+				// 	PhoneNumber:     new("(+63)98 765 4321"),
+				// })
 			</div>
 		</div>
 	}

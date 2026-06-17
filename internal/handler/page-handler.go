@@ -4,10 +4,11 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/Se7enSe7enSe7en/go-toolkit/pkg/logger"
+	"github.com/Se7enSe7enSe7en/tenant-manager/internal/ctxkeys"
 	"github.com/Se7enSe7enSe7en/tenant-manager/internal/service"
 	"github.com/Se7enSe7enSe7en/tenant-manager/internal/utils"
 	"github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/propertycard"
+	"github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/tenantcard"
 	"github.com/Se7enSe7enSe7en/tenant-manager/internal/web/page"
 )
 
@@ -29,32 +30,38 @@ func (h *PageHandler) RegisterPage(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *PageHandler) DashboardPage(w http.ResponseWriter, r *http.Request) {
-	// // call the service -> ListTenant
-	// dbTenantList, err := h.tenantService.ListTenants(r.Context())
-	// if err != nil {
-	// 	logger.Error("ListTenantPage(): ", err)
-	// 	http.Error(w, err.Error(), http.StatusInternalServerError)
-	// 	return
-	// }
+	// get user
+	user, ok := ctxkeys.UserFrom(r.Context())
+	if !ok {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
+
+	// call the service -> ListTenant
+	dbTenantList, err := h.TenantService.ListTenantsWithProperty(r.Context(), user.ID.String())
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 
 	// logger.Debug("ListTenantPage() dbTenantList: %v", dbTenantList)
 
-	// // convert []repo.Tenant -> []component.TenantCardProps
-	// tenantList := make([]tenantcard.TenantCardProps, len(dbTenantList))
-	// for i, t := range dbTenantList {
-	// 	tenantList[i] = tenantcard.TenantCardProps{
-	// 		Name: t.Name,
-	// 		Unit: t.PropertyID.String(), // TODO: should be handled from the query, getting the property connected to the user
-	// 		//  Status: , // TODO: add status
-	// 		RentAmount: t.PropertyID.String(), // TODO: should get from property as well
-	// 		// LastPaymentDate: , TODO: get from last transaction
-	// 		Email:       new(t.Email),
-	// 		PhoneNumber: new(t.PhoneNumber),
-	// 	}
-	// }
+	// convert []repo.Tenant -> []component.TenantCardProps
+	tenantList := make([]tenantcard.TenantCardProps, len(dbTenantList))
+	for i, t := range dbTenantList {
+		tenantList[i] = tenantcard.TenantCardProps{
+			Name: t.TenantName,
+			Unit: t.PropertyName.String,
+			// Status: , // TODO: add status
+			RentAmount: utils.PgtypeNumericToString(t.PropertyRentAmount), // TODO: should get from property as well
+			// LastPaymentDate: , TODO: get from last transaction
+			Email:       &t.TenantEmail,
+			PhoneNumber: &t.TenantPhoneNumber,
+		}
+	}
 
 	// property from db
-	dbPropertyList, err := h.PropertyService.ListProperties(r.Context())
+	dbPropertyList, err := h.PropertyService.ListUnoccupiedProperties(r.Context(), user.ID.String())
 	if err != nil {
 		http.Error(w, "cannot get property list", http.StatusInternalServerError)
 		return
@@ -74,8 +81,7 @@ func (h *PageHandler) DashboardPage(w http.ResponseWriter, r *http.Request) {
 	// return tenant page with context in an HTTP response
 	page.DashboardPage(page.DashboardPageProps{
 		PropertyList: propertyList,
-		// TenantList: tenantList,
-
+		TenantList:   tenantList,
 	}).Render(context.Background(), w)
 }
 
@@ -85,8 +91,6 @@ func (h *PageHandler) CreatePropertyPage(w http.ResponseWriter, r *http.Request)
 
 func (h *PageHandler) CreateTenantPage(w http.ResponseWriter, r *http.Request) {
 	propertyId := r.URL.Query().Get("property_id")
-
-	logger.Debug("vibe check propertyId: %v", propertyId)
 
 	page.CreateTenantPage(page.CreateTenantPageProps{
 		PropertyId: propertyId,

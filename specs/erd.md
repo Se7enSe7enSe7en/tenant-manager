@@ -39,7 +39,7 @@ erDiagram
 
     Tenant {
         uuid id PK
-        uuid property_id FK
+        uuid property_id FK "[unique] 1 to 1 relationship with property"
         string name
         string email UK
         string phone_number "?"

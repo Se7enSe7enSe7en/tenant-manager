@@ -14,4 +14,14 @@ VALUES (
         $1,
         $2,
         $3
-    ) RETURNING *;
+    )
+RETURNING
+    *;
+
+-- name: ListUnoccupiedProperties :many
+SELECT p.*
+FROM property p
+LEFT JOIN tenant t 
+    ON p.id = t.property_id
+WHERE t.property_id IS NULL
+AND p.user_id = $1;

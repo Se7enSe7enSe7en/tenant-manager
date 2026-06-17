@@ -69,11 +69,11 @@ func (h *propertyHandler) CreateProperty(w http.ResponseWriter, r *http.Request)
 	// TODO: send a success signal
 	sse := datastar.NewSSE(w, r)
 
-	type Output struct {
+	type Response struct {
 		Success bool `json:"success"`
 	}
 
-	sse.MarshalAndPatchSignals(Output{Success: true})
+	sse.MarshalAndPatchSignals(Response{Success: true})
 
 	// TODO: change later to show a modal then make the user choose to add another or go back to the dashboard
 	// change auto redirect later

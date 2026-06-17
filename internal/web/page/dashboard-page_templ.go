@@ -8,7 +8,6 @@ package page
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-import "github.com/Se7enSe7enSe7en/tenant-manager/internal/constants"
 import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/tenantcard"
 import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/statcard"
 import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/propertycard"
@@ -106,54 +105,6 @@ func DashboardPage(props DashboardPageProps) templ.Component {
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-			}
-			templ_7745c5c3_Err = tenantcard.TenantCard(tenantcard.TenantCardProps{
-				Name:            "Chim Chay",
-				Unit:            "Apt #1",
-				Status:          constants.PAID,
-				RentAmount:      "₱19,000",
-				LastPaymentDate: "2026-01-10",
-				Email:           new("email@email.com"),
-				PhoneNumber:     new("(+63)98 765 4321"),
-			}).Render(ctx, templ_7745c5c3_Buffer)
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			templ_7745c5c3_Err = tenantcard.TenantCard(tenantcard.TenantCardProps{
-				Name:            "Dum Dith",
-				Unit:            "Apt #2",
-				Status:          constants.LATE,
-				RentAmount:      "₱19,000",
-				LastPaymentDate: "2026-01-10",
-				Email:           new("email@email.com"),
-				PhoneNumber:     new("(+63)98 765 4321"),
-			}).Render(ctx, templ_7745c5c3_Buffer)
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			templ_7745c5c3_Err = tenantcard.TenantCard(tenantcard.TenantCardProps{
-				Name:            "Dud Li",
-				Unit:            "Apt #3",
-				Status:          constants.UNPAID,
-				RentAmount:      "₱19,000",
-				LastPaymentDate: "2026-01-10",
-				Email:           new("email@email.com"),
-				PhoneNumber:     new("(+63)98 765 4321"),
-			}).Render(ctx, templ_7745c5c3_Buffer)
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			templ_7745c5c3_Err = tenantcard.TenantCard(tenantcard.TenantCardProps{
-				Name:            "Dudz And Guy Inc.",
-				Unit:            "Apt #4",
-				Status:          constants.UNPAID,
-				RentAmount:      "₱19,000",
-				LastPaymentDate: "2026-01-10",
-				Email:           new("email@email.com"),
-				PhoneNumber:     new("(+63)98 765 4321"),
-			}).Render(ctx, templ_7745c5c3_Buffer)
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
 			}
 			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "</div></div>")
 			if templ_7745c5c3_Err != nil {
