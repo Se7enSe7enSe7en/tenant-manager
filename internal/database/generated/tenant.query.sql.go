@@ -8,6 +8,7 @@ package repo
 import (
 	"context"
 
+	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
@@ -38,7 +39,7 @@ type CreateTenantParams struct {
 	Name            string
 	PhoneNumber     string
 	ExpectedRentDay int16
-	PropertyID      pgtype.UUID
+	PropertyID      uuid.UUID
 }
 
 func (q *Queries) CreateTenant(ctx context.Context, arg CreateTenantParams) (Tenant, error) {
@@ -63,39 +64,6 @@ func (q *Queries) CreateTenant(ctx context.Context, arg CreateTenantParams) (Ten
 	return i, err
 }
 
-const listTenants = `-- name: ListTenants :many
-SELECT id, property_id, name, email, phone_number, expected_rent_day, created_at, updated_at FROM tenant
-`
-
-func (q *Queries) ListTenants(ctx context.Context) ([]Tenant, error) {
-	rows, err := q.db.Query(ctx, listTenants)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []Tenant
-	for rows.Next() {
-		var i Tenant
-		if err := rows.Scan(
-			&i.ID,
-			&i.PropertyID,
-			&i.Name,
-			&i.Email,
-			&i.PhoneNumber,
-			&i.ExpectedRentDay,
-			&i.CreatedAt,
-			&i.UpdatedAt,
-		); err != nil {
-			return nil, err
-		}
-		items = append(items, i)
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
 const listTenantsWithProperty = `-- name: ListTenantsWithProperty :many
 SELECT
     t.id AS tenant_id,
@@ -115,18 +83,18 @@ WHERE p.user_id = $1
 `
 
 type ListTenantsWithPropertyRow struct {
-	TenantID              pgtype.UUID
+	TenantID              uuid.UUID
 	TenantEmail           string
 	TenantName            string
 	TenantExpectedRentDay int16
 	TenantPhoneNumber     string
-	PropertyID            pgtype.UUID
+	PropertyID            uuid.NullUUID
 	PropertyName          pgtype.Text
 	PropertyRentAmount    pgtype.Numeric
 	PropertyUpdatedAt     pgtype.Timestamp
 }
 
-func (q *Queries) ListTenantsWithProperty(ctx context.Context, userID pgtype.UUID) ([]ListTenantsWithPropertyRow, error) {
+func (q *Queries) ListTenantsWithProperty(ctx context.Context, userID uuid.UUID) ([]ListTenantsWithPropertyRow, error) {
 	rows, err := q.db.Query(ctx, listTenantsWithProperty, userID)
 	if err != nil {
 		return nil, err

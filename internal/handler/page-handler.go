@@ -30,15 +30,11 @@ func (h *PageHandler) RegisterPage(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *PageHandler) DashboardPage(w http.ResponseWriter, r *http.Request) {
-	// get user
-	user, ok := ctxkeys.UserFrom(r.Context())
-	if !ok {
-		http.Error(w, "Unauthorized", http.StatusUnauthorized)
-		return
-	}
+	// get user, ok is not needed since this handler is already protected from the middleware
+	user, _ := ctxkeys.UserFrom(r.Context())
 
 	// call the service -> ListTenant
-	dbTenantList, err := h.TenantService.ListTenantsWithProperty(r.Context(), user.ID.String())
+	dbTenantList, err := h.TenantService.ListTenantsWithProperty(r.Context(), user.ID)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -61,7 +57,7 @@ func (h *PageHandler) DashboardPage(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// property from db
-	dbPropertyList, err := h.PropertyService.ListUnoccupiedProperties(r.Context(), user.ID.String())
+	dbPropertyList, err := h.PropertyService.ListUnoccupiedProperties(r.Context(), user.ID)
 	if err != nil {
 		http.Error(w, "cannot get property list", http.StatusInternalServerError)
 		return

@@ -3,13 +3,11 @@ package handler
 import (
 	"net/http"
 
-	"github.com/Se7enSe7enSe7en/go-toolkit/pkg/logger"
-	"github.com/Se7enSe7enSe7en/tenant-manager/internal/ctxkeys"
 	repo "github.com/Se7enSe7enSe7en/tenant-manager/internal/database/generated"
 	"github.com/Se7enSe7enSe7en/tenant-manager/internal/model"
 	"github.com/Se7enSe7enSe7en/tenant-manager/internal/service"
-	"github.com/Se7enSe7enSe7en/tenant-manager/internal/utils"
 	"github.com/Se7enSe7enSe7en/tenant-manager/internal/validation"
+	"github.com/google/uuid"
 	"github.com/starfederation/datastar-go/datastar"
 )
 
@@ -22,14 +20,6 @@ func NewTenantHandler(service service.TenantService) *tenantHandler {
 }
 
 func (h *tenantHandler) CreateTenant(w http.ResponseWriter, r *http.Request) {
-	// TODO: move this into auth util
-	// get user from context added by AttachUser middleware
-	user, ok := ctxkeys.UserFrom(r.Context())
-	if !ok {
-		http.Error(w, "No user", http.StatusUnauthorized) // TODO: check later if this is the correct http code to use here
-		return
-	}
-
 	// parse using datastar signals
 	var payload struct {
 		CreateTenantSignals model.CreateTenantSignals `json:"create_tenant_signals"`
@@ -41,16 +31,8 @@ func (h *tenantHandler) CreateTenant(w http.ResponseWriter, r *http.Request) {
 
 	form := payload.CreateTenantSignals
 
-	// DEBUG
-	logger.Debug("user: %v", user)
-	logger.Debug("propertyId: %v", form.PropertyId)
-	logger.Debug("name: %v", form.Name)
-	logger.Debug("email: %v", form.Email)
-	logger.Debug("phoneNumber: %v", form.PhoneNumber)
-	logger.Debug("expectedRentDay: %v", form.ExpectedRentDay)
-
 	// string conversions
-	propertyIdPgTypeUuid, err := utils.StringToPgtypeUuid(form.PropertyId)
+	propertyIdUuid, err := uuid.Parse(form.PropertyId)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -58,6 +40,7 @@ func (h *tenantHandler) CreateTenant(w http.ResponseWriter, r *http.Request) {
 
 	// validation
 	if err := validation.CheckCreateTenantForm(form); err != nil {
+		// TODO: use datastar to show errors in the front end
 		http.Error(w, err.Error(), http.StatusInternalServerError) // TMP
 		return
 	}
@@ -68,7 +51,7 @@ func (h *tenantHandler) CreateTenant(w http.ResponseWriter, r *http.Request) {
 		Name:            form.Name,
 		PhoneNumber:     form.PhoneNumber,
 		ExpectedRentDay: int16(form.ExpectedRentDay),
-		PropertyID:      propertyIdPgTypeUuid,
+		PropertyID:      propertyIdUuid,
 	})
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

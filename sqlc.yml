@@ -9,3 +9,15 @@ sql:
         out: "./internal/database/generated"
         sql_package: "pgx/v5"
         emit_interface: true # this is for enabling Querier interface
+        overrides:
+          # pgtype.UUID to google/uuid
+          - db_type: "uuid"
+            nullable: false
+            go_type:
+              import: "github.com/google/uuid"
+              type: "UUID"
+          - db_type: "uuid"
+            nullable: true
+            go_type:
+              import: "github.com/google/uuid"
+              type: "NullUUID"

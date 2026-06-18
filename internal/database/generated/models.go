@@ -5,12 +5,13 @@
 package repo
 
 import (
+	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
 type Identity struct {
-	ID             pgtype.UUID
-	UserID         pgtype.UUID
+	ID             uuid.UUID
+	UserID         uuid.UUID
 	Provider       string
 	ProviderUserID string
 	PasswordHash   pgtype.Text
@@ -18,8 +19,8 @@ type Identity struct {
 }
 
 type Property struct {
-	ID         pgtype.UUID
-	UserID     pgtype.UUID
+	ID         uuid.UUID
+	UserID     uuid.UUID
 	Name       string
 	RentAmount pgtype.Numeric
 	CreatedAt  pgtype.Timestamp
@@ -27,15 +28,15 @@ type Property struct {
 }
 
 type Session struct {
-	ID        pgtype.UUID
-	UserID    pgtype.UUID
+	ID        uuid.UUID
+	UserID    uuid.UUID
 	ExpiresAt pgtype.Timestamp
 	CreatedAt pgtype.Timestamp
 }
 
 type Tenant struct {
-	ID              pgtype.UUID
-	PropertyID      pgtype.UUID
+	ID              uuid.UUID
+	PropertyID      uuid.UUID
 	Name            string
 	Email           string
 	PhoneNumber     string
@@ -45,10 +46,10 @@ type Tenant struct {
 }
 
 type Trade struct {
-	ID         pgtype.UUID
-	TenantID   pgtype.UUID
-	PropertyID pgtype.UUID
-	UserID     pgtype.UUID
+	ID         uuid.UUID
+	TenantID   uuid.UUID
+	PropertyID uuid.UUID
+	UserID     uuid.UUID
 	PaidAmount pgtype.Numeric
 	StartDate  pgtype.Timestamp
 	EndDate    pgtype.Timestamp
@@ -56,7 +57,7 @@ type Trade struct {
 }
 
 type User struct {
-	ID        pgtype.UUID
+	ID        uuid.UUID
 	Email     string
 	Name      pgtype.Text
 	CreatedAt pgtype.Timestamp

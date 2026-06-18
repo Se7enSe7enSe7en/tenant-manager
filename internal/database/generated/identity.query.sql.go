@@ -8,6 +8,7 @@ package repo
 import (
 	"context"
 
+	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
@@ -30,7 +31,7 @@ VALUES (
 `
 
 type CreateIdentityParams struct {
-	UserID         pgtype.UUID
+	UserID         uuid.UUID
 	Provider       string
 	ProviderUserID string
 	PasswordHash   pgtype.Text
@@ -88,7 +89,7 @@ SELECT id, user_id, provider, provider_user_id, password_hash, created_at FROM i
 `
 
 // params: user_id
-func (q *Queries) GetLocalIdentityByUserID(ctx context.Context, userID pgtype.UUID) (Identity, error) {
+func (q *Queries) GetLocalIdentityByUserID(ctx context.Context, userID uuid.UUID) (Identity, error) {
 	row := q.db.QueryRow(ctx, getLocalIdentityByUserID, userID)
 	var i Identity
 	err := row.Scan(

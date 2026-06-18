@@ -8,6 +8,7 @@ package repo
 import (
 	"context"
 
+	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
@@ -30,7 +31,7 @@ RETURNING
 `
 
 type CreatePropertyParams struct {
-	UserID     pgtype.UUID
+	UserID     uuid.UUID
 	Name       string
 	RentAmount pgtype.Numeric
 }
@@ -50,11 +51,14 @@ func (q *Queries) CreateProperty(ctx context.Context, arg CreatePropertyParams) 
 }
 
 const listProperties = `-- name: ListProperties :many
-SELECT id, user_id, name, rent_amount, created_at, updated_at FROM property
+SELECT p.id, p.user_id, p.name, p.rent_amount, p.created_at, p.updated_at
+FROM property p
+WHERE
+    p.user_id = $1
 `
 
-func (q *Queries) ListProperties(ctx context.Context) ([]Property, error) {
-	rows, err := q.db.Query(ctx, listProperties)
+func (q *Queries) ListProperties(ctx context.Context, userID uuid.UUID) ([]Property, error) {
+	rows, err := q.db.Query(ctx, listProperties, userID)
 	if err != nil {
 		return nil, err
 	}
@@ -83,13 +87,13 @@ func (q *Queries) ListProperties(ctx context.Context) ([]Property, error) {
 const listUnoccupiedProperties = `-- name: ListUnoccupiedProperties :many
 SELECT p.id, p.user_id, p.name, p.rent_amount, p.created_at, p.updated_at
 FROM property p
-LEFT JOIN tenant t 
-    ON p.id = t.property_id
-WHERE t.property_id IS NULL
-AND p.user_id = $1
+    LEFT JOIN tenant t ON p.id = t.property_id
+WHERE
+    t.property_id IS NULL
+    AND p.user_id = $1
 `
 
-func (q *Queries) ListUnoccupiedProperties(ctx context.Context, userID pgtype.UUID) ([]Property, error) {
+func (q *Queries) ListUnoccupiedProperties(ctx context.Context, userID uuid.UUID) ([]Property, error) {
 	rows, err := q.db.Query(ctx, listUnoccupiedProperties, userID)
 	if err != nil {
 		return nil, err

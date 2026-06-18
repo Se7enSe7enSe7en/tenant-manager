@@ -1,6 +1,3 @@
--- name: ListProperties :many
-SELECT * FROM property;
-
 -- name: CreateProperty :one
 INSERT INTO
     property (
@@ -18,10 +15,16 @@ VALUES (
 RETURNING
     *;
 
--- name: ListUnoccupiedProperties :many
-SELECT p.*
+-- name: ListProperties :many
+SELECT p.id, p.user_id, p.name, p.rent_amount, p.created_at, p.updated_at
 FROM property p
-LEFT JOIN tenant t 
-    ON p.id = t.property_id
-WHERE t.property_id IS NULL
-AND p.user_id = $1;
+WHERE
+    p.user_id = $1;
+
+-- name: ListUnoccupiedProperties :many
+SELECT p.id, p.user_id, p.name, p.rent_amount, p.created_at, p.updated_at
+FROM property p
+    LEFT JOIN tenant t ON p.id = t.property_id
+WHERE
+    t.property_id IS NULL
+    AND p.user_id = $1;

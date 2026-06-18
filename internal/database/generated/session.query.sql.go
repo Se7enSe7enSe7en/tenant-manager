@@ -8,6 +8,7 @@ package repo
 import (
 	"context"
 
+	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
@@ -18,7 +19,7 @@ VALUES (gen_random_uuid (), $1, $2) RETURNING id, user_id, expires_at, created_a
 `
 
 type CreateSessionParams struct {
-	UserID    pgtype.UUID
+	UserID    uuid.UUID
 	ExpiresAt pgtype.Timestamp
 }
 
@@ -47,7 +48,7 @@ const deleteSession = `-- name: DeleteSession :exec
 DELETE FROM session WHERE id = $1
 `
 
-func (q *Queries) DeleteSession(ctx context.Context, id pgtype.UUID) error {
+func (q *Queries) DeleteSession(ctx context.Context, id uuid.UUID) error {
 	_, err := q.db.Exec(ctx, deleteSession, id)
 	return err
 }
@@ -56,7 +57,7 @@ const getSession = `-- name: GetSession :one
 SELECT id, user_id, expires_at, created_at FROM session WHERE id = $1
 `
 
-func (q *Queries) GetSession(ctx context.Context, id pgtype.UUID) (Session, error) {
+func (q *Queries) GetSession(ctx context.Context, id uuid.UUID) (Session, error) {
 	row := q.db.QueryRow(ctx, getSession, id)
 	var i Session
 	err := row.Scan(

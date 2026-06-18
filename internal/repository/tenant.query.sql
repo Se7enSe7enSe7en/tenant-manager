@@ -1,6 +1,3 @@
--- name: ListTenants :many
-SELECT * FROM tenant;
-
 -- name: CreateTenant :one
 INSERT INTO
     tenant (

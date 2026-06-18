@@ -8,7 +8,7 @@ import (
 	"github.com/Se7enSe7enSe7en/go-toolkit/pkg/logger"
 	"github.com/Se7enSe7enSe7en/tenant-manager/internal/auth"
 	repo "github.com/Se7enSe7enSe7en/tenant-manager/internal/database/generated"
-	"github.com/Se7enSe7enSe7en/tenant-manager/internal/utils"
+	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgconn"
 	"github.com/jackc/pgx/v5/pgtype"
@@ -157,12 +157,12 @@ func (s *authService) Login(ctx context.Context, email string, password string) 
 }
 
 func (s *authService) Logout(ctx context.Context, sessionID string) error {
-	pgUuidSessionID, err := utils.StringToPgtypeUuid(sessionID)
+	sessionIDUuid, err := uuid.Parse(sessionID)
 	if err != nil {
 		return err // malformed cookie - treat as "not logged in"
 	}
 
-	err = s.queries.DeleteSession(ctx, pgUuidSessionID)
+	err = s.queries.DeleteSession(ctx, sessionIDUuid)
 	if err != nil {
 		return err
 	}
@@ -176,12 +176,12 @@ func (s *authService) LoginWithGoogle(ctx context.Context, googleSub string, ema
 }
 
 func (s *authService) UserFromSession(ctx context.Context, sessionID string) (repo.User, error) {
-	pgUuidSessionID, err := utils.StringToPgtypeUuid(sessionID)
+	sessionIDUuid, err := uuid.Parse(sessionID)
 	if err != nil {
 		return repo.User{}, err
 	}
 
-	session, err := s.queries.GetSession(ctx, pgUuidSessionID)
+	session, err := s.queries.GetSession(ctx, sessionIDUuid)
 	if err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
 			// possible cause: logged out, expired-and-cleaned, or never existed
