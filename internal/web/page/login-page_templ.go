@@ -11,6 +11,7 @@ import templruntime "github.com/a-h/templ/runtime"
 import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/form"
 import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/input"
 import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/button"
+import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/base"
 
 func LoginPage() templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
@@ -249,7 +250,7 @@ func LoginPage() templ.Component {
 			}
 			return nil
 		})
-		templ_7745c5c3_Err = Base().Render(templ.WithChildren(ctx, templ_7745c5c3_Var2), templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = base.Base().Render(templ.WithChildren(ctx, templ_7745c5c3_Var2), templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

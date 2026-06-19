@@ -11,6 +11,7 @@ import templruntime "github.com/a-h/templ/runtime"
 import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/tenantcard"
 import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/statcard"
 import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/propertycard"
+import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/base"
 
 type DashboardPageProps struct {
 	TenantList   []tenantcard.TenantCardProps
@@ -112,7 +113,7 @@ func DashboardPage(props DashboardPageProps) templ.Component {
 			}
 			return nil
 		})
-		templ_7745c5c3_Err = Base().Render(templ.WithChildren(ctx, templ_7745c5c3_Var2), templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = base.Base().Render(templ.WithChildren(ctx, templ_7745c5c3_Var2), templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

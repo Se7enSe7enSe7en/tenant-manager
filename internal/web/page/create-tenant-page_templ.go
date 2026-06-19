@@ -13,6 +13,7 @@ import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/input"
 import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/button"
 import "github.com/Se7enSe7enSe7en/tenant-manager/internal/utils"
 import "github.com/Se7enSe7enSe7en/tenant-manager/internal/model"
+import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/base"
 
 type CreateTenantPageProps struct {
 	PropertyId string
@@ -408,7 +409,7 @@ func CreateTenantPage(props CreateTenantPageProps) templ.Component {
 			}
 			return nil
 		})
-		templ_7745c5c3_Err = Base().Render(templ.WithChildren(ctx, templ_7745c5c3_Var2), templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = base.Base().Render(templ.WithChildren(ctx, templ_7745c5c3_Var2), templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

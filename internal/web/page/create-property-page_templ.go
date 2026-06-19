@@ -9,6 +9,7 @@ import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
 import (
+	"github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/base"
 	"github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/button"
 	"github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/form"
 	"github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/input"
@@ -258,7 +259,7 @@ func CreatePropertyPage() templ.Component {
 			}
 			return nil
 		})
-		templ_7745c5c3_Err = Base().Render(templ.WithChildren(ctx, templ_7745c5c3_Var2), templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = base.Base().Render(templ.WithChildren(ctx, templ_7745c5c3_Var2), templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

@@ -5,13 +5,14 @@ import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/input"
 import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/button"
 import "github.com/Se7enSe7enSe7en/tenant-manager/internal/utils"
 import "github.com/Se7enSe7enSe7en/tenant-manager/internal/model"
+import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/base"
 
 type CreateTenantPageProps struct {
 	PropertyId string
 }
 
 templ CreateTenantPage(props CreateTenantPageProps) {
-	@Base() {
+	@base.Base() {
 		{{
 			signals := utils.Signals("create_tenant_signals", model.CreateTenantSignals{
 				PropertyId:      props.PropertyId,

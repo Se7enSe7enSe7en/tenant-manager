@@ -3,9 +3,10 @@ package page
 import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/form"
 import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/input"
 import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/button"
+import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/base"
 
 templ RegisterPage() {
-    @Base() {
+    @base.Base() {
         <div class="flex items-center justify-center w-screen h-screen">
 			<div class="border bg-card items-center justify-center p-4 rounded-md flex flex-col gap-4">
 				<h1 class="text-xl">Tenant manager</h1>
