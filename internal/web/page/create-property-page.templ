@@ -4,7 +4,7 @@ import (
 	"github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/button"
 	"github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/form"
 	"github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/input"
-	"github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/base"
+	"github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/layout"
 )
 
 type CreatePropertyVM struct {
@@ -13,9 +13,9 @@ type CreatePropertyVM struct {
 }
 
 templ CreatePropertyPage() {
-	@base.Base() {
+	@layout.WithSidebar() {
 		<div class="grid grid-cols-12 gap-4">
-			<div 
+			<div
 				class="p-4 col-span-12 lg:col-start-4 lg:col-span-6 border bg-card"
 				data-signals="{property: { name: '', rent_amount: '' }}"
 			>
@@ -47,20 +47,26 @@ templ CreatePropertyPage() {
 							Type:        "number",
 							Placeholder: "15000",
 							Attributes: templ.Attributes{
-								"data-bind":"property.rent_amount",
-								"step": "0.01", // note: by default the input can only take step = 1, meaning whole numbers
+								"data-bind": "property.rent_amount",
+								"step":      "0.01", // note: by default the input can only take step = 1, meaning whole numbers
 							},
 						})
 					}
 					<div class="flex pt-4 justify-between">
-						@button.Button(button.ButtonArgs{
-							Type: "button",
-							Variant: "outline",
-							Attributes: templ.Attributes{
-								"data-on:click":"$property = { name: '', rent_amount: '' }",
-							},
+						// @button.Button(button.ButtonArgs{
+						// 	Type:    "button",
+						// 	Variant: "outline",
+						// 	Attributes: templ.Attributes{
+						// 		"data-on:click": "$property = { name: '', rent_amount: '' }",
+						// 	},
+						// }) {
+						// 	Clear
+						// }
+						@button.LinkButton(button.LinkButtonArgs{
+							Href:    "/dashboard",
+							Variant: "secondary",
 						}) {
-							Clear
+							Back to dashboard
 						}
 						@button.Button(button.ButtonArgs{Type: "submit"}) {
 							Submit

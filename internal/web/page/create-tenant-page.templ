@@ -5,24 +5,24 @@ import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/input"
 import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/button"
 import "github.com/Se7enSe7enSe7en/tenant-manager/internal/utils"
 import "github.com/Se7enSe7enSe7en/tenant-manager/internal/model"
-import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/base"
+
+import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/layout"
 
 type CreateTenantPageProps struct {
 	PropertyId string
 }
 
 templ CreateTenantPage(props CreateTenantPageProps) {
-	@base.Base() {
-		{{
-			signals := utils.Signals("create_tenant_signals", model.CreateTenantSignals{
-				PropertyId:      props.PropertyId,
-				Name:            "",
-				Email:           "",
-				PhoneNumber:     "",
-				ExpectedRentDay: 1,
-			})
-
-		}}
+	{{
+		signals := utils.Signals("create_tenant_signals", model.CreateTenantSignals{
+			PropertyId:      props.PropertyId,
+			Name:            "",
+			Email:           "",
+			PhoneNumber:     "",
+			ExpectedRentDay: 1,
+		})
+	}}
+	@layout.WithSidebar() {
 		<div class="grid grid-cols-12 gap-4">
 			<div
 				class="p-4 col-span-12 lg:col-start-4 lg:col-span-6 border bg-card"

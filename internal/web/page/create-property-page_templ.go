@@ -9,10 +9,10 @@ import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
 import (
-	"github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/base"
 	"github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/button"
 	"github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/form"
 	"github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/input"
+	"github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/layout"
 )
 
 type CreatePropertyVM struct {
@@ -201,18 +201,15 @@ func CreatePropertyPage() templ.Component {
 						}()
 					}
 					ctx = templ.InitializeContext(ctx)
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "Clear")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "Back to dashboard")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
 					return nil
 				})
-				templ_7745c5c3_Err = button.Button(button.ButtonArgs{
-					Type:    "button",
-					Variant: "outline",
-					Attributes: templ.Attributes{
-						"data-on:click": "$property = { name: '', rent_amount: '' }",
-					},
+				templ_7745c5c3_Err = button.LinkButton(button.LinkButtonArgs{
+					Href:    "/dashboard",
+					Variant: "secondary",
 				}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var8), templ_7745c5c3_Buffer)
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
@@ -259,7 +256,7 @@ func CreatePropertyPage() templ.Component {
 			}
 			return nil
 		})
-		templ_7745c5c3_Err = base.Base().Render(templ.WithChildren(ctx, templ_7745c5c3_Var2), templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = layout.WithSidebar().Render(templ.WithChildren(ctx, templ_7745c5c3_Var2), templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

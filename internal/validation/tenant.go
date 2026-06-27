@@ -13,5 +13,9 @@ func CheckCreateTenantForm(form model.CreateTenantSignals) error {
 		return errors.New("No property selected")
 	}
 
+	if form.ExpectedRentDay < 1 || form.ExpectedRentDay > 31 {
+		return errors.New("Choose a day between 1 and 31")
+	}
+
 	return nil
 }

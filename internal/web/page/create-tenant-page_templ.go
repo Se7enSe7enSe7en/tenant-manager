@@ -13,7 +13,8 @@ import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/input"
 import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/button"
 import "github.com/Se7enSe7enSe7en/tenant-manager/internal/utils"
 import "github.com/Se7enSe7enSe7en/tenant-manager/internal/model"
-import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/base"
+
+import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/layout"
 
 type CreateTenantPageProps struct {
 	PropertyId string
@@ -40,6 +41,13 @@ func CreateTenantPage(props CreateTenantPageProps) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
+		signals := utils.Signals("create_tenant_signals", model.CreateTenantSignals{
+			PropertyId:      props.PropertyId,
+			Name:            "",
+			Email:           "",
+			PhoneNumber:     "",
+			ExpectedRentDay: 1,
+		})
 		templ_7745c5c3_Var2 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 			templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 			templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
@@ -52,13 +60,6 @@ func CreateTenantPage(props CreateTenantPageProps) templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			signals := utils.Signals("create_tenant_signals", model.CreateTenantSignals{
-				PropertyId:      props.PropertyId,
-				Name:            "",
-				Email:           "",
-				PhoneNumber:     "",
-				ExpectedRentDay: 1,
-			})
 			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"grid grid-cols-12 gap-4\"><div class=\"p-4 col-span-12 lg:col-start-4 lg:col-span-6 border bg-card\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
@@ -409,7 +410,7 @@ func CreateTenantPage(props CreateTenantPageProps) templ.Component {
 			}
 			return nil
 		})
-		templ_7745c5c3_Err = base.Base().Render(templ.WithChildren(ctx, templ_7745c5c3_Var2), templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = layout.WithSidebar().Render(templ.WithChildren(ctx, templ_7745c5c3_Var2), templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
