@@ -10,6 +10,7 @@ import (
 type TenantService interface {
 	CreateTenant(ctx context.Context, params repo.CreateTenantParams) (repo.Tenant, error)
 	ListTenantsWithProperty(ctx context.Context, userId uuid.UUID) ([]repo.ListTenantsWithPropertyRow, error)
+	GetTenantWithPropertyDetails(ctx context.Context, tenantId uuid.UUID) (repo.GetTenantWithPropertyByIdRow, error)
 }
 
 type tenantService struct {
@@ -26,4 +27,8 @@ func (s *tenantService) CreateTenant(ctx context.Context, params repo.CreateTena
 
 func (s *tenantService) ListTenantsWithProperty(ctx context.Context, userId uuid.UUID) ([]repo.ListTenantsWithPropertyRow, error) {
 	return s.repo.ListTenantsWithProperty(ctx, userId)
+}
+
+func (s *tenantService) GetTenantWithPropertyDetails(ctx context.Context, tenantId uuid.UUID) (repo.GetTenantWithPropertyByIdRow, error) {
+	return s.repo.GetTenantWithPropertyById(ctx, tenantId)
 }

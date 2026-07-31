@@ -10,6 +10,7 @@ import (
 	"github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/propertycard"
 	"github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/tenantcard"
 	"github.com/Se7enSe7enSe7en/tenant-manager/internal/web/page"
+	"github.com/google/uuid"
 )
 
 type PageHandler struct {
@@ -46,6 +47,7 @@ func (h *PageHandler) DashboardPage(w http.ResponseWriter, r *http.Request) {
 	tenantList := make([]tenantcard.TenantCardProps, len(dbTenantList))
 	for i, t := range dbTenantList {
 		tenantList[i] = tenantcard.TenantCardProps{
+			Id:   t.TenantID.String(),
 			Name: t.TenantName,
 			Unit: t.PropertyName.String,
 			// Status: , // TODO: add status
@@ -90,5 +92,32 @@ func (h *PageHandler) CreateTenantPage(w http.ResponseWriter, r *http.Request) {
 
 	page.CreateTenantPage(page.CreateTenantPageProps{
 		PropertyId: propertyId,
+	}).Render(r.Context(), w)
+}
+
+func (h *PageHandler) CreateTradePage(w http.ResponseWriter, r *http.Request) {
+	tenantId := r.URL.Query().Get("tenant_id")
+
+	tenantIdUuid, err := uuid.Parse(tenantId)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// get tenant details using id
+	// get property details from the connected property
+	tenantWithPropertyDetails, err := h.TenantService.GetTenantWithPropertyDetails(r.Context(), tenantIdUuid)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	page.CreateTradePage(page.CreateTradePageProps{
+		TenantId:     tenantId,
+		TenantName:   tenantWithPropertyDetails.TenantName,
+		PropertyName: tenantWithPropertyDetails.PropertyName.String,
+		// RentValidityPeriod: current month until next month (prev rent day to next rent day),
+		RentAmount: utils.PgtypeNumericToString(tenantWithPropertyDetails.PropertyRentAmount),
+		// TransactionDate: handle in client side instead, use JS to show current time,
 	}).Render(r.Context(), w)
 }

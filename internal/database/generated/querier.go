@@ -23,6 +23,7 @@ type Querier interface {
 	// params: user_id
 	GetLocalIdentityByUserID(ctx context.Context, userID uuid.UUID) (Identity, error)
 	GetSession(ctx context.Context, id uuid.UUID) (Session, error)
+	GetTenantWithPropertyById(ctx context.Context, id uuid.UUID) (GetTenantWithPropertyByIdRow, error)
 	GetUserByEmail(ctx context.Context, email string) (User, error)
 	GetUserByID(ctx context.Context, id uuid.UUID) (User, error)
 	ListProperties(ctx context.Context, userID uuid.UUID) ([]Property, error)

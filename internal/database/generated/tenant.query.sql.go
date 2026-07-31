@@ -64,22 +64,72 @@ func (q *Queries) CreateTenant(ctx context.Context, arg CreateTenantParams) (Ten
 	return i, err
 }
 
-const listTenantsWithProperty = `-- name: ListTenantsWithProperty :many
+const getTenantWithPropertyById = `-- name: GetTenantWithPropertyById :one
 SELECT
+    -- tenant
     t.id AS tenant_id,
     t.email AS tenant_email,
     t.name AS tenant_name,
     t.expected_rent_day AS tenant_expected_rent_day,
     t.phone_number AS tenant_phone_number,
-    
+    -- property
     p.id AS property_id,
     p.name AS property_name,
     p.rent_amount AS property_rent_amount,
     p.updated_at AS property_updated_at
 FROM tenant t
-LEFT JOIN property p
-    ON t.property_id = p.id
-WHERE p.user_id = $1
+    LEFT JOIN property p ON t.property_id = p.id
+WHERE
+    t.id = $1
+LIMIT 1
+`
+
+type GetTenantWithPropertyByIdRow struct {
+	TenantID              uuid.UUID
+	TenantEmail           string
+	TenantName            string
+	TenantExpectedRentDay int16
+	TenantPhoneNumber     string
+	PropertyID            uuid.NullUUID
+	PropertyName          pgtype.Text
+	PropertyRentAmount    pgtype.Numeric
+	PropertyUpdatedAt     pgtype.Timestamp
+}
+
+func (q *Queries) GetTenantWithPropertyById(ctx context.Context, id uuid.UUID) (GetTenantWithPropertyByIdRow, error) {
+	row := q.db.QueryRow(ctx, getTenantWithPropertyById, id)
+	var i GetTenantWithPropertyByIdRow
+	err := row.Scan(
+		&i.TenantID,
+		&i.TenantEmail,
+		&i.TenantName,
+		&i.TenantExpectedRentDay,
+		&i.TenantPhoneNumber,
+		&i.PropertyID,
+		&i.PropertyName,
+		&i.PropertyRentAmount,
+		&i.PropertyUpdatedAt,
+	)
+	return i, err
+}
+
+const listTenantsWithProperty = `-- name: ListTenantsWithProperty :many
+SELECT
+    -- tenant
+    t.id AS tenant_id,
+    t.email AS tenant_email,
+    t.name AS tenant_name,
+    t.expected_rent_day AS tenant_expected_rent_day,
+    t.phone_number AS tenant_phone_number,
+    -- property
+    p.id AS property_id,
+    p.name AS property_name,
+    p.rent_amount AS property_rent_amount,
+    p.updated_at AS property_updated_at
+FROM tenant t
+    LEFT JOIN property p ON t.property_id = p.id
+WHERE
+    p.user_id = $1
 `
 
 type ListTenantsWithPropertyRow struct {

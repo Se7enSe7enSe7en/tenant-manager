@@ -1,0 +1,44 @@
+package page
+
+import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/layout"
+import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/button"
+
+type CreateTradePageProps struct {
+	TenantId           string
+	TenantName         string
+	PropertyName       string
+	RentValidityPeriod string
+	RentAmount         string
+	TransactionDate    string
+}
+
+templ CreateTradePage(props CreateTradePageProps) {
+	@layout.WithSidebar() {
+		<div class="flex flex-col items-center justify-center gap-3">
+			<p>🚧 Under construction 🚧</p>
+			<div class="flex flex-col gap-3">
+				<div class="bg-card rounded-xl p-5 border shadow-sm h-60 flex flex-col justify-between">
+					<p>Receipt details</p>
+					<p>Tenant id: { props.TenantId }</p>
+					<p>tenant name: { props.TenantName }</p>
+					<p>property name: { props.PropertyName }</p>
+					<p>rent validity period: { props.RentValidityPeriod }</p>
+					<p>rent amount: { props.RentAmount }</p>
+					<p>transaction date: { props.TransactionDate }</p>
+				</div>
+				<div class="flex justify-between">
+					@button.Button(button.ButtonArgs{
+						Variant: "secondary",
+					}) {
+						Cancel
+					}
+					@button.Button(button.ButtonArgs{
+						Type: "submit",
+					}) {
+						Confirm
+					}
+				</div>
+			</div>
+		</div>
+	}
+}

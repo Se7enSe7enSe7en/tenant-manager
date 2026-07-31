@@ -99,10 +99,13 @@ func main() {
 	mux.Handle("GET /dashboard", protect(pageHandler.DashboardPage))
 	mux.Handle("GET /property/create", protect(pageHandler.CreatePropertyPage))
 	mux.Handle("GET /tenant/create", protect(pageHandler.CreateTenantPage))
+	mux.Handle("GET /trade/create", protect(pageHandler.CreateTradePage))
 
 	// handlers
 	mux.Handle("POST /property/create", protect(propertyHandler.CreateProperty))
 	mux.Handle("POST /tenant/create", protect(tenantHandler.CreateTenant))
+	// mux.Handle("POST /trade/create", protect()) // TODO
+
 	mux.HandleFunc("POST /login", authHandler.Login)
 	mux.HandleFunc("POST /register", authHandler.Register)
 	mux.HandleFunc("POST /logout", authHandler.Logout)
