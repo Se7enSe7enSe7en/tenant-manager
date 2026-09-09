@@ -7,20 +7,22 @@ package repo
 
 import (
 	"context"
+	"time"
 
 	"github.com/google/uuid"
-	"github.com/jackc/pgx/v5/pgtype"
 )
 
 const createSession = `-- name: CreateSession :one
 INSERT INTO
-    session (id, user_id, expires_at)
-VALUES (gen_random_uuid (), $1, $2) RETURNING id, user_id, expires_at, created_at
+    "session" (id, user_id, expires_at)
+VALUES (gen_random_uuid (), $1, $2)
+RETURNING
+    id, user_id, expires_at, created_at
 `
 
 type CreateSessionParams struct {
 	UserID    uuid.UUID
-	ExpiresAt pgtype.Timestamp
+	ExpiresAt time.Time
 }
 
 func (q *Queries) CreateSession(ctx context.Context, arg CreateSessionParams) (Session, error) {
@@ -36,7 +38,7 @@ func (q *Queries) CreateSession(ctx context.Context, arg CreateSessionParams) (S
 }
 
 const deleteExpiredSessions = `-- name: DeleteExpiredSessions :exec
-DELETE FROM session WHERE now() >= expires_at
+DELETE FROM "session" WHERE now() >= expires_at
 `
 
 func (q *Queries) DeleteExpiredSessions(ctx context.Context) error {
@@ -45,7 +47,7 @@ func (q *Queries) DeleteExpiredSessions(ctx context.Context) error {
 }
 
 const deleteSession = `-- name: DeleteSession :exec
-DELETE FROM session WHERE id = $1
+DELETE FROM "session" WHERE id = $1
 `
 
 func (q *Queries) DeleteSession(ctx context.Context, id uuid.UUID) error {
@@ -54,7 +56,7 @@ func (q *Queries) DeleteSession(ctx context.Context, id uuid.UUID) error {
 }
 
 const getSession = `-- name: GetSession :one
-SELECT id, user_id, expires_at, created_at FROM session WHERE id = $1
+SELECT id, user_id, expires_at, created_at FROM "session" WHERE id = $1
 `
 
 func (q *Queries) GetSession(ctx context.Context, id uuid.UUID) (Session, error) {

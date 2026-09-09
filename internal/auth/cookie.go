@@ -13,7 +13,7 @@ func SetCookie(w http.ResponseWriter, session repo.Session) {
 		Path:     "/",
 		HttpOnly: true,
 		SameSite: http.SameSiteLaxMode,
-		Expires:  session.ExpiresAt.Time,
+		Expires:  session.ExpiresAt,
 		// Secure: true, // TODO: for prod only
 	})
 }

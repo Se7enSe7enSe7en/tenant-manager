@@ -8,15 +8,15 @@ erDiagram
     User {
         uuid id PK
         string email UK
-        string name "? (nullable)"
+        string name "[null] nullable"
     }
 
     Identity {
         uuid id PK
         uuid user_id
-        string provider "[unique] eg. 'local', 'google'"
+        string provider "eg. 'local', 'google'"
         string provider_user_id "[unique] email for local, Google's sub for google"
-        string password_hash "NULL unless provider='local'"
+        string password_hash "[null] [local] for provider='local', otherwise NULL"
         date created_at "default: now"
     }
     Identity }|--|| User : "A user can have multiple identities"
@@ -39,28 +39,36 @@ erDiagram
 
     Tenant {
         uuid id PK
-        uuid property_id FK "[unique] 1 to 1 relationship with property"
         string name
         string email UK
-        string phone_number "?"
-        int8 expected_rent_day "default: first day of the month"
+        string phone_number "[null]"
         date created_at
     }
-    Property ||--o| Tenant : "A property can have zero or one tenant representative"
+
+    Lease {
+        uuid id PK
+        uuid property_id FK "[unique] 1 to 1 relationship with property"
+        uuid tenant_id FK "[unique]"
+        int32 expected_rent_day "default: first day of the month"
+        date start_date "default: now(), time lease record is created"
+        date expiry_date
+        bool is_month_advance
+        decimal deposit_amount
+    }
+    Property ||--o| Lease : "A property has 0 or 1 lease"
+    Tenant ||--|| Lease : "A tenant belongs to 1 lease"
 
     Trade {
         uuid id PK
-        uuid tenant_id FK
-        uuid property_id FK
-        uuid user_id FK
-        float32 paid_amount
-        date start_date
-        date end_date
+        uuid lease_id FK
+        string type "eg. 'rent', 'deposit'"
+        decimal paid_amount
+        date start_date "[null] [rent] for type='rent', otherwise NULL"
+        date end_date "[null] [rent]"
+        string note "[null] [deposit] can be used for type='deposit', reason for reducing deposit"
         date created_at
     }
-    Tenant ||--o{ Trade : "A tenant can have zero or more trade (transactions)"
-    User ||--o{ Trade : "A user can have zero or more trade"
-    Property ||--o{ Trade : "A property can have zero or more trade"
+    Lease ||--o{ Trade : "a Lease can have 0 or many Trade (transactions)"
 
 ```
 

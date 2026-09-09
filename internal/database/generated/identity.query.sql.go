@@ -9,12 +9,11 @@ import (
 	"context"
 
 	"github.com/google/uuid"
-	"github.com/jackc/pgx/v5/pgtype"
 )
 
 const createIdentity = `-- name: CreateIdentity :one
 INSERT INTO
-    identity (
+    "identity" (
         id,
         user_id,
         provider,
@@ -27,14 +26,16 @@ VALUES (
         $2,
         $3,
         $4
-    ) RETURNING id, user_id, provider, provider_user_id, password_hash, created_at
+    )
+RETURNING
+    id, user_id, provider, provider_user_id, password_hash, created_at
 `
 
 type CreateIdentityParams struct {
 	UserID         uuid.UUID
 	Provider       string
 	ProviderUserID string
-	PasswordHash   pgtype.Text
+	PasswordHash   *string
 }
 
 func (q *Queries) CreateIdentity(ctx context.Context, arg CreateIdentityParams) (Identity, error) {
@@ -58,7 +59,7 @@ func (q *Queries) CreateIdentity(ctx context.Context, arg CreateIdentityParams) 
 
 const getIdentityByProvider = `-- name: GetIdentityByProvider :one
 SELECT id, user_id, provider, provider_user_id, password_hash, created_at
-FROM identity
+FROM "identity"
 WHERE
     provider = $1
     AND provider_user_id = $2
@@ -85,7 +86,11 @@ func (q *Queries) GetIdentityByProvider(ctx context.Context, arg GetIdentityByPr
 }
 
 const getLocalIdentityByUserID = `-- name: GetLocalIdentityByUserID :one
-SELECT id, user_id, provider, provider_user_id, password_hash, created_at FROM identity WHERE user_id = $1 AND provider = 'local'
+SELECT id, user_id, provider, provider_user_id, password_hash, created_at
+FROM "identity"
+WHERE
+    user_id = $1
+    AND provider = 'local'
 `
 
 // params: user_id

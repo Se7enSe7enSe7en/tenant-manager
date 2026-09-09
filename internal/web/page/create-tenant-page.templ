@@ -4,22 +4,28 @@ import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/form"
 import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/input"
 import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/button"
 import "github.com/Se7enSe7enSe7en/tenant-manager/internal/utils"
-import "github.com/Se7enSe7enSe7en/tenant-manager/internal/model"
 
 import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/layout"
+import "time"
+import "github.com/Se7enSe7enSe7en/tenant-manager/internal/store"
 
 type CreateTenantPageProps struct {
-	PropertyId string
+	PropertyId           string
+	DefaultDepositAmount float64
 }
 
 templ CreateTenantPage(props CreateTenantPageProps) {
 	{{
-		signals := utils.Signals("create_tenant_signals", model.CreateTenantSignals{
+		signals := utils.Signals("create_tenant_signals", store.CreateTenantSignals{
 			PropertyId:      props.PropertyId,
 			Name:            "",
 			Email:           "",
 			PhoneNumber:     "",
 			ExpectedRentDay: 1,
+			StartDate:       time.Now().Format("2006-01-02"),
+			IsMonthAdvance:  false,
+			DepositAmount:   props.DefaultDepositAmount,
+			NextDueDate:     utils.ComputeNextExpiryDate(time.Now(), 1).Format("Jan 02 2006"),
 		})
 	}}
 	@layout.WithSidebar() {
@@ -76,21 +82,86 @@ templ CreateTenantPage(props CreateTenantPageProps) {
 							},
 						})
 					}
+					// Start date input field
+					@form.FormItem(form.FormItemArgs{}) {
+						@form.FormLabel(form.FormLabelArgs{For: "start_date"}) {
+							lease start date
+						}
+						@input.Input(input.InputArgs{
+							ID:   "start_date",
+							Name: "start_date",
+							Type: "date",
+							// Placeholder: "now()",
+							Attributes: templ.Attributes{
+								"data-bind":      "create_tenant_signals.start_date",
+								"data-on:change": "@post('/ds/tenant/create/compute_next_due_date')",
+							},
+						})
+					}
+					// Rent day input field
 					@form.FormItem(form.FormItemArgs{}) {
 						@form.FormLabel(form.FormLabelArgs{For: "expected_rent_day"}) {
-							tenant rent day
+							lease rent day
 						}
 						@input.Input(input.InputArgs{
 							ID:          "expected_rent_day",
 							Name:        "expected_rent_day",
 							Placeholder: "1",
 							Attributes: templ.Attributes{
-								"data-bind": "create_tenant_signals.expected_rent_day",
+								"data-bind":      "create_tenant_signals.expected_rent_day",
+								"data-on:change": "@post('/ds/tenant/create/compute_next_due_date')",
 							},
 						})
 						@form.FormDescription(form.FormDescriptionArgs{}) {
 							Choose a number from 1 to 31, If empty, this will default to the first day of the month which is 1
 						}
+						// Next due date based on the current start_date and expected_rent_day
+						// @form.FormDescription(form.FormDescriptionArgs{}) {
+						// 	Next due date: $create_tenant_signals.next_due_date
+						// }
+					}
+					@form.FormItem(form.FormItemArgs{}) {
+						@form.FormLabel(form.FormLabelArgs{For: "expected_rent_day"}) {
+							lease expected next due date
+						}
+						@input.Input(input.InputArgs{
+							ID:   "next_due_date",
+							Name: "next_due_date",
+							Attributes: templ.Attributes{
+								"data-bind": "create_tenant_signals.next_due_date",
+								"readonly":  true,
+							},
+						})
+					}
+					// Is Month advance checkbox
+					@form.FormItem(form.FormItemArgs{}) {
+						@form.FormLabel(form.FormLabelArgs{For: "is_month_advance"}) {
+							lease is month advance paid
+						}
+						@input.Input(input.InputArgs{
+							ID:    "is_month_advance",
+							Name:  "is_month_advance",
+							Type:  "checkbox",
+							Class: "w-6",
+							Attributes: templ.Attributes{
+								"data-bind": "create_tenant_signals.is_month_advance",
+							},
+						})
+					}
+					// deposit amount input field
+					@form.FormItem(form.FormItemArgs{}) {
+						@form.FormLabel(form.FormLabelArgs{For: "deposit_amount"}) {
+							lease deposit amount
+						}
+						@input.Input(input.InputArgs{
+							ID:   "deposit_amount",
+							Name: "deposit_amount",
+							Type: "number",
+							Attributes: templ.Attributes{
+								"data-bind": "create_tenant_signals.deposit_amount",
+								"step":      "0.01",
+							},
+						})
 					}
 					// // TODO: Property rent amount can also be edited in this form
 					// @form.FormItem(form.FormItemArgs{}) {

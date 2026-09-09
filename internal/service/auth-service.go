@@ -11,7 +11,6 @@ import (
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgconn"
-	"github.com/jackc/pgx/v5/pgtype"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -59,10 +58,7 @@ func (s *authService) Register(ctx context.Context, email string, password strin
 
 	user, err := qtx.CreateUser(ctx, repo.CreateUserParams{
 		Email: normalizedEmail,
-		Name: pgtype.Text{
-			String: name,
-			Valid:  name != "",
-		},
+		Name:  &name,
 	})
 	if err != nil {
 		var pgErr *pgconn.PgError
@@ -76,21 +72,15 @@ func (s *authService) Register(ctx context.Context, email string, password strin
 		UserID:         user.ID,
 		Provider:       auth.ProviderLocal,
 		ProviderUserID: normalizedEmail,
-		PasswordHash: pgtype.Text{
-			String: hashedPassword,
-			Valid:  true,
-		},
+		PasswordHash:   &hashedPassword,
 	})
 	if err != nil {
 		return repo.User{}, repo.Session{}, err
 	}
 
 	session, err := qtx.CreateSession(ctx, repo.CreateSessionParams{
-		UserID: user.ID,
-		ExpiresAt: pgtype.Timestamp{
-			Time:  time.Now().Add(time.Hour * 24),
-			Valid: true,
-		},
+		UserID:    user.ID,
+		ExpiresAt: time.Now().Add(time.Hour * 24),
 	})
 	if err != nil {
 		return repo.User{}, repo.Session{}, err
@@ -131,7 +121,7 @@ func (s *authService) Login(ctx context.Context, email string, password string) 
 		return repo.User{}, repo.Session{}, err
 	}
 
-	err = auth.CheckPasswordHash(password, identity.PasswordHash.String)
+	err = auth.CheckPasswordHash(password, *identity.PasswordHash)
 	if err != nil {
 		logger.Debug("Login() CheckPasswordHash(): ", err)
 
@@ -143,11 +133,8 @@ func (s *authService) Login(ctx context.Context, email string, password string) 
 	}
 
 	session, err := s.queries.CreateSession(ctx, repo.CreateSessionParams{
-		UserID: identity.UserID,
-		ExpiresAt: pgtype.Timestamp{
-			Time:  time.Now().Add(time.Hour * 24),
-			Valid: true,
-		},
+		UserID:    identity.UserID,
+		ExpiresAt: time.Now().Add(time.Hour * 24),
 	})
 	if err != nil {
 		return repo.User{}, repo.Session{}, err
@@ -191,7 +178,7 @@ func (s *authService) UserFromSession(ctx context.Context, sessionID string) (re
 		return repo.User{}, err
 	}
 
-	if time.Now().After(session.ExpiresAt.Time) {
+	if time.Now().After(session.ExpiresAt) {
 		return repo.User{}, auth.ErrNotAuthenticated
 	}
 

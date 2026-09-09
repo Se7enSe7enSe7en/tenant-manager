@@ -1,34 +1,25 @@
+// DEPRECATE: not used
+
 package service
 
-import (
-	"context"
+// import (
+// 	"context"
 
-	repo "github.com/Se7enSe7enSe7en/tenant-manager/internal/database/generated"
-	"github.com/google/uuid"
-)
+// 	repo "github.com/Se7enSe7enSe7en/tenant-manager/internal/database/generated"
+// )
 
-type TenantService interface {
-	CreateTenant(ctx context.Context, params repo.CreateTenantParams) (repo.Tenant, error)
-	ListTenantsWithProperty(ctx context.Context, userId uuid.UUID) ([]repo.ListTenantsWithPropertyRow, error)
-	GetTenantWithPropertyDetails(ctx context.Context, tenantId uuid.UUID) (repo.GetTenantWithPropertyByIdRow, error)
-}
+// type TenantService interface {
+// 	CreateTenant(ctx context.Context, params repo.CreateTenantParams) (repo.Tenant, error)
+// }
 
-type tenantService struct {
-	repo repo.Querier
-}
+// type tenantService struct {
+// 	repo repo.Querier
+// }
 
-func NewTenantService(repo repo.Querier) *tenantService {
-	return &tenantService{repo}
-}
+// func NewTenantService(repo repo.Querier) *tenantService {
+// 	return &tenantService{repo}
+// }
 
-func (s *tenantService) CreateTenant(ctx context.Context, params repo.CreateTenantParams) (repo.Tenant, error) {
-	return s.repo.CreateTenant(ctx, params)
-}
-
-func (s *tenantService) ListTenantsWithProperty(ctx context.Context, userId uuid.UUID) ([]repo.ListTenantsWithPropertyRow, error) {
-	return s.repo.ListTenantsWithProperty(ctx, userId)
-}
-
-func (s *tenantService) GetTenantWithPropertyDetails(ctx context.Context, tenantId uuid.UUID) (repo.GetTenantWithPropertyByIdRow, error) {
-	return s.repo.GetTenantWithPropertyById(ctx, tenantId)
-}
+// func (s *tenantService) CreateTenant(ctx context.Context, params repo.CreateTenantParams) (repo.Tenant, error) {
+// 	return s.repo.CreateTenant(ctx, params)
+// }

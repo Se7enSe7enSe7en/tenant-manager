@@ -5,8 +5,10 @@
 package repo
 
 import (
+	"time"
+
 	"github.com/google/uuid"
-	"github.com/jackc/pgx/v5/pgtype"
+	"github.com/shopspring/decimal"
 )
 
 type Identity struct {
@@ -14,52 +16,63 @@ type Identity struct {
 	UserID         uuid.UUID
 	Provider       string
 	ProviderUserID string
-	PasswordHash   pgtype.Text
-	CreatedAt      pgtype.Timestamp
+	PasswordHash   *string
+	CreatedAt      time.Time
+}
+
+type Lease struct {
+	ID              uuid.UUID
+	PropertyID      uuid.UUID
+	TenantID        uuid.UUID
+	ExpectedRentDay int16
+	StartDate       time.Time
+	ExpiryDate      *time.Time
+	IsMonthAdvance  bool
+	DepositAmount   decimal.Decimal
+	CreatedAt       time.Time
+	UpdatedAt       time.Time
 }
 
 type Property struct {
 	ID         uuid.UUID
 	UserID     uuid.UUID
 	Name       string
-	RentAmount pgtype.Numeric
-	CreatedAt  pgtype.Timestamp
-	UpdatedAt  pgtype.Timestamp
+	RentAmount decimal.Decimal
+	CreatedAt  time.Time
+	UpdatedAt  time.Time
 }
 
 type Session struct {
 	ID        uuid.UUID
 	UserID    uuid.UUID
-	ExpiresAt pgtype.Timestamp
-	CreatedAt pgtype.Timestamp
+	ExpiresAt time.Time
+	CreatedAt time.Time
 }
 
 type Tenant struct {
-	ID              uuid.UUID
-	PropertyID      uuid.UUID
-	Name            string
-	Email           string
-	PhoneNumber     string
-	ExpectedRentDay int16
-	CreatedAt       pgtype.Timestamp
-	UpdatedAt       pgtype.Timestamp
+	ID          uuid.UUID
+	Name        string
+	Email       string
+	PhoneNumber string
+	CreatedAt   time.Time
+	UpdatedAt   time.Time
 }
 
 type Trade struct {
 	ID         uuid.UUID
-	TenantID   uuid.UUID
-	PropertyID uuid.UUID
-	UserID     uuid.UUID
-	PaidAmount pgtype.Numeric
-	StartDate  pgtype.Timestamp
-	EndDate    pgtype.Timestamp
-	CreatedAt  pgtype.Timestamp
+	LeaseID    uuid.UUID
+	Type       int16
+	PaidAmount decimal.Decimal
+	StartDate  *time.Time
+	EndDate    *time.Time
+	Note       *string
+	CreatedAt  time.Time
 }
 
 type User struct {
 	ID        uuid.UUID
 	Email     string
-	Name      pgtype.Text
-	CreatedAt pgtype.Timestamp
-	UpdatedAt pgtype.Timestamp
+	Name      *string
+	CreatedAt time.Time
+	UpdatedAt time.Time
 }

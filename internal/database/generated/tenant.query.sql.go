@@ -7,169 +7,37 @@ package repo
 
 import (
 	"context"
-
-	"github.com/google/uuid"
-	"github.com/jackc/pgx/v5/pgtype"
 )
 
 const createTenant = `-- name: CreateTenant :one
 INSERT INTO
-    tenant (
-        id,
-        email,
-        name,
-        phone_number,
-        expected_rent_day,
-        property_id
-    )
+    tenant (id, email, name, phone_number)
 VALUES (
         gen_random_uuid (),
         $1,
         $2,
-        $3,
-        $4,
-        $5
+        $3
     )
 RETURNING
-    id, property_id, name, email, phone_number, expected_rent_day, created_at, updated_at
+    id, name, email, phone_number, created_at, updated_at
 `
 
 type CreateTenantParams struct {
-	Email           string
-	Name            string
-	PhoneNumber     string
-	ExpectedRentDay int16
-	PropertyID      uuid.UUID
+	Email       string
+	Name        string
+	PhoneNumber string
 }
 
 func (q *Queries) CreateTenant(ctx context.Context, arg CreateTenantParams) (Tenant, error) {
-	row := q.db.QueryRow(ctx, createTenant,
-		arg.Email,
-		arg.Name,
-		arg.PhoneNumber,
-		arg.ExpectedRentDay,
-		arg.PropertyID,
-	)
+	row := q.db.QueryRow(ctx, createTenant, arg.Email, arg.Name, arg.PhoneNumber)
 	var i Tenant
 	err := row.Scan(
 		&i.ID,
-		&i.PropertyID,
 		&i.Name,
 		&i.Email,
 		&i.PhoneNumber,
-		&i.ExpectedRentDay,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
 	return i, err
-}
-
-const getTenantWithPropertyById = `-- name: GetTenantWithPropertyById :one
-SELECT
-    -- tenant
-    t.id AS tenant_id,
-    t.email AS tenant_email,
-    t.name AS tenant_name,
-    t.expected_rent_day AS tenant_expected_rent_day,
-    t.phone_number AS tenant_phone_number,
-    -- property
-    p.id AS property_id,
-    p.name AS property_name,
-    p.rent_amount AS property_rent_amount,
-    p.updated_at AS property_updated_at
-FROM tenant t
-    LEFT JOIN property p ON t.property_id = p.id
-WHERE
-    t.id = $1
-LIMIT 1
-`
-
-type GetTenantWithPropertyByIdRow struct {
-	TenantID              uuid.UUID
-	TenantEmail           string
-	TenantName            string
-	TenantExpectedRentDay int16
-	TenantPhoneNumber     string
-	PropertyID            uuid.NullUUID
-	PropertyName          pgtype.Text
-	PropertyRentAmount    pgtype.Numeric
-	PropertyUpdatedAt     pgtype.Timestamp
-}
-
-func (q *Queries) GetTenantWithPropertyById(ctx context.Context, id uuid.UUID) (GetTenantWithPropertyByIdRow, error) {
-	row := q.db.QueryRow(ctx, getTenantWithPropertyById, id)
-	var i GetTenantWithPropertyByIdRow
-	err := row.Scan(
-		&i.TenantID,
-		&i.TenantEmail,
-		&i.TenantName,
-		&i.TenantExpectedRentDay,
-		&i.TenantPhoneNumber,
-		&i.PropertyID,
-		&i.PropertyName,
-		&i.PropertyRentAmount,
-		&i.PropertyUpdatedAt,
-	)
-	return i, err
-}
-
-const listTenantsWithProperty = `-- name: ListTenantsWithProperty :many
-SELECT
-    -- tenant
-    t.id AS tenant_id,
-    t.email AS tenant_email,
-    t.name AS tenant_name,
-    t.expected_rent_day AS tenant_expected_rent_day,
-    t.phone_number AS tenant_phone_number,
-    -- property
-    p.id AS property_id,
-    p.name AS property_name,
-    p.rent_amount AS property_rent_amount,
-    p.updated_at AS property_updated_at
-FROM tenant t
-    LEFT JOIN property p ON t.property_id = p.id
-WHERE
-    p.user_id = $1
-`
-
-type ListTenantsWithPropertyRow struct {
-	TenantID              uuid.UUID
-	TenantEmail           string
-	TenantName            string
-	TenantExpectedRentDay int16
-	TenantPhoneNumber     string
-	PropertyID            uuid.NullUUID
-	PropertyName          pgtype.Text
-	PropertyRentAmount    pgtype.Numeric
-	PropertyUpdatedAt     pgtype.Timestamp
-}
-
-func (q *Queries) ListTenantsWithProperty(ctx context.Context, userID uuid.UUID) ([]ListTenantsWithPropertyRow, error) {
-	rows, err := q.db.Query(ctx, listTenantsWithProperty, userID)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []ListTenantsWithPropertyRow
-	for rows.Next() {
-		var i ListTenantsWithPropertyRow
-		if err := rows.Scan(
-			&i.TenantID,
-			&i.TenantEmail,
-			&i.TenantName,
-			&i.TenantExpectedRentDay,
-			&i.TenantPhoneNumber,
-			&i.PropertyID,
-			&i.PropertyName,
-			&i.PropertyRentAmount,
-			&i.PropertyUpdatedAt,
-		); err != nil {
-			return nil, err
-		}
-		items = append(items, i)
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
 }

@@ -7,7 +7,7 @@ project/
 ├── cmd/server/          # Main web server entry point
 └── internal/            # Private application code
     ├── handler/         # HTTP handlers (presentation layer)
-    ├── service/         # Business logic
+    ├── service/         # Business logic (also serves as the usecase layer)
     ├── repository/      # Data access layer (sqlc will generated files based on .query.sql files)
     ├── middleware/      # HTTP middleware
     ├── routes/          # Route definitions

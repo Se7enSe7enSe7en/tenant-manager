@@ -1,6 +1,6 @@
 -- name: CreateIdentity :one
 INSERT INTO
-    identity (
+    "identity" (
         id,
         user_id,
         provider,
@@ -13,16 +13,22 @@ VALUES (
         $2,
         $3,
         $4
-    ) RETURNING *;
+    )
+RETURNING
+    *;
 
 -- name: GetIdentityByProvider :one
 -- params: provider, provider_user_id
 SELECT *
-FROM identity
+FROM "identity"
 WHERE
     provider = $1
     AND provider_user_id = $2;
 
 -- name: GetLocalIdentityByUserID :one
 -- params: user_id
-SELECT * FROM identity WHERE user_id = $1 AND provider = 'local';
+SELECT *
+FROM "identity"
+WHERE
+    user_id = $1
+    AND provider = 'local';

@@ -1,3 +1,5 @@
+// TODO: refactor this
+
 package service
 
 import (
@@ -9,26 +11,31 @@ import (
 
 type PropertyService interface {
 	CreateProperty(ctx context.Context, params repo.CreatePropertyParams) (repo.Property, error)
-	ListProperties(ctx context.Context, userId uuid.UUID) ([]repo.Property, error)
-	ListUnoccupiedProperties(ctx context.Context, userId uuid.UUID) ([]repo.Property, error)
+	ListProperty(ctx context.Context, userId uuid.UUID) ([]repo.Property, error)
+	ListUnoccupiedProperty(ctx context.Context, userId uuid.UUID) ([]repo.Property, error)
+	GetProperty(ctx context.Context, propertyId uuid.UUID) (repo.GetPropertyByIdRow, error)
 }
 
 type propertyService struct {
-	repo repo.Querier
+	queries *repo.Queries
 }
 
-func NewPropertyService(repo repo.Querier) *propertyService {
+func NewPropertyService(repo *repo.Queries) *propertyService {
 	return new(propertyService{repo})
 }
 
 func (s *propertyService) CreateProperty(ctx context.Context, params repo.CreatePropertyParams) (repo.Property, error) {
-	return s.repo.CreateProperty(ctx, params)
+	return s.queries.CreateProperty(ctx, params)
 }
 
-func (s *propertyService) ListProperties(ctx context.Context, userId uuid.UUID) ([]repo.Property, error) {
-	return s.repo.ListProperties(ctx, userId)
+func (s *propertyService) ListProperty(ctx context.Context, userId uuid.UUID) ([]repo.Property, error) {
+	return s.queries.ListProperty(ctx, userId)
 }
 
-func (s *propertyService) ListUnoccupiedProperties(ctx context.Context, userId uuid.UUID) ([]repo.Property, error) {
-	return s.repo.ListUnoccupiedProperties(ctx, userId)
+func (s *propertyService) ListUnoccupiedProperty(ctx context.Context, userId uuid.UUID) ([]repo.Property, error) {
+	return s.queries.ListUnoccupiedProperty(ctx, userId)
+}
+
+func (s *propertyService) GetProperty(ctx context.Context, propertyId uuid.UUID) (repo.GetPropertyByIdRow, error) {
+	return s.queries.GetPropertyById(ctx, propertyId)
 }

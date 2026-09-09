@@ -17,6 +17,7 @@ import (
 	"github.com/Se7enSe7enSe7en/tenant-manager/internal/middleware"
 	"github.com/Se7enSe7enSe7en/tenant-manager/internal/routine"
 	"github.com/Se7enSe7enSe7en/tenant-manager/internal/service"
+	"github.com/Se7enSe7enSe7en/tenant-manager/internal/slogfmt"
 	"github.com/Se7enSe7enSe7en/tenant-manager/internal/utils"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/joho/godotenv"
@@ -35,6 +36,10 @@ func main() {
 
 	// load env variables
 	godotenv.Load()
+
+	// TODO: we now use slog for logging, refactor all instances of using the old "github.com/Se7enSe7enSe7en/go-toolkit/pkg/logger"
+	// or update the go-toolkit to use the new custom logger, check logfmt/logfmt.go
+	slogfmt.Init()
 
 	// init app config
 	cfg := app.Config{
@@ -64,33 +69,38 @@ func main() {
 	// init db queries
 	queries := repo.New(application.Db)
 
-	// create server mux
+	// create main server mux
 	mux := http.NewServeMux()
 
 	// serve static files
 	fs := http.FileServer(http.Dir("./internal/web/static/assets"))
 	mux.Handle("/assets/", utils.DisableCacheInDevMode(http.StripPrefix("/assets/", fs)))
 
-	// init services and handlers
-	tenantService := service.NewTenantService(queries)
-	tenantHandler := handler.NewTenantHandler(tenantService)
-
-	propertyService := service.NewPropertyService(queries)
-	propertyHandler := handler.NewPropertyHandler(propertyService)
-
+	// init services
 	authService := service.NewAuthService(application.Db)
-	authHandler := handler.NewAuthHandler(authService)
+	// tenantService := service.NewTenantService(queries) // not used atm
+	leaseService := service.NewLeaseService(queries)
+	propertyService := service.NewPropertyService(queries)
+	transactionService := service.NewTransactionService(queries)
+	registrationService := service.NewRegistrationService(application.Db, queries)
 
-	pageHandler := handler.NewPageHandler(handler.PageHandler{
-		PropertyService: propertyService,
-		TenantService:   tenantService,
-	})
+	// init handlers
+	authHandler := handler.NewAuthHandler(authService)
+	tenantHandler := handler.NewTenantHandler(registrationService)
+	propertyHandler := handler.NewPropertyHandler(propertyService)
+	tradeHandler := handler.NewTradeHandler(transactionService)
+	pageHandler := handler.NewPageHandler(propertyService, leaseService)
 
 	// TODO: refactor this later, find a more elegant way to write this to handler multiple middlewares
 	// auth middleware func
 	protect := func(h http.HandlerFunc) http.Handler {
 		return middleware.RequireAuth(http.HandlerFunc(h))
 	}
+
+	// auth handlers
+	mux.HandleFunc("POST /login", authHandler.Login)
+	mux.HandleFunc("POST /register", authHandler.Register)
+	mux.HandleFunc("POST /logout", authHandler.Logout)
 
 	// TODO: find a better way to write, .Handle() and HandleFunc(), they both serve the same purpose, only difference is that .Handle() needs you to convert the handler functions you pass
 	// page handlers
@@ -101,14 +111,13 @@ func main() {
 	mux.Handle("GET /tenant/create", protect(pageHandler.CreateTenantPage))
 	mux.Handle("GET /trade/create", protect(pageHandler.CreateTradePage))
 
-	// handlers
+	// CRUD handlers
 	mux.Handle("POST /property/create", protect(propertyHandler.CreateProperty))
 	mux.Handle("POST /tenant/create", protect(tenantHandler.CreateTenant))
-	// mux.Handle("POST /trade/create", protect()) // TODO
+	mux.Handle("POST /trade/create", protect(tradeHandler.CreateTrade)) // TODO
 
-	mux.HandleFunc("POST /login", authHandler.Login)
-	mux.HandleFunc("POST /register", authHandler.Register)
-	mux.HandleFunc("POST /logout", authHandler.Logout)
+	// Datastar handlers
+	mux.Handle("POST /ds/tenant/create/compute_next_due_date", protect(tenantHandler.ComputeNextDueDate))
 
 	// init server
 	s := &http.Server{

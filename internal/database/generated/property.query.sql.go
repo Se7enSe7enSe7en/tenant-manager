@@ -7,9 +7,10 @@ package repo
 
 import (
 	"context"
+	"time"
 
 	"github.com/google/uuid"
-	"github.com/jackc/pgx/v5/pgtype"
+	"github.com/shopspring/decimal"
 )
 
 const createProperty = `-- name: CreateProperty :one
@@ -33,7 +34,7 @@ RETURNING
 type CreatePropertyParams struct {
 	UserID     uuid.UUID
 	Name       string
-	RentAmount pgtype.Numeric
+	RentAmount decimal.Decimal
 }
 
 func (q *Queries) CreateProperty(ctx context.Context, arg CreatePropertyParams) (Property, error) {
@@ -50,15 +51,43 @@ func (q *Queries) CreateProperty(ctx context.Context, arg CreatePropertyParams) 
 	return i, err
 }
 
-const listProperties = `-- name: ListProperties :many
+const getPropertyById = `-- name: GetPropertyById :one
+SELECT p.id, p.user_id, p.rent_amount, p.created_at, p.updated_at
+FROM property p
+WHERE
+    p.id = $1
+`
+
+type GetPropertyByIdRow struct {
+	ID         uuid.UUID
+	UserID     uuid.UUID
+	RentAmount decimal.Decimal
+	CreatedAt  time.Time
+	UpdatedAt  time.Time
+}
+
+func (q *Queries) GetPropertyById(ctx context.Context, id uuid.UUID) (GetPropertyByIdRow, error) {
+	row := q.db.QueryRow(ctx, getPropertyById, id)
+	var i GetPropertyByIdRow
+	err := row.Scan(
+		&i.ID,
+		&i.UserID,
+		&i.RentAmount,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
+const listProperty = `-- name: ListProperty :many
 SELECT p.id, p.user_id, p.name, p.rent_amount, p.created_at, p.updated_at
 FROM property p
 WHERE
     p.user_id = $1
 `
 
-func (q *Queries) ListProperties(ctx context.Context, userID uuid.UUID) ([]Property, error) {
-	rows, err := q.db.Query(ctx, listProperties, userID)
+func (q *Queries) ListProperty(ctx context.Context, userID uuid.UUID) ([]Property, error) {
+	rows, err := q.db.Query(ctx, listProperty, userID)
 	if err != nil {
 		return nil, err
 	}
@@ -84,17 +113,17 @@ func (q *Queries) ListProperties(ctx context.Context, userID uuid.UUID) ([]Prope
 	return items, nil
 }
 
-const listUnoccupiedProperties = `-- name: ListUnoccupiedProperties :many
+const listUnoccupiedProperty = `-- name: ListUnoccupiedProperty :many
 SELECT p.id, p.user_id, p.name, p.rent_amount, p.created_at, p.updated_at
 FROM property p
-    LEFT JOIN tenant t ON p.id = t.property_id
+    LEFT JOIN lease l ON p.id = l.property_id
 WHERE
-    t.property_id IS NULL
+    l.property_id IS NULL
     AND p.user_id = $1
 `
 
-func (q *Queries) ListUnoccupiedProperties(ctx context.Context, userID uuid.UUID) ([]Property, error) {
-	rows, err := q.db.Query(ctx, listUnoccupiedProperties, userID)
+func (q *Queries) ListUnoccupiedProperty(ctx context.Context, userID uuid.UUID) ([]Property, error) {
+	rows, err := q.db.Query(ctx, listUnoccupiedProperty, userID)
 	if err != nil {
 		return nil, err
 	}

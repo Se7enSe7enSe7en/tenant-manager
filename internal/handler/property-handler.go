@@ -6,8 +6,8 @@ import (
 	"github.com/Se7enSe7enSe7en/tenant-manager/internal/ctxkeys"
 	repo "github.com/Se7enSe7enSe7en/tenant-manager/internal/database/generated"
 	"github.com/Se7enSe7enSe7en/tenant-manager/internal/service"
-	"github.com/Se7enSe7enSe7en/tenant-manager/internal/utils"
 	"github.com/Se7enSe7enSe7en/tenant-manager/internal/validation"
+	"github.com/shopspring/decimal"
 	"github.com/starfederation/datastar-go/datastar"
 )
 
@@ -39,7 +39,7 @@ func (h *propertyHandler) CreateProperty(w http.ResponseWriter, r *http.Request)
 
 	// TODO: make adapters or combine with validation step to make these more straight forward
 	// string conversions
-	rentAmountNumeric, err := utils.StringToPgtypeNumeric(rentAmount)
+	rentAmountDecimal, err := decimal.NewFromString(rentAmount)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -48,7 +48,7 @@ func (h *propertyHandler) CreateProperty(w http.ResponseWriter, r *http.Request)
 	// TODO: validate form values, this function is not yet complete
 	if err := validation.CheckCreatePropertyForm(validation.CreatePropertyForm{
 		Name:       name,
-		RentAmount: float64(rentAmountNumeric.Exp),
+		RentAmount: rentAmountDecimal,
 	}); err != nil {
 		// TODO: handle error, with datastar
 		http.Error(w, err.Error(), http.StatusInternalServerError) // TMP
@@ -59,7 +59,7 @@ func (h *propertyHandler) CreateProperty(w http.ResponseWriter, r *http.Request)
 	_, err = h.service.CreateProperty(r.Context(), repo.CreatePropertyParams{
 		UserID:     user.ID,
 		Name:       name,
-		RentAmount: rentAmountNumeric,
+		RentAmount: rentAmountDecimal,
 	})
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

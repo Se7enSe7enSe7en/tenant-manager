@@ -20,3 +20,22 @@ func (ps PaymentStatus) String() string {
 		return ""
 	}
 }
+
+type TradeType int
+
+const (
+	RENT TradeType = iota
+	DEPOSIT
+)
+
+func (t TradeType) String() string {
+	switch t {
+	case RENT:
+		return "Rent"
+	case DEPOSIT:
+		return "Deposit"
+	default:
+		return ""
+
+	}
+}

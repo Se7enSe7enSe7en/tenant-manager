@@ -8,7 +8,8 @@ sql:
         package: "repo"
         out: "./internal/database/generated"
         sql_package: "pgx/v5"
-        emit_interface: true # this is for enabling Querier interface
+        emit_interface: true
+        emit_pointers_for_null_types: true # for pointers as nil *time.Time
         overrides:
           # pgtype.UUID to google/uuid
           - db_type: "uuid"
@@ -21,3 +22,31 @@ sql:
             go_type:
               import: "github.com/google/uuid"
               type: "NullUUID"
+          # pgtype.Numeric to Decimal
+          - db_type: "pg_catalog.numeric"
+            nullable: false
+            go_type:
+              import: "github.com/shopspring/decimal"
+              type: "Decimal"
+          - db_type: "pg_catalog.numeric"
+            nullable: true
+            go_type:
+              import: "github.com/shopspring/decimal"
+              type: "NullDecimal"
+          # pgtype.Timestamp to time.Timestamp
+          - db_type: "pg_catalog.timestamp"
+            nullable: false
+            go_type: "time.Time"
+          - db_type: "pg_catalog.timestamp"
+            nullable: true
+            go_type:
+              type: "time.Time"
+              pointer: true
+          - db_type: "pg_catalog.timestampz"
+            nullable: false
+            go_type: "time.Time"
+          - db_type: "pg_catalog.timestampz"
+            nullable: true
+            go_type:
+              type: "time.Time"
+              pointer: true

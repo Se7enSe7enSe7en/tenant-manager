@@ -15,4 +15,5 @@
     "templ": "html"
   },
   "database-client.capitalizeKeywordsWhenFormatting": true,
+  "database-client.telemetry.usesOnlineServices": false,
 }

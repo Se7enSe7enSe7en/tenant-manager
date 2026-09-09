@@ -9,18 +9,19 @@ import (
 	"context"
 
 	"github.com/google/uuid"
-	"github.com/jackc/pgx/v5/pgtype"
 )
 
 const createUser = `-- name: CreateUser :one
 INSERT INTO
     "user" (id, email, name)
-VALUES (gen_random_uuid (), $1, $2) RETURNING id, email, name, created_at, updated_at
+VALUES (gen_random_uuid (), $1, $2)
+RETURNING
+    id, email, name, created_at, updated_at
 `
 
 type CreateUserParams struct {
 	Email string
-	Name  pgtype.Text
+	Name  *string
 }
 
 func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, error) {

@@ -12,6 +12,8 @@ require (
 	golang.org/x/crypto v0.51.0
 )
 
+require github.com/shopspring/decimal v1.4.0
+
 require (
 	github.com/CAFxX/httpcompression v0.0.9 // indirect
 	github.com/andybalholm/brotli v1.2.0 // indirect

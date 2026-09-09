@@ -15,16 +15,22 @@ VALUES (
 RETURNING
     *;
 
--- name: ListProperties :many
+-- name: ListProperty :many
 SELECT p.id, p.user_id, p.name, p.rent_amount, p.created_at, p.updated_at
 FROM property p
 WHERE
     p.user_id = $1;
 
--- name: ListUnoccupiedProperties :many
+-- name: ListUnoccupiedProperty :many
 SELECT p.id, p.user_id, p.name, p.rent_amount, p.created_at, p.updated_at
 FROM property p
-    LEFT JOIN tenant t ON p.id = t.property_id
+    LEFT JOIN lease l ON p.id = l.property_id
 WHERE
-    t.property_id IS NULL
+    l.property_id IS NULL
     AND p.user_id = $1;
+
+-- name: GetPropertyById :one
+SELECT p.id, p.user_id, p.rent_amount, p.created_at, p.updated_at
+FROM property p
+WHERE
+    p.id = $1;

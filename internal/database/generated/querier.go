@@ -12,23 +12,28 @@ import (
 
 type Querier interface {
 	CreateIdentity(ctx context.Context, arg CreateIdentityParams) (Identity, error)
+	CreateLease(ctx context.Context, arg CreateLeaseParams) (Lease, error)
 	CreateProperty(ctx context.Context, arg CreatePropertyParams) (Property, error)
 	CreateSession(ctx context.Context, arg CreateSessionParams) (Session, error)
 	CreateTenant(ctx context.Context, arg CreateTenantParams) (Tenant, error)
+	CreateTrade(ctx context.Context, arg CreateTradeParams) (Trade, error)
 	CreateUser(ctx context.Context, arg CreateUserParams) (User, error)
 	DeleteExpiredSessions(ctx context.Context) error
+	DeleteLease(ctx context.Context, id uuid.UUID) error
 	DeleteSession(ctx context.Context, id uuid.UUID) error
 	// params: provider, provider_user_id
 	GetIdentityByProvider(ctx context.Context, arg GetIdentityByProviderParams) (Identity, error)
+	GetLeaseById(ctx context.Context, id uuid.UUID) (GetLeaseByIdRow, error)
 	// params: user_id
 	GetLocalIdentityByUserID(ctx context.Context, userID uuid.UUID) (Identity, error)
+	GetPropertyById(ctx context.Context, id uuid.UUID) (GetPropertyByIdRow, error)
 	GetSession(ctx context.Context, id uuid.UUID) (Session, error)
-	GetTenantWithPropertyById(ctx context.Context, id uuid.UUID) (GetTenantWithPropertyByIdRow, error)
 	GetUserByEmail(ctx context.Context, email string) (User, error)
 	GetUserByID(ctx context.Context, id uuid.UUID) (User, error)
-	ListProperties(ctx context.Context, userID uuid.UUID) ([]Property, error)
-	ListTenantsWithProperty(ctx context.Context, userID uuid.UUID) ([]ListTenantsWithPropertyRow, error)
-	ListUnoccupiedProperties(ctx context.Context, userID uuid.UUID) ([]Property, error)
+	ListLease(ctx context.Context, id uuid.UUID) ([]ListLeaseRow, error)
+	ListProperty(ctx context.Context, userID uuid.UUID) ([]Property, error)
+	ListUnoccupiedProperty(ctx context.Context, userID uuid.UUID) ([]Property, error)
+	UpdateLease(ctx context.Context, arg UpdateLeaseParams) (Lease, error)
 }
 
 var _ Querier = (*Queries)(nil)

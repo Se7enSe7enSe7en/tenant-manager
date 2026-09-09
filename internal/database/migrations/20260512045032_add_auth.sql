@@ -1,5 +1,5 @@
 -- +goose Up
-CREATE TABLE identity (
+CREATE TABLE "identity" (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid (),
     user_id UUID NOT NULL REFERENCES "user" (id) ON DELETE CASCADE,
     provider TEXT NOT NULL, -- 'local' | 'google'
@@ -9,18 +9,18 @@ CREATE TABLE identity (
     UNIQUE (user_id, provider_user_id)
 );
 
-CREATE INDEX idx_identity_user_id ON identity (user_id);
+CREATE INDEX idx_identity_user_id ON IDENTITY (user_id);
 
-CREATE TABLE session (
+CREATE TABLE "session" (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid (),
     user_id UUID NOT NULL REFERENCES "user" (id) ON DELETE CASCADE,
     expires_at TIMESTAMP NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT now()
 );
 
-CREATE INDEX idx_session_user_id ON session (user_id);
+CREATE INDEX idx_session_user_id ON SESSION (user_id);
 
 -- +goose Down
-DROP TABLE identity;
+DROP TABLE "identity";
 
-DROP TABLE session CASCADE;
+DROP TABLE "session" CASCADE;

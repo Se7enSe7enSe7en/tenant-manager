@@ -2,6 +2,7 @@ package utils
 
 import (
 	"log"
+	"time"
 
 	"github.com/jackc/pgx/v5/pgtype"
 )
@@ -13,7 +14,7 @@ func StringToPgtypeUuid(s string) (pgtype.UUID, error) {
 	return uuid, err
 }
 
-func StringToPgtypeNumeric(s string) (pgtype.Numeric, error) {
+func ToPgtypeNumeric(s any) (pgtype.Numeric, error) {
 	var num pgtype.Numeric
 	err := num.Scan(s)
 
@@ -41,4 +42,11 @@ func PgtypeNumericToString(num pgtype.Numeric) string {
 	}
 
 	return fallbackValue
+}
+
+func TimetoPgtypeTimestamp(t time.Time) pgtype.Timestamp {
+	return pgtype.Timestamp{
+		Time:  t,
+		Valid: true,
+	}
 }
