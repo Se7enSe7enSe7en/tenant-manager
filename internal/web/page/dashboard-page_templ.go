@@ -14,9 +14,17 @@ import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/propert
 
 import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/layout"
 
+type StatCard struct {
+	TotalTenants       string
+	TotalPaidTenants   string
+	TotalUnpaidTenants string
+	TotalLateTenants   string
+}
+
 type DashboardPageProps struct {
 	TenantList   []tenantcard.TenantCardProps
 	PropertyList []propertycard.PropertyCardProps
+	StatCard     StatCard
 }
 
 func DashboardPage(props DashboardPageProps) templ.Component {
@@ -58,7 +66,7 @@ func DashboardPage(props DashboardPageProps) templ.Component {
 			}
 			templ_7745c5c3_Err = statcard.StatCard(statcard.StatCardProps{
 				Title:    "Total tenants",
-				Value:    "4",
+				Value:    props.StatCard.TotalTenants,
 				Subtitle: new("Active units"),
 				Icon:     new("assets/tenants-icon.svg"),
 			}).Render(ctx, templ_7745c5c3_Buffer)
@@ -67,8 +75,8 @@ func DashboardPage(props DashboardPageProps) templ.Component {
 			}
 			templ_7745c5c3_Err = statcard.StatCard(statcard.StatCardProps{
 				Title:    "Paid",
-				Value:    "1",
-				Subtitle: new("₱15,000 collected"),
+				Value:    props.StatCard.TotalPaidTenants,
+				Subtitle: new("Collected payments"),
 				Icon:     new("assets/paid-icon.svg"),
 			}).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
@@ -76,8 +84,8 @@ func DashboardPage(props DashboardPageProps) templ.Component {
 			}
 			templ_7745c5c3_Err = statcard.StatCard(statcard.StatCardProps{
 				Title:    "Unpaid",
-				Value:    "2",
-				Subtitle: new("Awaiting payment"),
+				Value:    props.StatCard.TotalUnpaidTenants,
+				Subtitle: new("Awaiting payments"),
 				Icon:     new("assets/unpaid-icon.svg"),
 			}).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
@@ -85,7 +93,7 @@ func DashboardPage(props DashboardPageProps) templ.Component {
 			}
 			templ_7745c5c3_Err = statcard.StatCard(statcard.StatCardProps{
 				Title:    "Late",
-				Value:    "1",
+				Value:    props.StatCard.TotalLateTenants,
 				Subtitle: new("Overdue payments"),
 				Icon:     new("assets/late-icon.svg"),
 			}).Render(ctx, templ_7745c5c3_Buffer)

@@ -22,7 +22,7 @@ func ComputeNextExpiryDate(prevDate time.Time, expectedRentDay int) time.Time {
 	expiryDate := time.Date(
 		oneMonthAfterStartDate.Year(),
 		oneMonthAfterStartDate.Month(),
-		int(expectedRentDay),
+		expectedRentDay,
 		oneMonthAfterStartDate.Hour(),
 		oneMonthAfterStartDate.Minute(),
 		oneMonthAfterStartDate.Second(),
@@ -34,8 +34,8 @@ func ComputeNextExpiryDate(prevDate time.Time, expectedRentDay int) time.Time {
 	if expiryDate.Month() != oneMonthAfterStartDate.Month() {
 		expiryDate = time.Date(
 			oneMonthAfterStartDate.Year(),
-			oneMonthAfterStartDate.Month(),
-			0, // "0" means the last day of the month
+			oneMonthAfterStartDate.Month()+1, // add 1 since we want the last day of the next month
+			0,                                // "0" means the last day of the previous month (eg. month = Oct, day = 0 -> Sep 31 )
 			oneMonthAfterStartDate.Hour(),
 			oneMonthAfterStartDate.Minute(),
 			oneMonthAfterStartDate.Second(),

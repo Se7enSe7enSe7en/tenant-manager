@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"strconv"
 	"time"
 
 	repo "github.com/Se7enSe7enSe7en/tenant-manager/internal/database/generated"
@@ -13,6 +14,7 @@ type LeaseService interface {
 	// CreateLease(ctx context.Context, params CreateLeaseParams) (repo.Lease, error)
 	ListLease(ctx context.Context, userID uuid.UUID) ([]repo.ListLeaseRow, error)
 	GetLease(ctx context.Context, leaseID uuid.UUID) (repo.GetLeaseByIdRow, error)
+	GetCountLeaseWithTenantStats(ctx context.Context, userID uuid.UUID) (CountLeaseWithTenantStats, error)
 }
 
 type leaseService struct {
@@ -66,4 +68,38 @@ func (s *leaseService) ListLease(ctx context.Context, userID uuid.UUID) ([]repo.
 
 func (s *leaseService) GetLease(ctx context.Context, leaseID uuid.UUID) (repo.GetLeaseByIdRow, error) {
 	return s.queries.GetLeaseById(ctx, leaseID)
+}
+
+type CountLeaseWithTenantStats struct {
+	TotalTenants       string
+	TotalPaidTenants   string
+	TotalUnpaidTenants string
+	TotalLateTenants   string
+}
+
+func (s *leaseService) GetCountLeaseWithTenantStats(ctx context.Context, userID uuid.UUID) (CountLeaseWithTenantStats, error) {
+	totalTenants, err := s.queries.CountLease(ctx, userID)
+	if err != nil {
+		return CountLeaseWithTenantStats{}, err
+	}
+
+	totalPaidTenants, err := s.queries.CountLeasePaid(ctx, userID)
+	if err != nil {
+		return CountLeaseWithTenantStats{}, err
+	}
+	totalUnpaidTenants, err := s.queries.CountLeaseUnpaid(ctx, userID)
+	if err != nil {
+		return CountLeaseWithTenantStats{}, err
+	}
+	totalLateTenants, err := s.queries.CountLeaseLate(ctx, userID)
+	if err != nil {
+		return CountLeaseWithTenantStats{}, err
+	}
+
+	return CountLeaseWithTenantStats{
+		TotalTenants:       strconv.FormatInt(totalTenants, 10),
+		TotalPaidTenants:   strconv.FormatInt(totalPaidTenants, 10),
+		TotalUnpaidTenants: strconv.FormatInt(totalUnpaidTenants, 10),
+		TotalLateTenants:   strconv.FormatInt(totalLateTenants, 10),
+	}, nil
 }

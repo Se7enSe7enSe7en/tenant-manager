@@ -13,6 +13,78 @@ import (
 	"github.com/shopspring/decimal"
 )
 
+const countLease = `-- name: CountLease :one
+SELECT count(*)
+FROM
+    lease l
+    LEFT JOIN property p ON property_id = p.id
+    LEFT JOIN "user" u ON p.user_id = u.id
+WHERE
+    u.id = $1
+`
+
+func (q *Queries) CountLease(ctx context.Context, id uuid.UUID) (int64, error) {
+	row := q.db.QueryRow(ctx, countLease, id)
+	var count int64
+	err := row.Scan(&count)
+	return count, err
+}
+
+const countLeaseLate = `-- name: CountLeaseLate :one
+SELECT count(*)
+FROM
+    lease l
+    LEFT JOIN property p ON property_id = p.id
+    LEFT JOIN "user" u ON p.user_id = u.id
+WHERE
+    u.id = $1
+    AND expiry_date + INTERVAL '1 month' < now()
+`
+
+func (q *Queries) CountLeaseLate(ctx context.Context, id uuid.UUID) (int64, error) {
+	row := q.db.QueryRow(ctx, countLeaseLate, id)
+	var count int64
+	err := row.Scan(&count)
+	return count, err
+}
+
+const countLeasePaid = `-- name: CountLeasePaid :one
+SELECT count(*)
+FROM
+    lease l
+    LEFT JOIN property p ON property_id = p.id
+    LEFT JOIN "user" u ON p.user_id = u.id
+WHERE
+    u.id = $1
+    AND now() < expiry_date
+`
+
+func (q *Queries) CountLeasePaid(ctx context.Context, id uuid.UUID) (int64, error) {
+	row := q.db.QueryRow(ctx, countLeasePaid, id)
+	var count int64
+	err := row.Scan(&count)
+	return count, err
+}
+
+const countLeaseUnpaid = `-- name: CountLeaseUnpaid :one
+SELECT count(*)
+FROM
+    lease l
+    LEFT JOIN property p ON property_id = p.id
+    LEFT JOIN "user" u ON p.user_id = u.id
+WHERE
+    u.id = $1
+    AND expiry_date < now()
+    AND now() < expiry_date + INTERVAL '1 month'
+`
+
+func (q *Queries) CountLeaseUnpaid(ctx context.Context, id uuid.UUID) (int64, error) {
+	row := q.db.QueryRow(ctx, countLeaseUnpaid, id)
+	var count int64
+	err := row.Scan(&count)
+	return count, err
+}
+
 const createLease = `-- name: CreateLease :one
 INSERT INTO
     lease (

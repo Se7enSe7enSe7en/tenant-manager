@@ -121,3 +121,43 @@ RETURNING
 
 -- name: DeleteLease :exec
 DELETE FROM lease WHERE id = $1;
+
+-- name: CountLease :one
+SELECT count(*)
+FROM
+    lease l
+    LEFT JOIN property p ON property_id = p.id
+    LEFT JOIN "user" u ON p.user_id = u.id
+WHERE
+    u.id = $1;
+
+-- name: CountLeasePaid :one
+SELECT count(*)
+FROM
+    lease l
+    LEFT JOIN property p ON property_id = p.id
+    LEFT JOIN "user" u ON p.user_id = u.id
+WHERE
+    u.id = $1
+    AND now() < expiry_date;
+
+-- name: CountLeaseUnpaid :one
+SELECT count(*)
+FROM
+    lease l
+    LEFT JOIN property p ON property_id = p.id
+    LEFT JOIN "user" u ON p.user_id = u.id
+WHERE
+    u.id = $1
+    AND expiry_date < now()
+    AND now() < expiry_date + INTERVAL '1 month';
+
+-- name: CountLeaseLate :one
+SELECT count(*)
+FROM
+    lease l
+    LEFT JOIN property p ON property_id = p.id
+    LEFT JOIN "user" u ON p.user_id = u.id
+WHERE
+    u.id = $1
+    AND expiry_date + INTERVAL '1 month' < now();

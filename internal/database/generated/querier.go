@@ -11,6 +11,10 @@ import (
 )
 
 type Querier interface {
+	CountLease(ctx context.Context, id uuid.UUID) (int64, error)
+	CountLeaseLate(ctx context.Context, id uuid.UUID) (int64, error)
+	CountLeasePaid(ctx context.Context, id uuid.UUID) (int64, error)
+	CountLeaseUnpaid(ctx context.Context, id uuid.UUID) (int64, error)
 	CreateIdentity(ctx context.Context, arg CreateIdentityParams) (Identity, error)
 	CreateLease(ctx context.Context, arg CreateLeaseParams) (Lease, error)
 	CreateProperty(ctx context.Context, arg CreatePropertyParams) (Property, error)

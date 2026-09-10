@@ -6,9 +6,17 @@ import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/propert
 
 import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/layout"
 
+type StatCard struct {
+	TotalTenants       string
+	TotalPaidTenants   string
+	TotalUnpaidTenants string
+	TotalLateTenants   string
+}
+
 type DashboardPageProps struct {
 	TenantList   []tenantcard.TenantCardProps
 	PropertyList []propertycard.PropertyCardProps
+	StatCard     StatCard
 }
 
 templ DashboardPage(props DashboardPageProps) {
@@ -17,25 +25,25 @@ templ DashboardPage(props DashboardPageProps) {
 			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-col-4 xl:grid-cols-4 gap-4 mb-8">
 				@statcard.StatCard(statcard.StatCardProps{
 					Title:    "Total tenants",
-					Value:    "4",
+					Value:    props.StatCard.TotalTenants,
 					Subtitle: new("Active units"),
 					Icon:     new("assets/tenants-icon.svg"),
 				})
 				@statcard.StatCard(statcard.StatCardProps{
 					Title:    "Paid",
-					Value:    "1",
-					Subtitle: new("₱15,000 collected"),
+					Value:    props.StatCard.TotalPaidTenants,
+					Subtitle: new("Collected payments"),
 					Icon:     new("assets/paid-icon.svg"),
 				})
 				@statcard.StatCard(statcard.StatCardProps{
 					Title:    "Unpaid",
-					Value:    "2",
-					Subtitle: new("Awaiting payment"),
+					Value:    props.StatCard.TotalUnpaidTenants,
+					Subtitle: new("Awaiting payments"),
 					Icon:     new("assets/unpaid-icon.svg"),
 				})
 				@statcard.StatCard(statcard.StatCardProps{
 					Title:    "Late",
-					Value:    "1",
+					Value:    props.StatCard.TotalLateTenants,
 					Subtitle: new("Overdue payments"),
 					Icon:     new("assets/late-icon.svg"),
 				})

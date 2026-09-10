@@ -83,10 +83,23 @@ func (h *PageHandler) DashboardPage(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	// for stat card
+	stats, err := h.LeaseService.GetCountLeaseWithTenantStats(r.Context(), user.ID)
+	if err != nil {
+		errs.Http(w, r, err, http.StatusInternalServerError)
+		return
+	}
+
 	// return tenant page with context in an HTTP response
 	page.DashboardPage(page.DashboardPageProps{
 		PropertyList: propertyList,
 		TenantList:   tenantList,
+		StatCard: page.StatCard{
+			TotalTenants:       stats.TotalTenants,
+			TotalPaidTenants:   stats.TotalPaidTenants,
+			TotalUnpaidTenants: stats.TotalUnpaidTenants,
+			TotalLateTenants:   stats.TotalLateTenants,
+		},
 	}).Render(context.Background(), w)
 }
 
