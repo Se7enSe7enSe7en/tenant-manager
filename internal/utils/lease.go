@@ -1,6 +1,10 @@
 package utils
 
-import "time"
+import (
+	"time"
+
+	"github.com/Se7enSe7enSe7en/tenant-manager/internal/constants"
+)
 
 func ComputeNextExpiryDate(prevDate time.Time, expectedRentDay int) time.Time {
 	// set the start date to 1st day of the month
@@ -45,4 +49,19 @@ func ComputeNextExpiryDate(prevDate time.Time, expectedRentDay int) time.Time {
 	// we want it to be capped to the last day of the month instead (Feb 31 = Feb 28)
 
 	return expiryDate
+}
+
+func ComputeStatus(expiryDate time.Time) constants.PaymentStatus {
+	now := time.Now()
+
+	if now.Before(expiryDate) {
+		return constants.PAID
+	}
+
+	// expiryDate + 1 month = 1 month late
+	if now.After(expiryDate.AddDate(0, 1, 0)) {
+		return constants.LATE
+	}
+
+	return constants.UNPAID
 }

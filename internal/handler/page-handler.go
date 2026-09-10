@@ -49,15 +49,15 @@ func (h *PageHandler) DashboardPage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// convert []repo.Tenant -> []component.TenantCardProps
+	// convert []repo.Lease -> []component.TenantCardProps
 	tenantList := make([]tenantcard.TenantCardProps, len(dbLeaseList))
 	for i, l := range dbLeaseList {
 		tenantList[i] = tenantcard.TenantCardProps{
-			Id:   l.TenantID.UUID.String(),
-			Name: *l.TenantName,
-			Unit: *l.PropertyName,
-			// Status: , // TODO: add status
-			RentAmount:  l.PropertyRentAmount.Decimal.String(), // TODO: should get from property as well
+			Id:          l.TenantID.UUID.String(),
+			Name:        *l.TenantName,
+			Unit:        *l.PropertyName,
+			Status:      utils.ComputeStatus(*l.ExpiryDate),
+			RentAmount:  l.PropertyRentAmount.Decimal.String(),
 			NextDueDate: l.ExpiryDate.Format("Jan-02-2006"),
 			Email:       l.TenantEmail,
 			PhoneNumber: l.TenantPhoneNumber,
