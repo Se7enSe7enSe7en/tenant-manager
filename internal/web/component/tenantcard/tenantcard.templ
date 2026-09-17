@@ -8,43 +8,47 @@ import (
 )
 
 templ TenantCard(props TenantCardProps) {
-	<div class="bg-card rounded-xl p-5 border shadow-sm transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 h-60 flex flex-col justify-between">
-		<div class="flex justify-between mb-2">
-			<div class="flex gap-3">
-				<div class="flex bg-secondary items-center justify-center size-12 rounded-full ">
+	<div class="h-60 flex flex-col justify-between p-5 bg-card rounded-xl border shadow-sm transition-all">
+		<div class="flex w-full justify-between mb-2 gap-3">
+			<div class="flex w-1/2 gap-3">
+				<div class="flex size-12 items-center justify-center p-1 rounded-full ">
 					// TODO: add if no image condition in the future
-					<span class="text-xl">T</span>
+					// <span class="text-xl">T</span>
+					@statusbadge.StatusBadge(statusbadge.StatusBadgeProps{Status: props.Status})
 				</div>
+				<div class="flex flex-col w-full">
+					<p class="font-semibold">{ props.Name }</p>
+					<p class="truncate block">{ props.Unit }</p>
+				</div>
+			</div>
+			<div class="flex flex-col align-top">
 				<div class="flex-col">
-					<p class="">{ props.Name }</p>
-					<p class="">{ props.Unit }</p>
+					<p class="truncate block text-xs mt-1">Next Due Date:</p>
+					<p class="font-bold">{ props.NextDueDate }</p>
 				</div>
 			</div>
-			<div class="flex justify-end align-top w-12 h-6">
-				@statusbadge.StatusBadge(statusbadge.StatusBadgeProps{Status: props.Status})
-			</div>
 		</div>
-		<div class="flex justify-between">
-			<p>{ *props.Email }</p>
-			<p>{ *props.PhoneNumber }</p>
+		<div class="flex justify-between gap-3">
+			<p class="truncate block">{ *props.Email }</p>
+			<p class="truncate block">{ *props.PhoneNumber }</p>
 		</div>
-		<div class="flex justify-center">
+		// <div class="flex justify-between border-t pt-2">
+		// 	<div class="flex-col">
+		// 		<p class="text-xs">Monthly Rent:</p>
+		// 		<p>{ props.RentAmount }</p>
+		// 	</div>
+		// 	<div class="flex-col">
+		// 		// <p class="text-xs">Next Due Date:</p>
+		// 		// <p class="font-bold">{ props.NextDueDate }</p>
+		// 	</div>
+		// </div>
+		<div class="flex justify-center border-t pt-2">
 			@button.LinkButton(button.LinkButtonArgs{
 				Class: "w-full",
 				Href:  fmt.Sprintf("/trade/create?lease_id=%v", props.LeaseId),
 			}) {
 				Rent Collected
 			}
-		</div>
-		<div class="flex justify-between border-t pt-2">
-			<div class="flex-col">
-				<p>Monthly Rent</p>
-				<p>{ props.RentAmount }</p>
-			</div>
-			<div class="flex-col">
-				<p>Next Due Date</p>
-				<p>{ props.NextDueDate }</p>
-			</div>
 		</div>
 	</div>
 }

@@ -12,15 +12,18 @@ type StatusBadgeProps struct {
 templ StatusBadge(props StatusBadgeProps) {
 	<span
 		class={ utils.ClassNameJoin(
-            "inline-flex items-center gap-1.5 px-3 rounded-full text-xs font-semibold uppercase tracking-wide", 
+            "flex aspect-square rounded-full border", 
             statusBadgeClassName(props.Status)) }
+		data-tooltip={ props.Status.String() }
 	>
-		<span class="flex items-center justify-center">
-			// all this... just for a pulsing-ping effect... sigh
-			<span class={ utils.ClassNameJoin("absolute", statusDotClassName(props.Status)) }>⬤</span>
-			<span>⬤</span>
-		</span>
-		<span>{ props.Status.String() }</span>
+		<div class="flex aspect-square size-10 items-center justify-center">
+			<span class="flex items-center justify-center">
+				// all this... just for a pulsing-ping effect... sigh
+				<span class={ utils.ClassNameJoin("absolute", statusDotClassName(props.Status)) }>⬤</span>
+				<span>⬤</span>
+			</span>
+			// <span class="text-xs">{ props.Status.String() }</span>
+		</div>
 	</span>
 }
 
