@@ -8,15 +8,16 @@ import (
 )
 
 templ TenantCard(props TenantCardProps) {
-	<div class="h-60 flex flex-col justify-between p-5 bg-card rounded-xl border shadow-sm transition-all">
-		<div class="flex w-full justify-between mb-2 gap-3">
-			<div class="flex w-1/2 gap-3">
+	<div class="h-69 flex flex-col justify-between p-4 bg-card rounded-xl border shadow-sm">
+		//// header section
+		<div class="h-[30.9%] flex justify-between mb-2 gap-2">
+			<div class="flex w-[50%] gap-2">
 				<div class="flex size-12 items-center justify-center p-1 rounded-full ">
 					// TODO: add if no image condition in the future
 					// <span class="text-xl">T</span>
 					@statusbadge.StatusBadge(statusbadge.StatusBadgeProps{Status: props.Status})
 				</div>
-				<div class="flex flex-col w-full">
+				<div class="flex flex-col">
 					<p class="font-semibold">{ props.Name }</p>
 					<p class="truncate block">{ props.Unit }</p>
 				</div>
@@ -28,9 +29,33 @@ templ TenantCard(props TenantCardProps) {
 				</div>
 			</div>
 		</div>
-		<div class="flex justify-between gap-3">
-			<p class="truncate block">{ *props.Email }</p>
-			<p class="truncate block">{ *props.PhoneNumber }</p>
+		//// body section
+		<div class="h-[50%] flex flex-col pt-2 border-t gap-2">
+			<div class="flex justify-between gap-2">
+				<div>
+					<p class="text-xs">Email: </p>
+					<p class="truncate block">{ *props.Email }</p>
+				</div>
+				<div>
+					<p class="text-xs">Phone Number: </p>
+					<p class="truncate block">{ *props.PhoneNumber }</p>
+				</div>
+			</div>
+			<div class="flex">
+				<div>
+					<p class="text-xs">Monthly Rent:</p>
+					<p>{ props.RentAmount }</p>
+				</div>
+			</div>
+		</div>
+		//// footer section	
+		<div class="h-[19.1%] flex justify-center border-t pt-2">
+			@button.LinkButton(button.LinkButtonArgs{
+				Class: "w-full",
+				Href:  fmt.Sprintf("/trade/create?lease_id=%v", props.LeaseId),
+			}) {
+				Rent Collected
+			}
 		</div>
 		// <div class="flex justify-between border-t pt-2">
 		// 	<div class="flex-col">
@@ -42,14 +67,6 @@ templ TenantCard(props TenantCardProps) {
 		// 		// <p class="font-bold">{ props.NextDueDate }</p>
 		// 	</div>
 		// </div>
-		<div class="flex justify-center border-t pt-2">
-			@button.LinkButton(button.LinkButtonArgs{
-				Class: "w-full",
-				Href:  fmt.Sprintf("/trade/create?lease_id=%v", props.LeaseId),
-			}) {
-				Rent Collected
-			}
-		</div>
 	</div>
 }
 

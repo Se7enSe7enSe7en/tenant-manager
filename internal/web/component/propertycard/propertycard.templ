@@ -9,29 +9,39 @@ type PropertyCardProps struct {
 }
 
 templ PropertyCard(props PropertyCardProps) {
-	<div class="bg-card rounded-xl p-5 border shadow-sm transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 h-60 flex flex-col justify-between">
-		<div class="flex justify-between mb-2">
-			<div class="flex gap-3">
-				<div class="flex bg-secondary items-center justify-center size-12 rounded-full ">
+	<div class="h-69 flex flex-col justify-between p-4 bg-card rounded-xl border shadow-sm">
+		//// header section
+		<div class="h-[30.9%] flex justify-between mb-2 gap-2">
+			<div class="flex gap-2">
+				<div class="flex bg-secondary items-center justify-center size-12 rounded-full border">
 					// TODO: add if no image condition in the future
-					<span class="text-xl">P</span>
+					// <span class="text-xl">P</span>
 				</div>
 				<div class="flex-col">
 					<p class="">{ props.Name }</p>
 				</div>
 			</div>
 			<div class="flex justify-end align-top w-12 h-6">
-				<div class="flex border rounded-full items-center"><p>unoccupied</p></div>
+				<div class="flex border rounded-full items-center p-4"><p>unoccupied</p></div>
 			</div>
 		</div>
-        <div class="flex justify-between">
-			<p>address here</p>
+		//// body section
+		<div class="h-[50%] flex flex-col pt-2 border-t gap-2">
+			<div>
+				<p class="text-xs">Address: </p>
+				<p>001 test street, brgy. test, Test City</p>
+			</div>
+			<div>
+				<p class="text-xs">Monthly Rent: </p>
+				<p>{ props.RentAmount }</p>
+			</div>
 		</div>
-		<div class="flex justify-center">
+		//// footer section
+		<div class="h-[19.1%] flex justify-center border-t pt-2">
 			@button.LinkButton(button.LinkButtonArgs{
-				Class: "w-full",
+				Class:   "w-full",
 				Variant: "secondary",
-				Href: "/tenant/create?property_id=" + props.Id,
+				Href:    "/tenant/create?property_id=" + props.Id,
 			}) {
 				Add tenant
 			}
@@ -45,11 +55,11 @@ templ PropertyCard(props PropertyCardProps) {
 			// 	Add tenant
 			// }
 		</div>
-		<div class="flex justify-between border-t pt-2">
-			<div class="flex-col">
-				<p>Monthly Rent</p>
-				<p>{ props.RentAmount }</p>
-			</div>
-		</div>
+		// <div class="flex justify-between border-t pt-2">
+		// 	<div class="flex-col">
+		// 		<p class="text-xs">Monthly Rent: </p>
+		// 		<p>{ props.RentAmount }</p>
+		// 	</div>
+		// </div>
 	</div>
 }

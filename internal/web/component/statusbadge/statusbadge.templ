@@ -16,7 +16,7 @@ templ StatusBadge(props StatusBadgeProps) {
             statusBadgeClassName(props.Status)) }
 		data-tooltip={ props.Status.String() }
 	>
-		<div class="flex aspect-square size-10 items-center justify-center">
+		<div class="flex aspect-square size-12 items-center justify-center">
 			<span class="flex items-center justify-center">
 				// all this... just for a pulsing-ping effect... sigh
 				<span class={ utils.ClassNameJoin("absolute", statusDotClassName(props.Status)) }>⬤</span>
