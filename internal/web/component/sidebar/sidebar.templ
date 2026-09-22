@@ -5,11 +5,14 @@ import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/button"
 templ Sidebar() {
 	<div>
 		@button.LinkButton(button.LinkButtonArgs{
-			Href:    "/property/create",
+			Href:    "/dashboard",
 			Variant: "outline",
 			Class:   "flex",
 		}) {
-			Add property
+			<div class="flex items-center justify-center gap-3">
+				<svg class="size-5 fill-current"><use href="assets/home-icon.svg"></use></svg>
+				<span>Dashboard</span>
+			</div>
 		}
 	</div>
 }

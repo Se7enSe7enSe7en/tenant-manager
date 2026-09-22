@@ -38,7 +38,7 @@ tasks:
       - brew install watchman
 
   setup-watchman:
-  # note: watchman is needed for tailwindcss cli tool (--watch flag) for checking if there are changes project files to rebuild the css output
+    # note: watchman is needed for tailwindcss cli tool (--watch flag) for checking if there are changes project files to rebuild the css output
     deps:
       - task: setup-watchman-linux
       - task: setup-watchman-mac
@@ -123,12 +123,19 @@ tasks:
       # note #3: doing --cmd="task dev-server" causes a new problem where the task command doesn't restart properly
       # TODO: find a better way using `templ generate --notify-proxy`
 
+  db:
+    desc: Start postgres db using docker and run it in the background
+    cmds:
+      - docker compose up --detach
+
   dev:
     method: none
     desc: watch for changes and start the project for development
+    deps: [db]
     cmds:
       - task --parallel tailwind templ
 
+  # TODO: update this command for deployment
   prod:
     method: none
     desc: build and start the project for production

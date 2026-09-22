@@ -36,7 +36,7 @@ func TenantCard(props TenantCardProps) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"h-69 flex flex-col justify-between p-4 bg-card rounded-xl border shadow-sm\"><div class=\"h-[30.9%] flex justify-between mb-2 gap-2\"><div class=\"flex w-[50%] gap-2\"><div class=\"flex size-12 items-center justify-center p-1 rounded-full\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"h-69 flex flex-col justify-between p-4 bg-card rounded-xl border shadow-sm\"><div class=\"h-[30.9%] flex justify-between mb-2 gap-2\"><div class=\"flex w-[50%] gap-3\"><div class=\"flex size-12 items-center justify-center p-1 rounded-full\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

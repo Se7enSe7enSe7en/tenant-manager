@@ -13,6 +13,7 @@ import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/statcar
 import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/propertycard"
 
 import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/layout"
+import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/button"
 
 type StatCard struct {
 	TotalTenants       string
@@ -65,42 +66,75 @@ func DashboardPage(props DashboardPageProps) templ.Component {
 				return templ_7745c5c3_Err
 			}
 			templ_7745c5c3_Err = statcard.StatCard(statcard.StatCardProps{
-				Title:    "Total tenants",
-				Value:    props.StatCard.TotalTenants,
-				Subtitle: new("Active units"),
-				Icon:     new("assets/tenants-icon.svg"),
+				Title:     "Total tenants",
+				Value:     props.StatCard.TotalTenants,
+				Subtitle:  "Active units",
+				Icon:      "assets/tenants-icon.svg",
+				IconClass: "fill-current",
 			}).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			templ_7745c5c3_Err = statcard.StatCard(statcard.StatCardProps{
-				Title:    "Paid",
-				Value:    props.StatCard.TotalPaidTenants,
-				Subtitle: new("Collected payments"),
-				Icon:     new("assets/paid-icon.svg"),
+				Title:     "Paid",
+				Value:     props.StatCard.TotalPaidTenants,
+				Subtitle:  "Collected payments",
+				Icon:      "assets/paid-icon.svg",
+				IconClass: "fill-(--paid-color)",
 			}).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			templ_7745c5c3_Err = statcard.StatCard(statcard.StatCardProps{
-				Title:    "Unpaid",
-				Value:    props.StatCard.TotalUnpaidTenants,
-				Subtitle: new("Awaiting payments"),
-				Icon:     new("assets/unpaid-icon.svg"),
+				Title:     "Unpaid",
+				Value:     props.StatCard.TotalUnpaidTenants,
+				Subtitle:  "Awaiting payments",
+				Icon:      "assets/unpaid-icon.svg",
+				IconClass: "fill-(--unpaid-color)",
 			}).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			templ_7745c5c3_Err = statcard.StatCard(statcard.StatCardProps{
-				Title:    "Late",
-				Value:    props.StatCard.TotalLateTenants,
-				Subtitle: new("Overdue payments"),
-				Icon:     new("assets/late-icon.svg"),
+				Title:     "Late",
+				Value:     props.StatCard.TotalLateTenants,
+				Subtitle:  "Overdue payments",
+				Icon:      "assets/late-icon.svg",
+				IconClass: "fill-(--late-color)",
 			}).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</div><p class=\"text-2xl my-3\">Tenants and Properties</p><div class=\"grid grid-cols-1 md:grid-cols-2 lg:grid-col-3 xl:grid-cols-3 gap-4\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</div><div class=\"my-3 flex gap-3\"><p class=\"text-2xl\">Tenants and Properties</p>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Var3 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
+				templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
+				templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
+				if !templ_7745c5c3_IsBuffer {
+					defer func() {
+						templ_7745c5c3_BufErr := templruntime.ReleaseBuffer(templ_7745c5c3_Buffer)
+						if templ_7745c5c3_Err == nil {
+							templ_7745c5c3_Err = templ_7745c5c3_BufErr
+						}
+					}()
+				}
+				ctx = templ.InitializeContext(ctx)
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<div class=\"flex items-center justify-center gap-2\"><svg class=\"fill-current size-6\"><use href=\"assets/add-icon.svg\"></use></svg> <span>Add property</span></div>")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				return nil
+			})
+			templ_7745c5c3_Err = button.LinkButton(button.LinkButtonArgs{
+				Variant: "secondary",
+				Href:    "/property/create",
+			}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var3), templ_7745c5c3_Buffer)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "</div><div class=\"grid grid-cols-1 md:grid-cols-2 lg:grid-col-3 xl:grid-cols-3 gap-4\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -116,7 +150,7 @@ func DashboardPage(props DashboardPageProps) templ.Component {
 					return templ_7745c5c3_Err
 				}
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "</div></div>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "</div></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

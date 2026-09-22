@@ -1,25 +1,20 @@
 package statcard
 
-type StatCardProps struct {
-	Title    string
-	Value    string
-	Subtitle *string
-	Icon     *string
-}
+import "github.com/Se7enSe7enSe7en/tenant-manager/internal/utils"
 
 templ StatCard(props StatCardProps) {
 	<div class="stat-card bg-card flex min-w-4 p-4 border rounded-lg justify-between">
 		<div class="flex-col">
 			<p class="text-xl font-semibold">{ props.Title }</p>
 			<p class="text-3xl font-bold ">{ props.Value }</p>
-			if props.Subtitle != nil {
-				<p class="text-xs">{ *props.Subtitle }</p>
+			if props.Subtitle != "" {
+				<p class="text-xs">{ props.Subtitle }</p>
 			}
 		</div>
-		if props.Icon != nil {
-			<div class="bg-(--surface-3) rounded-lg size-12 p-2">
-				<img src={ *props.Icon }/>
-			</div>
+		if props.Icon != "" {
+			<svg class={ utils.ClassNameJoin("bg-(--surface-3) rounded-lg size-12 p-2", props.IconClass) }>
+				<use href={ props.Icon }></use>
+			</svg>
 		}
 	</div>
 }
