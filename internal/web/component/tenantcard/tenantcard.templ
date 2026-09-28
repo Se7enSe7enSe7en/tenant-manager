@@ -3,29 +3,32 @@ package tenantcard
 import (
 	"fmt"
 	"github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/button"
-	"github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/statusbadge"
+	"github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/status"
 	"strings"
 )
 
 templ TenantCard(props TenantCardProps) {
 	<div class="h-69 flex flex-col justify-between p-4 bg-card rounded-xl border shadow-sm">
 		//// header section
-		<div class="h-[30.9%] flex justify-between mb-2 gap-2">
-			<div class="flex w-[50%] gap-3">
-				<div class="flex size-12 items-center justify-center p-1 rounded-full ">
-					// TODO: add if no image condition in the future
-					// <span class="text-xl">T</span>
-					@statusbadge.StatusBadge(statusbadge.StatusBadgeProps{Status: props.Status})
-				</div>
-				<div class="flex flex-col">
+		<div class="h-[30.9%] flex justify-between mb-2 gap-3">
+			<div class="flex gap-3">
+				// <div class="flex size-12 items-center justify-center p-1 rounded-full ">
+				// 	// TODO: add if no image condition in the future
+				// 	// <span class="text-xl">T</span>
+				// 	@status.Circle(status.CircleProps{Status: props.Status})
+				// </div>
+				<div class="flex flex-col gap-2">
 					<p class="font-semibold">{ props.Name }</p>
 					<p class="truncate block">{ props.Unit }</p>
 				</div>
 			</div>
 			<div class="flex flex-col align-top">
-				<div class="flex-col">
-					<p class="truncate block text-xs mt-1">Next Due Date:</p>
-					<p class="font-bold">{ props.NextDueDate }</p>
+				<div class="flex flex-col gap-2">
+					@status.Badge(status.BadgeProps{Status: props.Status})
+					<div class="flex flex-col p-1 justify-end">
+						<p class="truncate block text-sm">Next Due Date:</p>
+						<p class="font-bold">{ props.NextDueDate }</p>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -33,17 +36,17 @@ templ TenantCard(props TenantCardProps) {
 		<div class="h-[50%] flex flex-col pt-2 border-t gap-2">
 			<div class="flex justify-between gap-2">
 				<div>
-					<p class="text-xs">Email: </p>
+					<p class="text-sm">Email: </p>
 					<p class="truncate block">{ *props.Email }</p>
 				</div>
 				<div>
-					<p class="text-xs">Phone Number: </p>
+					<p class="text-sm">Phone Number: </p>
 					<p class="truncate block">{ *props.PhoneNumber }</p>
 				</div>
 			</div>
 			<div class="flex">
 				<div>
-					<p class="text-xs">Monthly Rent:</p>
+					<p class="text-sm">Monthly Rent:</p>
 					<p>{ props.RentAmount }</p>
 				</div>
 			</div>

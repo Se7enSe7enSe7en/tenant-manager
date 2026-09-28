@@ -11,7 +11,7 @@ import templruntime "github.com/a-h/templ/runtime"
 import (
 	"fmt"
 	"github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/button"
-	"github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/statusbadge"
+	"github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/status"
 	"strings"
 )
 
@@ -36,15 +36,7 @@ func TenantCard(props TenantCardProps) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"h-69 flex flex-col justify-between p-4 bg-card rounded-xl border shadow-sm\"><div class=\"h-[30.9%] flex justify-between mb-2 gap-2\"><div class=\"flex w-[50%] gap-3\"><div class=\"flex size-12 items-center justify-center p-1 rounded-full\">")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = statusbadge.StatusBadge(statusbadge.StatusBadgeProps{Status: props.Status}).Render(ctx, templ_7745c5c3_Buffer)
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</div><div class=\"flex flex-col\"><p class=\"font-semibold\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"h-69 flex flex-col justify-between p-4 bg-card rounded-xl border shadow-sm\"><div class=\"h-[30.9%] flex justify-between mb-2 gap-3\"><div class=\"flex gap-3\"><div class=\"flex flex-col gap-2\"><p class=\"font-semibold\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -57,7 +49,7 @@ func TenantCard(props TenantCardProps) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "</p><p class=\"truncate block\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</p><p class=\"truncate block\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -70,53 +62,61 @@ func TenantCard(props TenantCardProps) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "</p></div></div><div class=\"flex flex-col align-top\"><div class=\"flex-col\"><p class=\"truncate block text-xs mt-1\">Next Due Date:</p><p class=\"font-bold\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "</p></div></div><div class=\"flex flex-col align-top\"><div class=\"flex flex-col gap-2\">")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = status.Badge(status.BadgeProps{Status: props.Status}).Render(ctx, templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "<div class=\"flex flex-col p-1 justify-end\"><p class=\"truncate block text-sm\">Next Due Date:</p><p class=\"font-bold\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var4 string
 		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(props.NextDueDate)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/web/component/tenantcard/tenantcard.templ`, Line: 28, Col: 45}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/web/component/tenantcard/tenantcard.templ`, Line: 30, Col: 46}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "</p></div></div></div><div class=\"h-[50%] flex flex-col pt-2 border-t gap-2\"><div class=\"flex justify-between gap-2\"><div><p class=\"text-xs\">Email: </p><p class=\"truncate block\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "</p></div></div></div></div><div class=\"h-[50%] flex flex-col pt-2 border-t gap-2\"><div class=\"flex justify-between gap-2\"><div><p class=\"text-sm\">Email: </p><p class=\"truncate block\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var5 string
 		templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(*props.Email)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/web/component/tenantcard/tenantcard.templ`, Line: 37, Col: 45}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/web/component/tenantcard/tenantcard.templ`, Line: 40, Col: 45}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "</p></div><div><p class=\"text-xs\">Phone Number: </p><p class=\"truncate block\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "</p></div><div><p class=\"text-sm\">Phone Number: </p><p class=\"truncate block\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var6 string
 		templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(*props.PhoneNumber)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/web/component/tenantcard/tenantcard.templ`, Line: 41, Col: 51}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/web/component/tenantcard/tenantcard.templ`, Line: 44, Col: 51}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "</p></div></div><div class=\"flex\"><div><p class=\"text-xs\">Monthly Rent:</p><p>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "</p></div></div><div class=\"flex\"><div><p class=\"text-sm\">Monthly Rent:</p><p>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var7 string
 		templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(props.RentAmount)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/web/component/tenantcard/tenantcard.templ`, Line: 47, Col: 26}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/web/component/tenantcard/tenantcard.templ`, Line: 50, Col: 26}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 		if templ_7745c5c3_Err != nil {

@@ -1,0 +1,23 @@
+package status
+
+import "github.com/Se7enSe7enSe7en/tenant-manager/internal/utils"
+
+templ Badge(props BadgeProps) {
+	<div
+		class="flex justify-end h-6"
+	>
+		<div
+			class={ utils.ClassNameJoin(
+                "flex rounded-full border items-center justify-center gap-3 px-2 font-semibold",
+                statusColorClassName(props.Status),
+            ) }
+		>
+			<span class="flex items-center justify-center">
+				// all this... just for a pulsing-ping effect... sigh
+				<span class={ utils.ClassNameJoin("absolute", statusDotAnimationClassName(props.Status)) }>⬤</span>
+				<span>⬤</span>
+			</span>
+			<span class="">{ props.Status.String() }</span>
+		</div>
+	</div>
+}

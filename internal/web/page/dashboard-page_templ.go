@@ -69,7 +69,7 @@ func DashboardPage(props DashboardPageProps) templ.Component {
 				Title:     "Total tenants",
 				Value:     props.StatCard.TotalTenants,
 				Subtitle:  "Active units",
-				Icon:      "assets/tenants-icon.svg",
+				Icon:      "/assets/tenants-icon.svg",
 				IconClass: "fill-current",
 			}).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
@@ -79,7 +79,7 @@ func DashboardPage(props DashboardPageProps) templ.Component {
 				Title:     "Paid",
 				Value:     props.StatCard.TotalPaidTenants,
 				Subtitle:  "Collected payments",
-				Icon:      "assets/paid-icon.svg",
+				Icon:      "/assets/paid-icon.svg",
 				IconClass: "fill-(--paid-color)",
 			}).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
@@ -89,7 +89,7 @@ func DashboardPage(props DashboardPageProps) templ.Component {
 				Title:     "Unpaid",
 				Value:     props.StatCard.TotalUnpaidTenants,
 				Subtitle:  "Awaiting payments",
-				Icon:      "assets/unpaid-icon.svg",
+				Icon:      "/assets/unpaid-icon.svg",
 				IconClass: "fill-(--unpaid-color)",
 			}).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
@@ -99,7 +99,7 @@ func DashboardPage(props DashboardPageProps) templ.Component {
 				Title:     "Late",
 				Value:     props.StatCard.TotalLateTenants,
 				Subtitle:  "Overdue payments",
-				Icon:      "assets/late-icon.svg",
+				Icon:      "/assets/late-icon.svg",
 				IconClass: "fill-(--late-color)",
 			}).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
@@ -121,7 +121,7 @@ func DashboardPage(props DashboardPageProps) templ.Component {
 					}()
 				}
 				ctx = templ.InitializeContext(ctx)
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<div class=\"flex items-center justify-center gap-2\"><svg class=\"fill-current size-6\"><use href=\"assets/add-icon.svg\"></use></svg> <span>Add property</span></div>")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<div class=\"flex items-center justify-center gap-2\"><svg class=\"fill-current size-6\"><use href=\"/assets/add-icon.svg\"></use></svg> <span>Add property</span></div>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}

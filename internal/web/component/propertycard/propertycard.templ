@@ -13,16 +13,28 @@ templ PropertyCard(props PropertyCardProps) {
 		//// header section
 		<div class="h-[30.9%] flex justify-between mb-2 gap-2">
 			<div class="flex gap-2">
-				<div class="flex bg-secondary items-center justify-center size-12 rounded-full border">
-					// TODO: add if no image condition in the future
-					// <span class="text-xl">P</span>
-				</div>
+				// <div class="flex bg-secondary items-center justify-center size-12 rounded-full border">
+				// 	// TODO: add if no image condition in the future
+				// 	// <span class="text-xl">P</span>
+				// </div>
 				<div class="flex-col">
 					<p class="">{ props.Name }</p>
 				</div>
 			</div>
-			<div class="flex justify-end align-top w-12 h-6">
-				<div class="flex border rounded-full items-center p-4"><p>unoccupied</p></div>
+			<div class="flex justify-end align-top">
+				// status
+				<div
+					class="flex justify-end h-6"
+				>
+					<div
+						class="flex rounded-full border items-center justify-center gap-3 px-2 font-semibold"
+					>
+						<span class="flex items-center justify-center">
+							<span>○</span>
+						</span>
+						<span class="">Unoccupied</span>
+					</div>
+				</div>
 			</div>
 		</div>
 		//// body section

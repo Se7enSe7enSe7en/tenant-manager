@@ -28,28 +28,28 @@ templ DashboardPage(props DashboardPageProps) {
 					Title:     "Total tenants",
 					Value:     props.StatCard.TotalTenants,
 					Subtitle:  "Active units",
-					Icon:      "assets/tenants-icon.svg",
+					Icon:      "/assets/tenants-icon.svg",
 					IconClass: "fill-current",
 				})
 				@statcard.StatCard(statcard.StatCardProps{
 					Title:     "Paid",
 					Value:     props.StatCard.TotalPaidTenants,
 					Subtitle:  "Collected payments",
-					Icon:      "assets/paid-icon.svg",
+					Icon:      "/assets/paid-icon.svg",
 					IconClass: "fill-(--paid-color)",
 				})
 				@statcard.StatCard(statcard.StatCardProps{
 					Title:     "Unpaid",
 					Value:     props.StatCard.TotalUnpaidTenants,
 					Subtitle:  "Awaiting payments",
-					Icon:      "assets/unpaid-icon.svg",
+					Icon:      "/assets/unpaid-icon.svg",
 					IconClass: "fill-(--unpaid-color)",
 				})
 				@statcard.StatCard(statcard.StatCardProps{
 					Title:     "Late",
 					Value:     props.StatCard.TotalLateTenants,
 					Subtitle:  "Overdue payments",
-					Icon:      "assets/late-icon.svg",
+					Icon:      "/assets/late-icon.svg",
 					IconClass: "fill-(--late-color)",
 				})
 			</div>
@@ -60,7 +60,7 @@ templ DashboardPage(props DashboardPageProps) {
 					Href:    "/property/create",
 				}) {
 					<div class="flex items-center justify-center gap-2">
-						<svg class="fill-current size-6"><use href="assets/add-icon.svg"></use></svg>
+						<svg class="fill-current size-6"><use href="/assets/add-icon.svg"></use></svg>
 						<span>Add property</span>
 					</div>
 				}

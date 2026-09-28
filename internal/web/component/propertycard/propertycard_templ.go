@@ -37,7 +37,7 @@ func PropertyCard(props PropertyCardProps) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"h-69 flex flex-col justify-between p-4 bg-card rounded-xl border shadow-sm\"><div class=\"h-[30.9%] flex justify-between mb-2 gap-2\"><div class=\"flex gap-2\"><div class=\"flex bg-secondary items-center justify-center size-12 rounded-full border\"></div><div class=\"flex-col\"><p class=\"\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"h-69 flex flex-col justify-between p-4 bg-card rounded-xl border shadow-sm\"><div class=\"h-[30.9%] flex justify-between mb-2 gap-2\"><div class=\"flex gap-2\"><div class=\"flex-col\"><p class=\"\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -50,14 +50,14 @@ func PropertyCard(props PropertyCardProps) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</p></div></div><div class=\"flex justify-end align-top w-12 h-6\"><div class=\"flex border rounded-full items-center p-4\"><p>unoccupied</p></div></div></div><div class=\"h-[50%] flex flex-col pt-2 border-t gap-2\"><div><p class=\"text-xs\">Address: </p><p>001 test street, brgy. test, Test City</p></div><div><p class=\"text-xs\">Monthly Rent: </p><p>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</p></div></div><div class=\"flex justify-end align-top\"><div class=\"flex justify-end h-6\"><div class=\"flex rounded-full border items-center justify-center gap-3 px-2 font-semibold\"><span class=\"flex items-center justify-center\"><span>○</span></span> <span class=\"\">Unoccupied</span></div></div></div></div><div class=\"h-[50%] flex flex-col pt-2 border-t gap-2\"><div><p class=\"text-xs\">Address: </p><p>001 test street, brgy. test, Test City</p></div><div><p class=\"text-xs\">Monthly Rent: </p><p>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var3 string
 		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(props.RentAmount)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/web/component/propertycard/propertycard.templ`, Line: 36, Col: 25}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/web/component/propertycard/propertycard.templ`, Line: 48, Col: 25}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 		if templ_7745c5c3_Err != nil {
