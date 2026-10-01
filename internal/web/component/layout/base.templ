@@ -1,5 +1,7 @@
 package layout
 
+import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/topbar"
+
 // The base component of all pages, all pages should be wrapped by this component
 templ Base() {
 	<!DOCTYPE html>
@@ -16,6 +18,7 @@ templ Base() {
 		<body>
 			<main>
 				<div id="main-page">
+					@topbar.Topbar()
 					{ children... }
 				</div>
 			</main>

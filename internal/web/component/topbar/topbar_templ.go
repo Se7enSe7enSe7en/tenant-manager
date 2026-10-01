@@ -29,7 +29,7 @@ func Topbar() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"flex h-16 border sticky top-0 bg-background items-center p-4\"><div class=\"flex gap-4 items-center\"><img class=\"h-12 rounded-sm\" src=\"/assets/tenant-manager-logo-dark.svg\"><h1 class=\"text-xl\">Tenant manager</h1></div></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"flex h-16 border sticky top-0 bg-background items-center p-4 gap-4\"><div class=\"flex gap-4 items-center\"><img class=\"h-12 rounded-sm\" src=\"/assets/tenant-manager-logo-dark.svg\"><h1 class=\"text-xl\">Tenant manager</h1></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

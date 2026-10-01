@@ -21,7 +21,7 @@ templ CreateTradePage(props CreateTradePageProps) {
 			LeaseId: props.LeaseId,
 		})
 	}}
-	@layout.WithSidebar() {
+	@layout.Base() {
 		@form.Form(form.FormArgs{
 			ID:     "trade-form",
 			Action: "/trade/create",

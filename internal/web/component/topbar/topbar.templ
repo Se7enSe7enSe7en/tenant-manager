@@ -1,7 +1,16 @@
 package topbar
 
 templ Topbar() {
-	<div class="flex h-16 border sticky top-0 bg-background items-center p-4">
+	<div class="flex h-16 border sticky top-0 bg-background items-center p-4 gap-4">
+		// @button.LinkButton(button.LinkButtonArgs{
+		// 	Variant: "secondary",
+		// 	Href:    "",
+		// 	Class:   "size-9",
+		// }) {
+		// 	<div class="flex item-center gap-3">
+		// 		<svg class="size-6 fill-current"><use href="/assets/burger-icon.svg"></use></svg>
+		// 	</div>
+		// }
 		<div class="flex gap-4 items-center">
 			<img class="h-12 rounded-sm" src="/assets/tenant-manager-logo-dark.svg"/>
 			<h1 class="text-xl">Tenant manager</h1>
