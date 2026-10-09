@@ -10,13 +10,24 @@ version: "3"
 
 interval: 500ms # note: this is the watch interval, taskfile will watch for changes every 500ms
 
+dotenv: [.env]
+
 vars:
+  APP_NAME: tenant-manager
+  # dev vars
   PORT: 8080
   PROXY_PORT: 7331
   TAILWIND_INPUT_CSS_PATH: ./internal/web/static/assets/css/input.css
   TAILWIND_OUTPUT_CSS_PATH: ./internal/web/static/assets/css/output.css
   SERVER_PATH: ./cmd/server
   BUILD_PATH: ./dist
+  
+  # prod vars
+  REMOTE_USER: deploy
+  REMOTE_HOST: $REMOTE_HOST # env variable
+  REMOTE_PATH: /opt/tenant-manager
+  BINARY: bin/tenant-manager
+
 
 tasks:
   setup-watchman-linux:
@@ -90,22 +101,20 @@ tasks:
         platforms: [darwin]
 
   build:
-    desc: build the go binary
-    sources:
-      - "**/*.go"
-      - "./internal/web/static/**/*"
-      - "**/*.templ"
-      # TODO: uncomment this when we figure how to wait for the entire "templ generate" process
-      # - exclude: "**/*_templ.go"
-      - exclude: "./dist/**/*"
-    generates:
-      - "**/*_templ.go"
-      - ./dist/main
+    desc: build the app binary
     cmds:
-      - templ generate -lazy .
+      - templ generate
       - ./tailwindcss --input {{.TAILWIND_INPUT_CSS_PATH}} --output {{.TAILWIND_OUTPUT_CSS_PATH}} --minify
       - go mod tidy
-      - go build -o ./dist/main {{.SERVER_PATH}}/main.go
+      - go build -o {{.BINARY}} {{.SERVER_PATH}}/main.go
+  
+  build-prod:
+    desc: build the app binary for production, it will be on a linux VPS
+    cmds:
+      - templ generate
+      - ./tailwindcss --input {{.TAILWIND_INPUT_CSS_PATH}} --output {{.TAILWIND_OUTPUT_CSS_PATH}} --minify
+      - go mod tidy
+      - CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o {{.BINARY}} {{.SERVER_PATH}}/main.go
 
   tailwind:
     desc: Tailwind watch css changes in .templ files
@@ -128,6 +137,12 @@ tasks:
     cmds:
       - docker compose up --detach
 
+  migrate-up:
+    desc: Run migration scripts from the app
+    deps: [build]
+    cmds:
+      - ./{{.BINARY}} migrate-up
+
   dev:
     method: none
     desc: watch for changes and start the project for development
@@ -135,13 +150,17 @@ tasks:
     cmds:
       - task --parallel tailwind templ
 
-  # TODO: update this command for deployment
-  prod:
-    method: none
-    desc: build and start the project for production
+  deploy:
+    desc: build the app binary, upload it using scp, migrate the app using the embedded migration scripts, restart the app service
+    requires:
+      vars:
+      - REMOTE_HOST # this is an env var
     cmds:
-      - task: build
-      - ./dist/main
-
+      - task: build-prod
+      - ssh {{.REMOTE_USER}}@{{.REMOTE_HOST}} "sudo systemctl stop {{.APP_NAME}}"
+      - scp {{.BINARY}} {{.REMOTE_USER}}@{{.REMOTE_HOST}}:{{.REMOTE_PATH}}/
+      - ssh {{.REMOTE_USER}}@{{.REMOTE_HOST}} "cd {{.REMOTE_PATH}} && ./{{.APP_NAME}} migrate-up"
+      - ssh {{.REMOTE_USER}}@{{.REMOTE_HOST}} "sudo systemctl start {{.APP_NAME}}"
+      - echo "Successfully Deployed wahoo!"
   default:
     - task: dev

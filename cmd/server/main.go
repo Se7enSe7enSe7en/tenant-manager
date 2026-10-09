@@ -2,6 +2,8 @@ package main
 
 import (
 	"context"
+	"fmt"
+	"io/fs"
 	"log"
 	"net/http"
 	"os"
@@ -12,6 +14,7 @@ import (
 	"github.com/Se7enSe7enSe7en/go-toolkit/pkg/logger"
 	"github.com/Se7enSe7enSe7en/tenant-manager/internal/app"
 	repo "github.com/Se7enSe7enSe7en/tenant-manager/internal/database/generated"
+	"github.com/Se7enSe7enSe7en/tenant-manager/internal/database/migrations"
 	"github.com/Se7enSe7enSe7en/tenant-manager/internal/env"
 	"github.com/Se7enSe7enSe7en/tenant-manager/internal/handler"
 	"github.com/Se7enSe7enSe7en/tenant-manager/internal/middleware"
@@ -19,6 +22,7 @@ import (
 	"github.com/Se7enSe7enSe7en/tenant-manager/internal/service"
 	"github.com/Se7enSe7enSe7en/tenant-manager/internal/slogfmt"
 	"github.com/Se7enSe7enSe7en/tenant-manager/internal/utils"
+	"github.com/Se7enSe7enSe7en/tenant-manager/internal/web"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/joho/godotenv"
 )
@@ -36,6 +40,24 @@ func main() {
 
 	// load env variables
 	godotenv.Load()
+	databaseUrl := env.GetString("DATABASE_URL", "")
+	if databaseUrl == "" {
+		log.Fatalf("DATABASE_URL env variable empty, check .env.example\n")
+	}
+
+	// app arguments
+	if len(os.Args) > 1 && os.Args[1] == "migrate-up" {
+		err := migrations.Up(databaseUrl)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Migration fail bohoo: %v\n", err)
+			os.Exit(1)
+			return
+		}
+
+		fmt.Println("Migration success wahoo!\n")
+		os.Exit(0)
+		return
+	}
 
 	// TODO: we now use slog for logging, refactor all instances of using the old "github.com/Se7enSe7enSe7en/go-toolkit/pkg/logger"
 	// or update the go-toolkit to use the new custom logger, check logfmt/logfmt.go
@@ -45,7 +67,7 @@ func main() {
 	cfg := app.Config{
 		Port:      "8080",
 		ProxyPort: "7331",
-		Dsn:       env.GetString("GOOSE_DBSTRING", "host=localhost user=postgres password=postgres dbname=db sslmode=disable"),
+		Dsn:       databaseUrl, // TODO: test this change later
 	}
 
 	// connect to database
@@ -73,8 +95,15 @@ func main() {
 	mux := http.NewServeMux()
 
 	// serve static files
-	fs := http.FileServer(http.Dir("./internal/web/static/assets"))
-	mux.Handle("/assets/", utils.DisableCacheInDevMode(http.StripPrefix("/assets/", fs)))
+	subFS, err := fs.Sub(web.Assets, "static/assets")
+	if err != nil {
+		log.Fatalf("Failed to located web assets FS: %v", err)
+	}
+
+	assetsFS := http.FS(subFS)
+	mux.Handle("/assets/", utils.DisableCacheInDevMode(http.StripPrefix("/assets/", http.FileServer(assetsFS))))
+	// fs := http.FileServer(http.Dir("./internal/web/static/assets"))
+	// mux.Handle("/assets/", utils.DisableCacheInDevMode(http.StripPrefix("/assets/", fs)))
 
 	// init services
 	authService := service.NewAuthService(application.Db)

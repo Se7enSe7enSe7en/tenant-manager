@@ -16,6 +16,19 @@ docker run --name some-postgres -e POSTGRES_PASSWORD=postgres -p 5432:5432 -d po
 docker run --name <container-name> --env <env-variable> --publish <exposed-port>:<internal-port> --detach <name-of-image>
 ```
 
+### updated specific command 2026-10-04
+```sh
+docker run -d \
+--name tenant-manager-postgres-db \
+--restart unless-stopped \
+-e POSTGRES_USER=postgres \
+-e POSTGRES_PASSWORD=<the-password> \
+-e POSTGRES_DB=db \
+-v postgres-data:/var/lib/postgresql \
+-p 127.0.0.1:5432:5432 \
+postgres:18-alpine
+```
+
 ### check running docker containers
 
 ```sh
