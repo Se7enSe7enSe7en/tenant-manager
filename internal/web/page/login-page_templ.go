@@ -48,7 +48,7 @@ func LoginPage() templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"flex items-center justify-center w-screen h-screen\"><div class=\"border bg-card items-center justify-center p-4 rounded-md flex flex-col gap-4\"><h1 class=\"text-xl\">Tenant manager</h1>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"flex items-center justify-center w-screen h-screen\"><div class=\"border bg-card items-center justify-center p-4 rounded-md flex flex-col gap-4\"><h1 class=\"font-libron text-xl\">Tenant manager</h1>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
