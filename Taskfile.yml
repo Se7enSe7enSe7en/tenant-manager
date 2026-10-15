@@ -119,10 +119,26 @@ tasks:
   tailwind:
     desc: Tailwind watch css changes in .templ files
     cmds:
+      - ./tailwindcss --input {{.TAILWIND_INPUT_CSS_PATH}} --output {{.TAILWIND_OUTPUT_CSS_PATH}}
+  
+  tailwind-watch:
+    method: none
+    desc: Tailwind watch css changes in .templ files
+    watch: true
+    sources: 
+      - '**/input.css'
+      - '**/*.svg'
+      # - '**/*.templ' # tailwind already watches all templ files, and is set in input.css
+    cmds:
       - ./tailwindcss --input {{.TAILWIND_INPUT_CSS_PATH}} --output {{.TAILWIND_OUTPUT_CSS_PATH}} --watch
 
-  templ:
+  templ-watch:
+    method: none
     desc: Templ hot reload, watches all .go files
+    watch: true
+    sources:
+      - '**/output.css'
+      # - '**/*.go' # templ already watches all .go files
     cmds:
       # - templ generate --watch --proxy="http://localhost:{{.PORT}}" --open-browser=false --cmd="go run {{.SERVER_PATH}}"
       - templ generate --watch --proxy="http://localhost:{{.PORT}}" --open-browser=false --cmd="./scripts/run-dev.sh"
@@ -148,7 +164,8 @@ tasks:
     desc: watch for changes and start the project for development
     deps: [db]
     cmds:
-      - task --parallel tailwind templ
+      - task --parallel templ-watch tailwind-watch
+      
 
   deploy:
     desc: build the app binary, upload it using scp, migrate the app using the embedded migration scripts, restart the app service

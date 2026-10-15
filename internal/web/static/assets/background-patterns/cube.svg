@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="125" height="200" viewBox="0 0 10 16">
+  <g id="cube">
+    <path fill="rgba(178,178,178,0.14)" d="M0 0l5 3v5l-5-3z"/>
+    <path fill="rgba(178,178,178,0.07)" d="M10 0l-5 3v5l5-3"/>
+  </g>
+  <use href="#cube" x="5" y="8"/>
+  <use href="#cube" x="-5" y="8"/>
+</svg>   

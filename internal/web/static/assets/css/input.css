@@ -32,12 +32,9 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 
-  /* Replace default font of tailwind with Libron */
-  --font-sans: "Libron", ui-sans-serif, system-ui, sans-serif;
-  --default-font-family: var(--font-sans);
 
   /* Add Libron font */
-  --font-libron: "Libron", sans-serif;
+  --font-libron: "Libron", var(--font-sans);
 }
 
 @layer base {
@@ -185,6 +182,16 @@
   }
 }
 
+@layer utilities {
+  .bg-dot-pattern {
+  background-color: #000;
+  opacity: 0.8;
+  background-image:  radial-gradient(#b2b2b2 1.65px, transparent 1.65px), radial-gradient(#b2b2b2 1.65px, #000 1.65px);
+  background-size: 22px 22px;
+  background-position: 0 0,11px 11px;
+}
+}
+
 @font-face {
   font-family: "Libron";
   src: url("/assets/fonts/Libron-Regular.woff2") format("woff2");
@@ -199,4 +206,27 @@
   font-weight: bold;
   font-style: normal;
   font-display: swap;
+}
+
+@utility bg-cube {
+  background-image: url("/assets/background-patterns/cube.svg");
+  background-size: 125px 200px;
+}
+
+@utility bg-turbulence {
+  background-image: url("/assets/background-patterns/turbulence.svg");
+  background-size: 200px 200px;
+}
+
+@utility bg-cube-turbulence {
+  background-image:
+    url("/assets/background-patterns/turbulence.svg"),
+    url("/assets/background-patterns/cube.svg");
+  background-size: 200px 200px, 125px 200px;
+}
+
+@utility bg-cube-house {
+  background-image:
+    url("/assets/background-patterns/cube-house.svg");
+  background-size: 125px 200px
 }
