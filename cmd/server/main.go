@@ -107,7 +107,7 @@ func main() {
 
 	// init services
 	authService := service.NewAuthService(application.Db)
-	// tenantService := service.NewTenantService(queries) // not used atm
+	tenantService := service.NewTenantService(queries)
 	leaseService := service.NewLeaseService(queries)
 	propertyService := service.NewPropertyService(queries)
 	transactionService := service.NewTransactionService(queries)
@@ -115,7 +115,7 @@ func main() {
 
 	// init handlers
 	authHandler := handler.NewAuthHandler(authService)
-	tenantHandler := handler.NewTenantHandler(registrationService)
+	tenantHandler := handler.NewTenantHandler(tenantService, registrationService)
 	propertyHandler := handler.NewPropertyHandler(propertyService)
 	tradeHandler := handler.NewTradeHandler(transactionService)
 	pageHandler := handler.NewPageHandler(propertyService, leaseService)
@@ -143,6 +143,7 @@ func main() {
 	// CRUD handlers
 	mux.Handle("POST /property/create", protect(propertyHandler.CreateProperty))
 	mux.Handle("POST /tenant/create", protect(tenantHandler.CreateTenant))
+	mux.Handle("DELETE /tenant/delete", protect(tenantHandler.DeleteTenant))
 	mux.Handle("POST /trade/create", protect(tradeHandler.CreateTrade)) // TODO
 
 	// Datastar handlers

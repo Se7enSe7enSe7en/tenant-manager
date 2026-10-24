@@ -3,7 +3,6 @@ INSERT INTO
     lease (
         id,
         property_id,
-        tenant_id,
         expected_rent_day,
         start_date,
         expiry_date,
@@ -20,7 +19,6 @@ VALUES (
         $4,
         $5,
         $6,
-        $7,
         now(),
         now()
     )
@@ -52,7 +50,7 @@ SELECT
     u.name AS user_name
 FROM
     lease l
-    LEFT JOIN tenant t ON l.tenant_id = t.id
+    LEFT JOIN tenant t ON l.id = t.lease_id
     LEFT JOIN property p ON l.property_id = p.id
     LEFT JOIN "user" u ON p.user_id = u.id
 WHERE
@@ -83,7 +81,7 @@ SELECT
     u.name AS user_name
 FROM
     lease l
-    LEFT JOIN tenant t ON l.tenant_id = t.id
+    LEFT JOIN tenant t ON l.id = t.lease_id
     LEFT JOIN property p ON l.property_id = p.id
     LEFT JOIN "user" u ON p.user_id = u.id
 WHERE

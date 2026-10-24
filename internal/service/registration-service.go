@@ -53,16 +53,6 @@ func (s *registrationService) RegisterTenantWithLease(ctx context.Context, param
 	defer tx.Rollback(ctx)
 	qtx := s.queries.WithTx(tx)
 
-	// create tenant
-	tenant, err := qtx.CreateTenant(ctx, repo.CreateTenantParams{
-		Email:       params.Email,
-		Name:        params.Name,
-		PhoneNumber: params.PhoneNumber,
-	})
-	if err != nil {
-		return repo.Tenant{}, repo.Lease{}, err
-	}
-
 	// create lease
 	//// remove hours, minutes, seconds, nanoseconds from start date
 	startDateNoHMS := time.Date(
@@ -78,12 +68,22 @@ func (s *registrationService) RegisterTenantWithLease(ctx context.Context, param
 
 	lease, err := qtx.CreateLease(ctx, repo.CreateLeaseParams{
 		PropertyID:      params.PropertyID,
-		TenantID:        tenant.ID,
 		ExpectedRentDay: int16(params.ExpectedRentDay),
 		StartDate:       startDateNoHMS,
 		ExpiryDate:      &expiryDate,
 		IsMonthAdvance:  params.IsMonthAdvance,
 		DepositAmount:   params.DepositAmount,
+	})
+	if err != nil {
+		return repo.Tenant{}, repo.Lease{}, err
+	}
+
+	// create tenant
+	tenant, err := qtx.CreateTenant(ctx, repo.CreateTenantParams{
+		LeaseID:     lease.ID,
+		Email:       params.Email,
+		Name:        params.Name,
+		PhoneNumber: params.PhoneNumber,
 	})
 	if err != nil {
 		return repo.Tenant{}, repo.Lease{}, err

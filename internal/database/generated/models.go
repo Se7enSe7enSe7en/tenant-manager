@@ -23,7 +23,6 @@ type Identity struct {
 type Lease struct {
 	ID              uuid.UUID
 	PropertyID      uuid.UUID
-	TenantID        uuid.UUID
 	ExpectedRentDay int16
 	StartDate       time.Time
 	ExpiryDate      *time.Time
@@ -51,6 +50,7 @@ type Session struct {
 
 type Tenant struct {
 	ID          uuid.UUID
+	LeaseID     uuid.UUID
 	Name        string
 	Email       string
 	PhoneNumber string

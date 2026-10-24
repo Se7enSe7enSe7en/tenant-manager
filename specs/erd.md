@@ -40,7 +40,7 @@ erDiagram
     Tenant {
         uuid id PK
         string name
-        string email UK
+        string email
         string phone_number "[null]"
         date created_at
     }

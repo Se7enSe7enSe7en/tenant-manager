@@ -7,32 +7,87 @@ package repo
 
 import (
 	"context"
+
+	"github.com/google/uuid"
 )
 
 const createTenant = `-- name: CreateTenant :one
 INSERT INTO
-    tenant (id, email, name, phone_number)
+    tenant (
+        id,
+        lease_id,
+        email,
+        name,
+        phone_number
+    )
 VALUES (
         gen_random_uuid (),
         $1,
         $2,
-        $3
+        $3,
+        $4
     )
 RETURNING
-    id, name, email, phone_number, created_at, updated_at
+    id, lease_id, name, email, phone_number, created_at, updated_at
 `
 
 type CreateTenantParams struct {
+	LeaseID     uuid.UUID
 	Email       string
 	Name        string
 	PhoneNumber string
 }
 
 func (q *Queries) CreateTenant(ctx context.Context, arg CreateTenantParams) (Tenant, error) {
-	row := q.db.QueryRow(ctx, createTenant, arg.Email, arg.Name, arg.PhoneNumber)
+	row := q.db.QueryRow(ctx, createTenant,
+		arg.LeaseID,
+		arg.Email,
+		arg.Name,
+		arg.PhoneNumber,
+	)
 	var i Tenant
 	err := row.Scan(
 		&i.ID,
+		&i.LeaseID,
+		&i.Name,
+		&i.Email,
+		&i.PhoneNumber,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
+const deleteTenant = `-- name: DeleteTenant :exec
+DELETE FROM tenant WHERE id = $1
+`
+
+func (q *Queries) DeleteTenant(ctx context.Context, id uuid.UUID) error {
+	_, err := q.db.Exec(ctx, deleteTenant, id)
+	return err
+}
+
+const getTenantById = `-- name: GetTenantById :one
+SELECT
+    id,
+    lease_id,
+    name,
+    email,
+    phone_number,
+    created_at,
+    updated_at
+FROM tenant t
+WHERE
+    t.id = $1
+LIMIT 1
+`
+
+func (q *Queries) GetTenantById(ctx context.Context, id uuid.UUID) (Tenant, error) {
+	row := q.db.QueryRow(ctx, getTenantById, id)
+	var i Tenant
+	err := row.Scan(
+		&i.ID,
+		&i.LeaseID,
 		&i.Name,
 		&i.Email,
 		&i.PhoneNumber,

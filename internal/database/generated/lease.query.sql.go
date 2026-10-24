@@ -90,7 +90,6 @@ INSERT INTO
     lease (
         id,
         property_id,
-        tenant_id,
         expected_rent_day,
         start_date,
         expiry_date,
@@ -107,17 +106,15 @@ VALUES (
         $4,
         $5,
         $6,
-        $7,
         now(),
         now()
     )
 RETURNING
-    id, property_id, tenant_id, expected_rent_day, start_date, expiry_date, is_month_advance, deposit_amount, created_at, updated_at
+    id, property_id, expected_rent_day, start_date, expiry_date, is_month_advance, deposit_amount, created_at, updated_at
 `
 
 type CreateLeaseParams struct {
 	PropertyID      uuid.UUID
-	TenantID        uuid.UUID
 	ExpectedRentDay int16
 	StartDate       time.Time
 	ExpiryDate      *time.Time
@@ -128,7 +125,6 @@ type CreateLeaseParams struct {
 func (q *Queries) CreateLease(ctx context.Context, arg CreateLeaseParams) (Lease, error) {
 	row := q.db.QueryRow(ctx, createLease,
 		arg.PropertyID,
-		arg.TenantID,
 		arg.ExpectedRentDay,
 		arg.StartDate,
 		arg.ExpiryDate,
@@ -139,7 +135,6 @@ func (q *Queries) CreateLease(ctx context.Context, arg CreateLeaseParams) (Lease
 	err := row.Scan(
 		&i.ID,
 		&i.PropertyID,
-		&i.TenantID,
 		&i.ExpectedRentDay,
 		&i.StartDate,
 		&i.ExpiryDate,
@@ -185,7 +180,7 @@ SELECT
     u.name AS user_name
 FROM
     lease l
-    LEFT JOIN tenant t ON l.tenant_id = t.id
+    LEFT JOIN tenant t ON l.id = t.lease_id
     LEFT JOIN property p ON l.property_id = p.id
     LEFT JOIN "user" u ON p.user_id = u.id
 WHERE
@@ -263,7 +258,7 @@ SELECT
     u.name AS user_name
 FROM
     lease l
-    LEFT JOIN tenant t ON l.tenant_id = t.id
+    LEFT JOIN tenant t ON l.id = t.lease_id
     LEFT JOIN property p ON l.property_id = p.id
     LEFT JOIN "user" u ON p.user_id = u.id
 WHERE
@@ -355,7 +350,7 @@ SET
 WHERE
     id = $1
 RETURNING
-    id, property_id, tenant_id, expected_rent_day, start_date, expiry_date, is_month_advance, deposit_amount, created_at, updated_at
+    id, property_id, expected_rent_day, start_date, expiry_date, is_month_advance, deposit_amount, created_at, updated_at
 `
 
 type UpdateLeaseParams struct {
@@ -380,7 +375,6 @@ func (q *Queries) UpdateLease(ctx context.Context, arg UpdateLeaseParams) (Lease
 	err := row.Scan(
 		&i.ID,
 		&i.PropertyID,
-		&i.TenantID,
 		&i.ExpectedRentDay,
 		&i.StartDate,
 		&i.ExpiryDate,

@@ -16,18 +16,18 @@ import (
 )
 
 type TenantHandler struct {
+	tenantService       service.TenantService
 	registrationService service.RegistrationService
 }
 
-func NewTenantHandler(registrationService service.RegistrationService) *TenantHandler {
+func NewTenantHandler(tenantService service.TenantService, registrationService service.RegistrationService) *TenantHandler {
 	return &TenantHandler{
+		tenantService:       tenantService,
 		registrationService: registrationService,
 	}
 }
 
 func (h *TenantHandler) CreateTenant(w http.ResponseWriter, r *http.Request) {
-	logger.Debug("CreateTenant() triggered")
-
 	// parse using datastar signals
 	var payload struct {
 		CreateTenantSignals store.CreateTenantSignals `json:"create_tenant_signals"`
@@ -85,6 +85,21 @@ func (h *TenantHandler) CreateTenant(w http.ResponseWriter, r *http.Request) {
 
 	// TODO: same as property-handler, show modal
 	sse.Redirect("/dashboard") // TMP
+}
+
+func (h *TenantHandler) DeleteTenant(w http.ResponseWriter, r *http.Request) {
+	// parse URL query
+	id := r.URL.Query().Get("id")
+	logger.Debug("DeleteTenant id: %v", id)
+
+	err := h.tenantService.DeleteTenantAndLease(r.Context(), id)
+	if err != nil {
+		errs.Http(w, r, err, http.StatusInternalServerError)
+		return
+	}
+
+	// TODO: send success signal
+	logger.Debug("DeleteTenant success")
 }
 
 func (h *TenantHandler) ComputeNextDueDate(w http.ResponseWriter, r *http.Request) {

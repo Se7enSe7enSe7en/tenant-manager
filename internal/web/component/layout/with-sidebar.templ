@@ -4,9 +4,10 @@ import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/topbar"
 
 templ Default() {
 	@Base() {
-		@topbar.Topbar()
-		{children...}
-
+		<div class="flex-1 overflow-auto bg-cube-house bg-fixed min-h-screen">
+			@topbar.Topbar()
+			{ children... }
+		</div>
 		// // with sidebar layout
 		// <div class="grid grid-cols-12 h-screen">
 		// 	<div

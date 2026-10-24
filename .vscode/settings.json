@@ -16,4 +16,5 @@
   },
   "database-client.capitalizeKeywordsWhenFormatting": true,
   "database-client.telemetry.usesOnlineServices": false,
+  "editor.formatOnSave": true,
 }

@@ -21,13 +21,12 @@ vars:
   TAILWIND_OUTPUT_CSS_PATH: ./internal/web/static/assets/css/output.css
   SERVER_PATH: ./cmd/server
   BUILD_PATH: ./dist
-  
+
   # prod vars
   REMOTE_USER: deploy
   REMOTE_HOST: $REMOTE_HOST # env variable
   REMOTE_PATH: /opt/tenant-manager
   BINARY: bin/tenant-manager
-
 
 tasks:
   setup-watchman-linux:
@@ -107,7 +106,7 @@ tasks:
       - ./tailwindcss --input {{.TAILWIND_INPUT_CSS_PATH}} --output {{.TAILWIND_OUTPUT_CSS_PATH}} --minify
       - go mod tidy
       - go build -o {{.BINARY}} {{.SERVER_PATH}}/main.go
-  
+
   build-prod:
     desc: build the app binary for production, it will be on a linux VPS
     cmds:
@@ -120,14 +119,14 @@ tasks:
     desc: Tailwind watch css changes in .templ files
     cmds:
       - ./tailwindcss --input {{.TAILWIND_INPUT_CSS_PATH}} --output {{.TAILWIND_OUTPUT_CSS_PATH}}
-  
+
   tailwind-watch:
     method: none
     desc: Tailwind watch css changes in .templ files
     watch: true
-    sources: 
-      - '**/input.css'
-      - '**/*.svg'
+    sources:
+      - "**/input.css"
+      - "**/*.svg"
       # - '**/*.templ' # tailwind already watches all templ files, and is set in input.css
     cmds:
       - ./tailwindcss --input {{.TAILWIND_INPUT_CSS_PATH}} --output {{.TAILWIND_OUTPUT_CSS_PATH}} --watch
@@ -137,7 +136,7 @@ tasks:
     desc: Templ hot reload, watches all .go files
     watch: true
     sources:
-      - '**/output.css'
+      - "**/output.css"
       # - '**/*.go' # templ already watches all .go files
     cmds:
       # - templ generate --watch --proxy="http://localhost:{{.PORT}}" --open-browser=false --cmd="go run {{.SERVER_PATH}}"
@@ -165,13 +164,12 @@ tasks:
     deps: [db]
     cmds:
       - task --parallel templ-watch tailwind-watch
-      
 
   deploy:
     desc: build the app binary, upload it using scp, migrate the app using the embedded migration scripts, restart the app service
     requires:
       vars:
-      - REMOTE_HOST # this is an env var
+        - REMOTE_HOST # this is an env var
     cmds:
       - task: build-prod
       - ssh {{.REMOTE_USER}}@{{.REMOTE_HOST}} "sudo systemctl stop {{.APP_NAME}}"
@@ -179,5 +177,30 @@ tasks:
       - ssh {{.REMOTE_USER}}@{{.REMOTE_HOST}} "cd {{.REMOTE_PATH}} && ./{{.APP_NAME}} migrate-up"
       - ssh {{.REMOTE_USER}}@{{.REMOTE_HOST}} "sudo systemctl start {{.APP_NAME}}"
       - echo "Successfully Deployed wahoo!"
+
+  # fetch-folder:
+  #   desc: "Fetch a folder from a GitHub permalink (no git history), mainly used for fetching components in datastarUI"
+  #   # note: this command and datastarUI somewhat mimicks shadcn, consider using shadcn-templ (formerly known as templui) in the future
+  #   vars:
+  #     DEST: './internal/web/component'
+  #   requires:
+  #     vars:
+  #       - URL
+  #   cmds:
+  #     - |
+  #       REPO_FULL=$(echo "{{.URL}}" | sed 's|https://github.com/||' | sed 's|/tree/.*||')
+  #       REPO_NAME=$(echo "$REPO_FULL" | cut -d'/' -f2)
+  #       REST=$(echo "{{.URL}}" | sed 's|.*github.com/[^/]*/[^/]*/tree/||')
+  #       COMMIT=$(echo "$REST" | cut -d'/' -f1)
+  #       FOLDER=$(echo "$REST" | cut -d'/' -f2-)
+
+  #       TMPDIR=$(mktemp -d)
+  #       curl -sL "https://github.com/${REPO_FULL}/archive/${COMMIT}.tar.gz" -o "$TMPDIR/repo.tar.gz"
+  #       tar xz -f "$TMPDIR/repo.tar.gz" -C "$TMPDIR"
+
+  #       mkdir -p "{{.DEST}}"
+  #       cp -r "$TMPDIR/${REPO_NAME}-${COMMIT}/${FOLDER}" "{{.DEST}}/"
+  #       rm -rf "$TMPDIR"
+
   default:
     - task: dev

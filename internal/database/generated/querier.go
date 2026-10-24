@@ -25,6 +25,7 @@ type Querier interface {
 	DeleteExpiredSessions(ctx context.Context) error
 	DeleteLease(ctx context.Context, id uuid.UUID) error
 	DeleteSession(ctx context.Context, id uuid.UUID) error
+	DeleteTenant(ctx context.Context, id uuid.UUID) error
 	// params: provider, provider_user_id
 	GetIdentityByProvider(ctx context.Context, arg GetIdentityByProviderParams) (Identity, error)
 	GetLeaseById(ctx context.Context, id uuid.UUID) (GetLeaseByIdRow, error)
@@ -32,6 +33,7 @@ type Querier interface {
 	GetLocalIdentityByUserID(ctx context.Context, userID uuid.UUID) (Identity, error)
 	GetPropertyById(ctx context.Context, id uuid.UUID) (GetPropertyByIdRow, error)
 	GetSession(ctx context.Context, id uuid.UUID) (Session, error)
+	GetTenantById(ctx context.Context, id uuid.UUID) (Tenant, error)
 	GetUserByEmail(ctx context.Context, email string) (User, error)
 	GetUserByID(ctx context.Context, id uuid.UUID) (User, error)
 	ListLease(ctx context.Context, id uuid.UUID) ([]ListLeaseRow, error)

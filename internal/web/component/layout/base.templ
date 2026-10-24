@@ -15,11 +15,14 @@ templ Base() {
 
 			// tailwind
 			<link href="/assets/css/output.css" rel="stylesheet"/>
-			<script type="module" src="https://cdn.jsdelivr.net/gh/starfederation/datastar@v1.0.1/bundles/datastar.js"></script>
+
+			// datastar
+			<script type="module" src="/assets/js/datastar.js"></script>
+			// <script type="module" src="https://cdn.jsdelivr.net/gh/starfederation/datastar@v1.0.1/bundles/datastar.js"></script>
 		</head>
 		<body>
 			<main>
-				<div id="main-page" class="bg-cube-house bg-fixed min-h-screen">
+				<div id="main-page">
 						{ children... }
 				</div>
 			</main>
