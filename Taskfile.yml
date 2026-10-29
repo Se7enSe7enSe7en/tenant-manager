@@ -178,6 +178,15 @@ tasks:
       - ssh {{.REMOTE_USER}}@{{.REMOTE_HOST}} "sudo systemctl start {{.APP_NAME}}"
       - echo "Successfully Deployed wahoo!"
 
+  setup-prod:
+    desc: setup needed files in the production VPS, this only needs to run once
+    requires:
+      vars:
+        - REMOTE_HOST
+    cmds:
+      - scp ./docker-compose.prod.yml {{.REMOTE_USER}}@{{.REMOTE_HOST}}:{{.REMOTE_PATH}}/
+      - scp ./.env.prod.example {{.REMOTE_USER}}@{{.REMOTE_HOST}}:{{.REMOTE_PATH}}/
+
   # fetch-folder:
   #   desc: "Fetch a folder from a GitHub permalink (no git history), mainly used for fetching components in datastarUI"
   #   # note: this command and datastarUI somewhat mimicks shadcn, consider using shadcn-templ (formerly known as templui) in the future
