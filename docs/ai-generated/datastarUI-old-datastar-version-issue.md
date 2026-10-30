@@ -6,7 +6,7 @@ Submitting the create-property form did nothing in Datastar terms — the form f
 
 ## Root cause
 
-The `form.Form` component copied from the [datastarUI repo](https://datastar-ui.com/docs) emits **pre-v1 Datastar attribute syntax**. Specifically, in `internal/web/component/form/form.templ`:
+The `form.Form` component copied from the [datastarUI repo](https://datastar-ui.com/docs) emits **pre-v1 Datastar attribute syntax**. Specifically, in `internal/web/components/form/form.templ`:
 
 ```go
 formAttrs["data-on-submit"] = submitHandler          // ← pre-v1
@@ -32,6 +32,7 @@ Because the syntax doesn't match, Datastar v1 silently skips the attribute — n
 ## How to spot it
 
 Symptoms when a component has stale syntax:
+
 - The component's interactive behavior just doesn't happen.
 - No console errors.
 - Network tab is empty (or shows a native browser navigation instead of an `@post`/`@get` fetch).
@@ -47,8 +48,8 @@ Symptoms when a component has stale syntax:
 
 ## Components confirmed patched
 
-- `internal/web/component/form/form.templ` — `data-on-submit` → `data-on:submit`. (The `data-indicator-fetching` line may also need fixing — flag if a "fetching" indicator doesn't render.)
+- `internal/web/components/form/form.templ` — `data-on-submit` → `data-on:submit`. (The `data-indicator-fetching` line may also need fixing — flag if a "fetching" indicator doesn't render.)
 
 ## Components not yet audited
 
-The rest of `internal/web/component/` was copied from the same source and may have the same issue. See `docs/ai-generated/todo.md` for the audit task.
+The rest of `internal/web/components/` was copied from the same source and may have the same issue. See `docs/ai-generated/todo.md` for the audit task.

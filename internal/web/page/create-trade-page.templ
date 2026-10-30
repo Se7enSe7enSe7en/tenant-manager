@@ -1,10 +1,11 @@
 package page
 
-import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/layout"
-import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/button"
+import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/components/layout"
+import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/components/button"
 import "github.com/Se7enSe7enSe7en/tenant-manager/internal/utils"
-import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/form"
+import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/components/form"
 import "github.com/Se7enSe7enSe7en/tenant-manager/internal/store"
+import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/components/table"
 
 type CreateTradePageProps struct {
 	LeaseId            string
@@ -31,16 +32,68 @@ templ CreateTradePage(props CreateTradePageProps) {
 			},
 		}) {
 			<div class="flex flex-col items-center justify-center gap-3">
-				<p>🚧 Under construction 🚧</p>
 				<div class="flex flex-col gap-3">
-					<div class="bg-card rounded-xl p-5 border shadow-sm h-60 flex flex-col justify-between">
-						<p>Receipt details</p>
-						<p>Lease id: { props.LeaseId }</p>
-						<p>tenant name: { props.TenantName }</p>
-						<p>property name: { props.PropertyName }</p>
-						<p>rent validity period: { props.RentValidityPeriod }</p>
-						<p>rent amount: { props.RentAmount }</p>
-						<p>transaction date: { props.TransactionDate }</p>
+					<div class="flex gap-3">
+						// table
+						<div class="bg-card rounded-xl p-5 border shadow-sm">
+							@table.Table() {
+								@table.Caption() {
+									Receipt details
+								}
+								@table.Body() {
+									@table.Row() {
+										@table.Cell(table.CellProps{Class: "font-medium"}) {
+											Tenant Name
+										}
+										@table.Cell() {
+											{ props.TenantName }
+										}
+									}
+									@table.Row() {
+										@table.Cell(table.CellProps{Class: "font-medium"}) {
+											Property Name
+										}
+										@table.Cell() {
+											{ props.PropertyName }
+										}
+									}
+									@table.Row() {
+										@table.Cell(table.CellProps{Class: "font-medium"}) {
+											Rent Validity
+										}
+										@table.Cell() {
+											{ props.RentValidityPeriod }
+										}
+									}
+									@table.Row() {
+										@table.Cell(table.CellProps{Class: "font-medium"}) {
+											Rent Amount
+										}
+										@table.Cell() {
+											{ props.RentAmount }
+										}
+									}
+									@table.Row() {
+										@table.Cell(table.CellProps{Class: "font-medium"}) {
+											Transaction Date
+										}
+										@table.Cell() {
+											{ props.TransactionDate }
+										}
+									}
+								}
+							}
+						</div>
+						// // summary details (old)
+						// <div class="bg-card rounded-xl p-5 border shadow-sm h-60 flex flex-col justify-between">
+						// 	<p>Receipt details</p>
+						// 	<p>Lease id: { props.LeaseId }</p>
+						// 	<p>tenant name: { props.TenantName }</p>
+						// 	<p>property name: { props.PropertyName }</p>
+						// 	<p>rent validity period: { props.RentValidityPeriod }</p>
+						// 	<p>rent amount: { props.RentAmount }</p>
+						// 	<p>transaction date: { props.TransactionDate }</p>
+						// </div>
 					</div>
 					<div class="flex justify-between">
 						@button.LinkButton(button.LinkButtonArgs{

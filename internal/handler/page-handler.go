@@ -9,8 +9,8 @@ import (
 	"github.com/Se7enSe7enSe7en/tenant-manager/internal/errs"
 	"github.com/Se7enSe7enSe7en/tenant-manager/internal/service"
 	"github.com/Se7enSe7enSe7en/tenant-manager/internal/utils"
-	"github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/propertycard"
-	"github.com/Se7enSe7enSe7en/tenant-manager/internal/web/component/tenantcard"
+	"github.com/Se7enSe7enSe7en/tenant-manager/internal/web/components/propertycard"
+	"github.com/Se7enSe7enSe7en/tenant-manager/internal/web/components/tenantcard"
 	"github.com/Se7enSe7enSe7en/tenant-manager/internal/web/page"
 	"github.com/google/uuid"
 )

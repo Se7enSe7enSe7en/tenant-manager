@@ -3,3 +3,6 @@
 dist
 tailwindcss
 bin
+
+internal/web/static/assets/js/shadcn-templ-*.js
+internal/web/static/assets/css/output.css

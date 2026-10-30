@@ -1,0 +1,21 @@
+{
+  "scripts": {
+    "dir": "internal/web/static/assets/js",
+    "path": "/internal/web/static/assets/js"
+  },
+  "$schema": "https://shadcn-templ.com/schema/components.json",
+  "style": "base-nova",
+  "tailwind": {
+    "css": "internal/web/static/assets/css/input.css",
+    "baseColor": "neutral",
+    "cssVariables": true
+  },
+  "rtl": false,
+  "iconLibrary": "lucide",
+  "menuColor": "default",
+  "menuAccent": "subtle",
+  "aliases": {
+    "components": "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/components",
+    "utils": "github.com/Se7enSe7enSe7en/tenant-manager/internal/utils"
+  }
+}

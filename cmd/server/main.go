@@ -3,11 +3,11 @@ package main
 import (
 	"context"
 	"fmt"
-	"io/fs"
 	"log"
 	"net/http"
 	"os"
 	"os/signal"
+	"strings"
 	"syscall"
 	"time"
 
@@ -21,8 +21,7 @@ import (
 	"github.com/Se7enSe7enSe7en/tenant-manager/internal/routine"
 	"github.com/Se7enSe7enSe7en/tenant-manager/internal/service"
 	"github.com/Se7enSe7enSe7en/tenant-manager/internal/slogfmt"
-	"github.com/Se7enSe7enSe7en/tenant-manager/internal/utils"
-	"github.com/Se7enSe7enSe7en/tenant-manager/internal/web"
+	"github.com/Se7enSe7enSe7en/tenant-manager/internal/web/static/assets"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/joho/godotenv"
 )
@@ -31,6 +30,25 @@ func startServer(s *http.Server, serverErr chan error) {
 	if err := s.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 		serverErr <- err
 	}
+}
+
+func setupAssetsRoutes(mux *http.ServeMux) {
+	development := os.Getenv("SHADCN_TEMPL_DEV") == "true" || os.Getenv("TEMPL_DEV_MODE") == "true"
+	files := http.FileServer(http.FS(assets.Assets))
+	if development {
+		files = http.FileServer(http.Dir("./internal/web/static/assets"))
+	}
+	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if development {
+			w.Header().Set("Cache-Control", "no-store")
+		} else if strings.HasPrefix(strings.TrimPrefix(r.URL.Path, "/"), "js/shadcn-templ-") {
+			w.Header().Set("Cache-Control", "public, max-age=31536000, immutable")
+		} else {
+			w.Header().Set("Cache-Control", "no-cache")
+		}
+		files.ServeHTTP(w, r)
+	})
+	mux.Handle("GET /assets/", http.StripPrefix("/assets/", handler))
 }
 
 func main() {
@@ -44,6 +62,8 @@ func main() {
 	if databaseUrl == "" {
 		log.Fatalf("DATABASE_URL env variable empty, check .env.example\n")
 	}
+
+	port := env.GetString("PORT", "8080")
 
 	// app arguments
 	if len(os.Args) > 1 && os.Args[1] == "migrate-up" {
@@ -65,7 +85,7 @@ func main() {
 
 	// init app config
 	cfg := app.Config{
-		Port:      "8080",
+		Port:      port,
 		ProxyPort: "7331",
 		Dsn:       databaseUrl, // TODO: test this change later
 	}
@@ -95,15 +115,14 @@ func main() {
 	mux := http.NewServeMux()
 
 	// serve static files
-	subFS, err := fs.Sub(web.Assets, "static/assets")
-	if err != nil {
-		log.Fatalf("Failed to located web assets FS: %v", err)
-	}
+	setupAssetsRoutes(mux)
 
-	assetsFS := http.FS(subFS)
-	mux.Handle("/assets/", utils.DisableCacheInDevMode(http.StripPrefix("/assets/", http.FileServer(assetsFS))))
-	// fs := http.FileServer(http.Dir("./internal/web/static/assets"))
-	// mux.Handle("/assets/", utils.DisableCacheInDevMode(http.StripPrefix("/assets/", fs)))
+	// subFS, err := fs.Sub(assets.Assets, ".")
+	// if err != nil {
+	// 	log.Fatalf("Failed to located web assets FS: %v", err)
+	// }
+	// assetsFS := http.FS(subFS)
+	// mux.Handle("/assets/", utils.DisableCacheInDevMode(http.StripPrefix("/assets/", http.FileServer(assetsFS))))
 
 	// init services
 	authService := service.NewAuthService(application.Db)

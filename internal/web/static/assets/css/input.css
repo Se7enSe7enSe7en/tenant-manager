@@ -1,5 +1,10 @@
-@import "tailwindcss" source("../../../../web"); /* note: the `source("../../../../web")` narrows down where tailwind will look instead of looking through the entire project */
-@source "**/*.templ"; /* narrow down further to only target the .templ files */
+@import "tailwindcss" source("../../../../web");
+@import "./tw-animate.css";
+@import "./shadcn-tailwind.css";
+
+@source "**/*.templ";
+
+@custom-variant dark (&:is(.dark *));
 
 @theme {
   --color-background: var(--background);
@@ -21,7 +26,6 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-
   /* Sidebar-specific tokens */
   --color-sidebar-background: var(--sidebar-background);
   --color-sidebar-foreground: var(--sidebar-foreground);
@@ -31,19 +35,11 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
-
-
   /* Add Libron font */
   --font-libron: "Libron", var(--font-sans);
 }
 
 @layer base {
-  /* 
-        theme is based of templUI: https: //templui.io/docs/themes
-        - note: change "--sidebar" to "--sidebar-background" when exporting from templUI themes
-        - oklch picker: https: //oklchpicker.com/
-    */
-
   :root {
     --background: oklch(1 0 0);
     --foreground: oklch(0.145 0 0);
@@ -63,37 +59,32 @@
     --border: oklch(0.922 0 0);
     --input: oklch(0.922 0 0);
     --ring: oklch(0.708 0 0);
+    --chart-1: oklch(0.87 0 0);
+    --chart-2: oklch(0.556 0 0);
+    --chart-3: oklch(0.439 0 0);
+    --chart-4: oklch(0.371 0 0);
+    --chart-5: oklch(0.269 0 0);
     --radius: 0.625rem;
-    --chart-1: oklch(0.646 0.222 41.116);
-    --chart-2: oklch(0.6 0.118 184.704);
-    --chart-3: oklch(0.398 0.07 227.392);
-    --chart-4: oklch(0.828 0.189 84.429);
-    --chart-5: oklch(0.769 0.188 70.08);
-    --sidebar-background: oklch(0.985 0 0);
+    --sidebar: oklch(0.985 0 0);
     --sidebar-foreground: oklch(0.145 0 0);
     --sidebar-primary: oklch(0.205 0 0);
     --sidebar-primary-foreground: oklch(0.985 0 0);
-    --sidebar-accent: oklch(0.94 0 0);
+    --sidebar-accent: oklch(0.97 0 0);
     --sidebar-accent-foreground: oklch(0.205 0 0);
     --sidebar-border: oklch(0.922 0 0);
     --sidebar-ring: oklch(0.708 0 0);
-    --selection: oklch(0.145 0 0);
-    --selection-foreground: oklch(1 0 0);
 
     /* Custom colors */
     --paid-color-value: 0.67 0.177 146;
     --unpaid-color-value: 0.67 0.005 197;
     --late-color-value: 0.67 0.214 26;
-
     --paid-color: oklch(var(--paid-color-value));
     --unpaid-color: oklch(var(--unpaid-color-value));
     --late-color: oklch(var(--late-color-value));
-
     --bg-paid-color: oklch(var(--paid-color-value) / 0.1);
     --bg-unpaid-color: oklch(var(--unpaid-color-value) / 0.1);
     --bg-late-color: oklch(var(--late-color-value) / 0.1);
   }
-
   .dark {
     --background: oklch(0.145 0 0);
     --foreground: oklch(0.985 0 0);
@@ -113,59 +104,94 @@
     --border: oklch(1 0 0 / 10%);
     --input: oklch(1 0 0 / 15%);
     --ring: oklch(0.556 0 0);
-    --radius: 0.625rem;
-    --chart-1: oklch(0.488 0.243 264.376);
-    --chart-2: oklch(0.696 0.17 162.48);
-    --chart-3: oklch(0.769 0.188 70.08);
-    --chart-4: oklch(0.627 0.265 303.9);
-    --chart-5: oklch(0.645 0.246 16.439);
-    --sidebar-background: oklch(0.205 0 0);
+    --chart-1: oklch(0.87 0 0);
+    --chart-2: oklch(0.556 0 0);
+    --chart-3: oklch(0.439 0 0);
+    --chart-4: oklch(0.371 0 0);
+    --chart-5: oklch(0.269 0 0);
+    --sidebar: oklch(0.205 0 0);
     --sidebar-foreground: oklch(0.985 0 0);
     --sidebar-primary: oklch(0.488 0.243 264.376);
     --sidebar-primary-foreground: oklch(0.985 0 0);
-    --sidebar-accent: oklch(0.3 0 0);
+    --sidebar-accent: oklch(0.269 0 0);
     --sidebar-accent-foreground: oklch(0.985 0 0);
     --sidebar-border: oklch(1 0 0 / 10%);
     --sidebar-ring: oklch(0.556 0 0);
-    --selection: oklch(0.922 0 0);
-    --selection-foreground: oklch(0.205 0 0);
   }
-
   /* Base element styles */
   * {
     border-color: var(--border);
+    @apply border-border outline-ring/50;
   }
-
   body {
     background-color: var(--background);
     color: var(--foreground);
     overscroll-behavior: none;
     /* font-synthesis-weight: none;
     text-rendering: optimizeLegibility; */
+    @apply bg-background text-foreground;
   }
-
   a {
     cursor: pointer;
   }
-
   /* Ensure form inputs have proper text colors */
   input,
   textarea,
   select {
     color: var(--foreground);
   }
-
   input::placeholder,
   textarea::placeholder {
     color: var(--muted-foreground);
   }
 }
 
+@theme inline {
+  --font-heading: var(--font-sans);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
 @layer components {
   [data-tooltip] {
     position: relative;
   }
-
   [data-tooltip]:hover::after {
     content: attr(data-tooltip);
     position: absolute;
@@ -184,12 +210,16 @@
 
 @layer utilities {
   .bg-dot-pattern {
-  background-color: #000;
-  opacity: 0.8;
-  background-image:  radial-gradient(#b2b2b2 1.65px, transparent 1.65px), radial-gradient(#b2b2b2 1.65px, #000 1.65px);
-  background-size: 22px 22px;
-  background-position: 0 0,11px 11px;
-}
+    background-color: #000;
+    opacity: 0.8;
+    background-image:
+      radial-gradient(#b2b2b2 1.65px, transparent 1.65px),
+      radial-gradient(#b2b2b2 1.65px, #000 1.65px);
+    background-size: 22px 22px;
+    background-position:
+      0 0,
+      11px 11px;
+  }
 }
 
 @font-face {
@@ -222,11 +252,12 @@
   background-image:
     url("/assets/background-patterns/turbulence.svg"),
     url("/assets/background-patterns/cube.svg");
-  background-size: 200px 200px, 125px 200px;
+  background-size:
+    200px 200px,
+    125px 200px;
 }
 
 @utility bg-cube-house {
-  background-image:
-    url("/assets/background-patterns/cube-house.svg");
-  background-size: 125px 200px
+  background-image: url("/assets/background-patterns/cube-house.svg");
+  background-size: 125px 200px;
 }

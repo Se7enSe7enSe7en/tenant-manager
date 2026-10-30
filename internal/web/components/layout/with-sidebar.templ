@@ -1,0 +1,41 @@
+package layout
+
+import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/components/topbar"
+
+templ Default() {
+	@Base() {
+		<div class="flex-1 overflow-auto bg-cube-house bg-fixed min-h-screen">
+			@topbar.Topbar()
+			{ children... }
+		</div>
+		// // with sidebar layout
+		// <div class="grid grid-cols-12 h-screen">
+		// 	<div
+		// 		class="bg-accent p-2"
+		// 		data-signals="{open: true}"
+		// 		data-class="{ 
+		// 			'hidden': !$open, 
+		// 			'col-span-2': $open 
+		// 		}"
+		// 	>
+		// 		@sidebar.Sidebar()
+		// 		// @button.Button(button.ButtonArgs{
+		// 		// 	Variant: "outline",
+		// 		// 	Attributes: templ.Attributes{
+		// 		// 		"data-on:click": "$open = false",
+		// 		// 	},
+		// 		// }) {
+		// 		// 	Hide side bar
+		// 		// }
+		// 	</div>
+		// 	<div
+		// 		data-class="{ 
+		// 		'col-span-12': !$open,
+		// 		'col-span-10': $open 
+		// 	}"
+		// 	>
+		// 		{ children... }
+		// 	</div>
+		// </div>
+	}
+}
