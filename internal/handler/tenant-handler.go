@@ -16,14 +16,14 @@ import (
 )
 
 type TenantHandler struct {
-	tenantService       service.TenantService
-	registrationService service.RegistrationService
+	TenantService       service.TenantService
+	RegistrationService service.RegistrationService
 }
 
 func NewTenantHandler(tenantService service.TenantService, registrationService service.RegistrationService) *TenantHandler {
 	return &TenantHandler{
-		tenantService:       tenantService,
-		registrationService: registrationService,
+		TenantService:       tenantService,
+		RegistrationService: registrationService,
 	}
 }
 
@@ -59,7 +59,7 @@ func (h *TenantHandler) CreateTenant(w http.ResponseWriter, r *http.Request) {
 	}
 	depositAmountDecimal := decimal.NewFromFloat(form.DepositAmount)
 
-	_, _, err = h.registrationService.RegisterTenantWithLease(r.Context(), service.RegisterTenantWithLeaseParams{
+	_, _, err = h.RegistrationService.RegisterTenantWithLease(r.Context(), service.RegisterTenantWithLeaseParams{
 		Email:           form.Email,
 		Name:            form.Name,
 		PhoneNumber:     form.PhoneNumber,
@@ -89,14 +89,18 @@ func (h *TenantHandler) CreateTenant(w http.ResponseWriter, r *http.Request) {
 
 func (h *TenantHandler) DeleteTenant(w http.ResponseWriter, r *http.Request) {
 	// parse URL query
-	id := r.URL.Query().Get("id")
-	logger.Debug("DeleteTenant id: %v", id)
+	tenantId := r.URL.Query().Get("id")
+	logger.Debug("DeleteTenant id: %v", tenantId)
 
-	err := h.tenantService.DeleteTenantAndLease(r.Context(), id)
+	err := h.TenantService.DeleteTenantAndLease(r.Context(), tenantId)
 	if err != nil {
 		errs.Http(w, r, err, http.StatusInternalServerError)
 		return
 	}
+
+	// tell dashboard to refresh its content
+	sse := datastar.NewSSE(w, r)
+	sse.DispatchCustomEvent("refresh-dashboard", nil)
 
 	// TODO: send success signal
 	logger.Debug("DeleteTenant success")

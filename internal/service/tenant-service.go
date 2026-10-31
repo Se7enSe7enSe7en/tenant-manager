@@ -11,7 +11,7 @@ import (
 
 type TenantService interface {
 	// CreateTenant(ctx context.Context, params repo.CreateTenantParams) (repo.Tenant, error)
-	DeleteTenantAndLease(ctx context.Context, id string) error
+	DeleteTenantAndLease(ctx context.Context, tenantId string) error
 }
 
 type tenantService struct {
@@ -26,9 +26,9 @@ func NewTenantService(repo repo.Querier) *tenantService {
 // 	return s.repo.CreateTenant(ctx, params)
 // }
 
-func (s *tenantService) DeleteTenantAndLease(ctx context.Context, id string) error {
+func (s *tenantService) DeleteTenantAndLease(ctx context.Context, tenantId string) error {
 	// parse uuid
-	tenantUuid, err := uuid.Parse(id)
+	tenantUuid, err := uuid.Parse(tenantId)
 	if err != nil {
 		return err
 	}

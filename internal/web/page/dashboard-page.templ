@@ -7,52 +7,20 @@ import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/components/proper
 import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/components/layout"
 import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/components/button"
 
-type StatCard struct {
-	TotalTenants       string
-	TotalPaidTenants   string
-	TotalUnpaidTenants string
-	TotalLateTenants   string
-}
-
 type DashboardPageProps struct {
 	TenantList   []tenantcard.TenantCardProps
 	PropertyList []propertycard.PropertyCardProps
-	StatCard     StatCard
+	StatCardList StatCardListProps
 }
 
 templ DashboardPage(props DashboardPageProps) {
 	@layout.Default() {
-		<div class="p-4 max-w-7xl mx-auto">
-			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-col-4 xl:grid-cols-4 gap-4 mb-8">
-				@statcard.StatCard(statcard.StatCardProps{
-					Title:     "Total tenants",
-					Value:     props.StatCard.TotalTenants,
-					Subtitle:  "Active units",
-					Icon:      "/assets/tenants-icon.svg",
-					IconClass: "fill-current",
-				})
-				@statcard.StatCard(statcard.StatCardProps{
-					Title:     "Paid",
-					Value:     props.StatCard.TotalPaidTenants,
-					Subtitle:  "Collected payments",
-					Icon:      "/assets/paid-icon.svg",
-					IconClass: "fill-(--paid-color)",
-				})
-				@statcard.StatCard(statcard.StatCardProps{
-					Title:     "Unpaid",
-					Value:     props.StatCard.TotalUnpaidTenants,
-					Subtitle:  "Awaiting payments",
-					Icon:      "/assets/unpaid-icon.svg",
-					IconClass: "fill-(--unpaid-color)",
-				})
-				@statcard.StatCard(statcard.StatCardProps{
-					Title:     "Late",
-					Value:     props.StatCard.TotalLateTenants,
-					Subtitle:  "Overdue payments",
-					Icon:      "/assets/late-icon.svg",
-					IconClass: "fill-(--late-color)",
-				})
-			</div>
+		<div class="p-4 max-w-7xl mx-auto" data-on:refresh-dashboard__window="@get('/ds/dashboard/content')">
+			// note: In Datastar, adding __window to an event listener means:
+			// "Listen for this event globally on the browser window."
+			// No matter where in the app or SSE an event named refresh-dashboard is dispatched, 
+			// this container will catch it and immediately run @get('/dashboard/content').
+			@StatCardList(props.StatCardList)
 			<div class="my-3 flex gap-3">
 				<p class="text-2xl">Tenants and Properties</p>
 				@button.LinkButton(button.LinkButtonArgs{
@@ -65,14 +33,72 @@ templ DashboardPage(props DashboardPageProps) {
 					</div>
 				}
 			</div>
-			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-col-3 xl:grid-cols-3 gap-4 flex-1 overflow-auto">
-				for _, property := range props.PropertyList {
-					@propertycard.PropertyCard(property)
-				}
-				for _, tenant := range props.TenantList {
-					@tenantcard.TenantCard(tenant)
-				}
-			</div>
+			@CardList(CardListProps{
+				PropertyList: props.PropertyList,
+				TenantList:   props.TenantList,
+			})
 		</div>
 	}
+}
+
+type CardListProps struct {
+	PropertyList []propertycard.PropertyCardProps
+	TenantList   []tenantcard.TenantCardProps
+}
+
+templ CardList(props CardListProps) {
+	<div
+		id="card-list"
+		class="grid grid-cols-1 md:grid-cols-2 lg:grid-col-3 xl:grid-cols-3 gap-4 flex-1 overflow-auto"
+	>
+		for _, property := range props.PropertyList {
+			@propertycard.PropertyCard(property)
+		}
+		for _, tenant := range props.TenantList {
+			@tenantcard.TenantCard(tenant)
+		}
+	</div>
+}
+
+type StatCardListProps struct {
+	TotalTenants       string
+	TotalPaidTenants   string
+	TotalUnpaidTenants string
+	TotalLateTenants   string
+}
+
+templ StatCardList(props StatCardListProps) {
+	<div
+		id="stat-card-list"
+		class="grid grid-cols-1 md:grid-cols-2 lg:grid-col-4 xl:grid-cols-4 gap-4 mb-8"
+	>
+		@statcard.StatCard(statcard.StatCardProps{
+			Title:     "Total tenants",
+			Value:     props.TotalTenants,
+			Subtitle:  "Active units",
+			Icon:      "/assets/tenants-icon.svg",
+			IconClass: "fill-current",
+		})
+		@statcard.StatCard(statcard.StatCardProps{
+			Title:     "Paid",
+			Value:     props.TotalPaidTenants,
+			Subtitle:  "Collected payments",
+			Icon:      "/assets/paid-icon.svg",
+			IconClass: "fill-(--paid-color)",
+		})
+		@statcard.StatCard(statcard.StatCardProps{
+			Title:     "Unpaid",
+			Value:     props.TotalUnpaidTenants,
+			Subtitle:  "Awaiting payments",
+			Icon:      "/assets/unpaid-icon.svg",
+			IconClass: "fill-(--unpaid-color)",
+		})
+		@statcard.StatCard(statcard.StatCardProps{
+			Title:     "Late",
+			Value:     props.TotalLateTenants,
+			Subtitle:  "Overdue payments",
+			Icon:      "/assets/late-icon.svg",
+			IconClass: "fill-(--late-color)",
+		})
+	</div>
 }

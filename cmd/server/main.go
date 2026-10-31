@@ -167,6 +167,7 @@ func main() {
 
 	// Datastar handlers
 	mux.Handle("POST /ds/tenant/create/compute_next_due_date", protect(tenantHandler.ComputeNextDueDate))
+	mux.Handle("GET /ds/dashboard/content", protect(pageHandler.DashboardContent))
 
 	// init server
 	s := &http.Server{

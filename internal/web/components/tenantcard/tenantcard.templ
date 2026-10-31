@@ -24,6 +24,7 @@ templ TenantCard(props TenantCardProps) {
 		isBodyPanelOpen := signals.Signal("is_body_panel_open")
 	}}
 	<div
+		id={ cardId }
 		class="h-69 flex flex-1 flex-col overflow-auto justify-between p-4 bg-card rounded-xl border shadow-sm "
 		data-signals={ signals.DataSignals }
 	>

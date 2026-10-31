@@ -13,6 +13,7 @@ import (
 	"github.com/Se7enSe7enSe7en/tenant-manager/internal/web/components/tenantcard"
 	"github.com/Se7enSe7enSe7en/tenant-manager/internal/web/page"
 	"github.com/google/uuid"
+	"github.com/starfederation/datastar-go/datastar"
 )
 
 type PageHandler struct {
@@ -43,6 +44,7 @@ func (h *PageHandler) DashboardPage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// get lease list from db
 	dbLeaseList, err := h.LeaseService.ListLease(r.Context(), user.ID)
 	if err != nil {
 		errs.Http(w, r, err, http.StatusInternalServerError)
@@ -65,7 +67,7 @@ func (h *PageHandler) DashboardPage(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	// property from db
+	// get property list from db
 	dbPropertyList, err := h.PropertyService.ListUnoccupiedProperty(r.Context(), user.ID)
 	if err != nil {
 		http.Error(w, "cannot get property list", http.StatusInternalServerError)
@@ -94,13 +96,85 @@ func (h *PageHandler) DashboardPage(w http.ResponseWriter, r *http.Request) {
 	page.DashboardPage(page.DashboardPageProps{
 		PropertyList: propertyList,
 		TenantList:   tenantList,
-		StatCard: page.StatCard{
+		StatCardList: page.StatCardListProps{
 			TotalTenants:       stats.TotalTenants,
 			TotalPaidTenants:   stats.TotalPaidTenants,
 			TotalUnpaidTenants: stats.TotalUnpaidTenants,
 			TotalLateTenants:   stats.TotalLateTenants,
 		},
 	}).Render(context.Background(), w)
+}
+
+// TODO: notice this is an almost exact copy of DashboardPage() func above, extract the duplicate code into a helper function
+func (h *PageHandler) DashboardContent(w http.ResponseWriter, r *http.Request) {
+	// get user, "ok" is not needed since this handler is already protected from the middleware
+	user, ok := ctxkeys.UserFrom(r.Context())
+	if !ok {
+		http.Error(w, "no user", http.StatusInternalServerError)
+		return
+	}
+
+	// get lease list from db
+	dbLeaseList, err := h.LeaseService.ListLease(r.Context(), user.ID)
+	if err != nil {
+		errs.Http(w, r, err, http.StatusInternalServerError)
+		return
+	}
+
+	// convert []repo.Lease -> []component.TenantCardProps
+	tenantList := make([]tenantcard.TenantCardProps, len(dbLeaseList))
+	for i, l := range dbLeaseList {
+		tenantList[i] = tenantcard.TenantCardProps{
+			Id:          l.TenantID.UUID.String(),
+			Name:        *l.TenantName,
+			Unit:        *l.PropertyName,
+			Status:      utils.ComputeStatus(*l.ExpiryDate),
+			RentAmount:  l.PropertyRentAmount.Decimal.String(),
+			NextDueDate: l.ExpiryDate.Format("Jan-02-2006"),
+			Email:       l.TenantEmail,
+			PhoneNumber: l.TenantPhoneNumber,
+			LeaseId:     l.ID.String(),
+		}
+	}
+
+	// get property list from db
+	dbPropertyList, err := h.PropertyService.ListUnoccupiedProperty(r.Context(), user.ID)
+	if err != nil {
+		http.Error(w, "cannot get property list", http.StatusInternalServerError)
+		return
+	}
+
+	// convert dbProperty for property in front end
+	propertyList := make([]propertycard.PropertyCardProps, len(dbPropertyList))
+	for i, dbProperty := range dbPropertyList {
+
+		propertyList[i] = propertycard.PropertyCardProps{
+			Id:         dbProperty.ID.String(),
+			Name:       dbProperty.Name,
+			RentAmount: dbProperty.RentAmount.String(),
+		}
+	}
+
+	// for stat card
+	stats, err := h.LeaseService.GetCountLeaseWithTenantStats(r.Context(), user.ID)
+	if err != nil {
+		errs.Http(w, r, err, http.StatusInternalServerError)
+		return
+	}
+	statCardList := page.StatCardListProps{
+		TotalTenants:       stats.TotalTenants,
+		TotalPaidTenants:   stats.TotalPaidTenants,
+		TotalUnpaidTenants: stats.TotalUnpaidTenants,
+		TotalLateTenants:   stats.TotalLateTenants,
+	}
+
+	// patch the updated content
+	sse := datastar.NewSSE(w, r)
+	sse.PatchElementTempl(page.StatCardList(statCardList))
+	sse.PatchElementTempl(page.CardList(page.CardListProps{
+		PropertyList: propertyList,
+		TenantList:   tenantList,
+	}))
 }
 
 func (h *PageHandler) CreatePropertyPage(w http.ResponseWriter, r *http.Request) {
