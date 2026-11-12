@@ -26,31 +26,6 @@ import (
 	"github.com/joho/godotenv"
 )
 
-func startServer(s *http.Server, serverErr chan error) {
-	if err := s.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-		serverErr <- err
-	}
-}
-
-func setupAssetsRoutes(mux *http.ServeMux) {
-	development := os.Getenv("SHADCN_TEMPL_DEV") == "true" || os.Getenv("TEMPL_DEV_MODE") == "true"
-	files := http.FileServer(http.FS(assets.Assets))
-	if development {
-		files = http.FileServer(http.Dir("./internal/web/static/assets"))
-	}
-	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if development {
-			w.Header().Set("Cache-Control", "no-store")
-		} else if strings.HasPrefix(strings.TrimPrefix(r.URL.Path, "/"), "js/shadcn-templ-") {
-			w.Header().Set("Cache-Control", "public, max-age=31536000, immutable")
-		} else {
-			w.Header().Set("Cache-Control", "no-cache")
-		}
-		files.ServeHTTP(w, r)
-	})
-	mux.Handle("GET /assets/", http.StripPrefix("/assets/", handler))
-}
-
 func main() {
 	// global context
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
@@ -116,13 +91,6 @@ func main() {
 
 	// serve static files
 	setupAssetsRoutes(mux)
-
-	// subFS, err := fs.Sub(assets.Assets, ".")
-	// if err != nil {
-	// 	log.Fatalf("Failed to located web assets FS: %v", err)
-	// }
-	// assetsFS := http.FS(subFS)
-	// mux.Handle("/assets/", utils.DisableCacheInDevMode(http.StripPrefix("/assets/", http.FileServer(assetsFS))))
 
 	// init services
 	authService := service.NewAuthService(application.Db)
@@ -208,4 +176,29 @@ func main() {
 
 	logger.Debug("server stopped cleanly")
 	// defers fire as main returns: stop(), pool.Close()
+}
+
+func startServer(s *http.Server, serverErr chan error) {
+	if err := s.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+		serverErr <- err
+	}
+}
+
+func setupAssetsRoutes(mux *http.ServeMux) {
+	development := os.Getenv("SHADCN_TEMPL_DEV") == "true" || os.Getenv("TEMPL_DEV_MODE") == "true"
+	files := http.FileServer(http.FS(assets.Assets))
+	if development {
+		files = http.FileServer(http.Dir("./internal/web/static/assets"))
+	}
+	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if development {
+			w.Header().Set("Cache-Control", "no-store")
+		} else if strings.HasPrefix(strings.TrimPrefix(r.URL.Path, "/"), "js/shadcn-templ-") {
+			w.Header().Set("Cache-Control", "public, max-age=31536000, immutable")
+		} else {
+			w.Header().Set("Cache-Control", "no-cache")
+		}
+		files.ServeHTTP(w, r)
+	})
+	mux.Handle("GET /assets/", http.StripPrefix("/assets/", handler))
 }

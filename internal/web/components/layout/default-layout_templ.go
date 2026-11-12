@@ -41,7 +41,7 @@ func Default() templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"flex-1 overflow-auto bg-cube-house bg-fixed min-h-screen\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"relative flex-1 overflow-auto min-h-screen\"><div class=\"fixed inset-0 bg-cube-house opacity-33 pointer-events-none -z-10\"></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
