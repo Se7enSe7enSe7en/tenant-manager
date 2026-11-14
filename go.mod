@@ -8,7 +8,7 @@ require (
 	github.com/a-h/templ v0.3.1100
 	github.com/jackc/pgx/v5 v5.10.0
 	github.com/joho/godotenv v1.5.1
-	github.com/starfederation/datastar-go v1.2.1
+	github.com/starfederation/datastar-go v1.2.2
 	golang.org/x/crypto v0.57.0
 )
 

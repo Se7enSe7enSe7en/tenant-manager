@@ -26,6 +26,7 @@ templ CreateTenantPage(props CreateTenantPageProps) {
 			IsMonthAdvance:  false,
 			DepositAmount:   props.DefaultDepositAmount,
 			NextDueDate:     utils.ComputeNextExpiryDate(time.Now(), 1).Format("Jan 02 2006"),
+			FormError:       "",
 		})
 	}}
 	@layout.Default() {
@@ -43,8 +44,11 @@ templ CreateTenantPage(props CreateTenantPageProps) {
 						// note: prevents default behavior of submitting a form, we don't need it because we send data through signals
 					},
 				}) {
+					// // DEBUG
+					// <pre data-json-signals></pre>
+					<p data-show="$create_tenant_signals.form_error" data-text="'Error: ' + $create_tenant_signals.form_error" class="text-destructive"></p>
 					@form.FormItem(form.FormItemArgs{}) {
-						@form.FormLabel(form.FormLabelArgs{For: "name"}) {
+						@form.FormLabel(form.FormLabelArgs{For: "name", HasError: true}) {
 							tenant name *
 						}
 						@input.Input(input.InputArgs{
@@ -54,11 +58,12 @@ templ CreateTenantPage(props CreateTenantPageProps) {
 							Attributes: templ.Attributes{
 								"data-bind": "create_tenant_signals.name", // TODO: figure out a way to have type safety
 							},
+							Required: true,
 						})
 					}
 					@form.FormItem(form.FormItemArgs{}) {
 						@form.FormLabel(form.FormLabelArgs{For: "email"}) {
-							tenant email *
+							tenant email
 						}
 						@input.Input(input.InputArgs{
 							ID:          "email",

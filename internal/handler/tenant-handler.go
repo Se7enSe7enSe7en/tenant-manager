@@ -41,8 +41,18 @@ func (h *TenantHandler) CreateTenant(w http.ResponseWriter, r *http.Request) {
 
 	// validation
 	if err := validation.CheckCreateTenantForm(form); err != nil {
-		// TODO: use datastar to show errors in the front end
-		errs.Http(w, r, err, http.StatusInternalServerError) // TMP
+
+		// 	// TODO: make error handling look nicer, highlight the specific input field
+		// 	// where the error occured
+		// if errors.Is(err, validation.CreateTenantError.NoTenantName) {
+		// 	return
+		// }
+
+		// show error in the front end
+		sse := datastar.NewSSE(w, r)
+		payload.CreateTenantSignals.FormError = err.Error()
+		sse.MarshalAndPatchSignals(payload)
+
 		return
 	}
 
@@ -74,14 +84,13 @@ func (h *TenantHandler) CreateTenant(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// TODO: send a success signal
 	sse := datastar.NewSSE(w, r)
 
-	type Response struct {
-		Success bool `json:"success"`
-	}
-
-	sse.MarshalAndPatchSignals(Response{Success: true})
+	// // TODO: send a success signal
+	// type Response struct {
+	// 	Success bool `json:"success"`
+	// }
+	// sse.MarshalAndPatchSignals(Response{Success: true})
 
 	// TODO: same as property-handler, show modal
 	sse.Redirect("/dashboard") // TMP

@@ -11,6 +11,8 @@ import (
 
 type TenantService interface {
 	// CreateTenant(ctx context.Context, params repo.CreateTenantParams) (repo.Tenant, error)
+	// note: CreateTenant is now part of a process in registration-service
+
 	DeleteTenantAndLease(ctx context.Context, tenantId string) error
 }
 
@@ -26,6 +28,7 @@ func NewTenantService(repo repo.Querier) *tenantService {
 // 	return s.repo.CreateTenant(ctx, params)
 // }
 
+// TODO: make this atomic, add query transactions
 func (s *tenantService) DeleteTenantAndLease(ctx context.Context, tenantId string) error {
 	// parse uuid
 	tenantUuid, err := uuid.Parse(tenantId)

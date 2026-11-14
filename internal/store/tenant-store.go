@@ -14,6 +14,9 @@ type CreateTenantSignals struct {
 	IsMonthAdvance  bool    `json:"is_month_advance"`
 	DepositAmount   float64 `json:"deposit_amount"` // later converted to type decimal.Decimal
 	NextDueDate     string  `json:"next_due_date"`
+
+	// for error handling
+	FormError string `json:"form_error"`
 }
 
 // note: make sure the name of the json field is the same in the front end, eg. `json:"field_name"`

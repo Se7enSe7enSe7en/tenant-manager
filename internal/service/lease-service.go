@@ -12,6 +12,8 @@ import (
 
 type LeaseService interface {
 	// CreateLease(ctx context.Context, params CreateLeaseParams) (repo.Lease, error)
+	// note: CreateLease is now part of a process in registration-service
+
 	ListLease(ctx context.Context, userID uuid.UUID) ([]repo.ListLeaseRow, error)
 	GetLease(ctx context.Context, leaseID uuid.UUID) (repo.GetLeaseByIdRow, error)
 	GetCountLeaseWithTenantStats(ctx context.Context, userID uuid.UUID) (CountLeaseWithTenantStats, error)
