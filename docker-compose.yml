@@ -2,15 +2,25 @@ services:
   postgres:
     image: postgres:18-alpine
     container_name: tenant-manager-postgres-db
+    restart: unless-stopped
     environment:
       POSTGRES_USER: ${POSTGRES_USER:?Set in .env}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set in .env}
       POSTGRES_DB: ${POSTGRES_DB:?Set in .env}
     ports:
-      - "5432:5432" # change if port is blocked
+      - "127.0.0.1:5432:5432"
     volumes:
       - postgres-data:/var/lib/postgresql
-    
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 volumes:
   postgres-data:
+
+# notes:
+# 1) to do health check "docker inspect --format='{{.State.Health.Status}}' tenant-manager-postgres-db"
+# 2) this docker compose file is mirrored to the production VPS, when making updates in this file, run `task setup-prod`, to sync the changes
+
