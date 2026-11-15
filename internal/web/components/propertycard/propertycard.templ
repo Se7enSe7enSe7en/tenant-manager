@@ -6,6 +6,7 @@ type PropertyCardProps struct {
 	Id         string
 	Name       string
 	RentAmount string
+	Address    string
 }
 
 templ PropertyCard(props PropertyCardProps) {
@@ -39,10 +40,15 @@ templ PropertyCard(props PropertyCardProps) {
 		</div>
 		//// body section
 		<div class="h-[50%] flex flex-col pt-2 border-t gap-2">
-			<div>
-				<p class="text-xs">Address: </p>
-				<p>001 test street, brgy. test, Test City</p>
-			</div>
+			if props.Address != "" {
+				<div>
+					<p class="text-xs">Address: </p>
+					<p>{ props.Address }</p>
+				</div>
+			}
+			// note: we currently now have 2 different ways to do conditional rendering
+			// this is the templ way, there is also the datastar way with `data-show="expression"`
+			// this is potentially confusing when to use depending on the situation
 			<div>
 				<p class="text-xs">Monthly Rent: </p>
 				<p>{ props.RentAmount }</p>

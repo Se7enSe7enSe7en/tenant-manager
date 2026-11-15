@@ -37,6 +37,7 @@ type Property struct {
 	UserID     uuid.UUID
 	Name       string
 	RentAmount decimal.Decimal
+	Address    *string
 	CreatedAt  time.Time
 	UpdatedAt  time.Time
 }

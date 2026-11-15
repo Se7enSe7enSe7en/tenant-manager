@@ -8,9 +8,8 @@ import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/components/layout
 import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/components/button"
 
 type DashboardPageProps struct {
-	TenantList   []tenantcard.TenantCardProps
-	PropertyList []propertycard.PropertyCardProps
-	StatCardList StatCardListProps
+	CardListProps CardListProps
+	StatCardList  StatCardListProps
 }
 
 templ DashboardPage(props DashboardPageProps) {
@@ -33,10 +32,7 @@ templ DashboardPage(props DashboardPageProps) {
 					</div>
 				}
 			</div>
-			@CardList(CardListProps{
-				PropertyList: props.PropertyList,
-				TenantList:   props.TenantList,
-			})
+			@CardList(props.CardListProps)
 		</div>
 	}
 }

@@ -31,7 +31,7 @@ type Querier interface {
 	GetLeaseById(ctx context.Context, id uuid.UUID) (GetLeaseByIdRow, error)
 	// params: user_id
 	GetLocalIdentityByUserID(ctx context.Context, userID uuid.UUID) (Identity, error)
-	GetPropertyById(ctx context.Context, id uuid.UUID) (GetPropertyByIdRow, error)
+	GetPropertyById(ctx context.Context, id uuid.UUID) (Property, error)
 	GetSession(ctx context.Context, id uuid.UUID) (Session, error)
 	GetTenantById(ctx context.Context, id uuid.UUID) (Tenant, error)
 	GetUserByEmail(ctx context.Context, email string) (User, error)

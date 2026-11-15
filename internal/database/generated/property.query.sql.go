@@ -7,7 +7,6 @@ package repo
 
 import (
 	"context"
-	"time"
 
 	"github.com/google/uuid"
 	"github.com/shopspring/decimal"
@@ -19,32 +18,41 @@ INSERT INTO
         id,
         user_id,
         name,
-        rent_amount
+        rent_amount,
+        address
     )
 VALUES (
         gen_random_uuid (),
         $1,
         $2,
-        $3
+        $3,
+        $4
     )
 RETURNING
-    id, user_id, name, rent_amount, created_at, updated_at
+    id, user_id, name, rent_amount, address, created_at, updated_at
 `
 
 type CreatePropertyParams struct {
 	UserID     uuid.UUID
 	Name       string
 	RentAmount decimal.Decimal
+	Address    *string
 }
 
 func (q *Queries) CreateProperty(ctx context.Context, arg CreatePropertyParams) (Property, error) {
-	row := q.db.QueryRow(ctx, createProperty, arg.UserID, arg.Name, arg.RentAmount)
+	row := q.db.QueryRow(ctx, createProperty,
+		arg.UserID,
+		arg.Name,
+		arg.RentAmount,
+		arg.Address,
+	)
 	var i Property
 	err := row.Scan(
 		&i.ID,
 		&i.UserID,
 		&i.Name,
 		&i.RentAmount,
+		&i.Address,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
@@ -52,27 +60,21 @@ func (q *Queries) CreateProperty(ctx context.Context, arg CreatePropertyParams) 
 }
 
 const getPropertyById = `-- name: GetPropertyById :one
-SELECT p.id, p.user_id, p.rent_amount, p.created_at, p.updated_at
+SELECT p.id, p.user_id, p.name, p.rent_amount, p.address, p.created_at, p.updated_at
 FROM property p
 WHERE
     p.id = $1
 `
 
-type GetPropertyByIdRow struct {
-	ID         uuid.UUID
-	UserID     uuid.UUID
-	RentAmount decimal.Decimal
-	CreatedAt  time.Time
-	UpdatedAt  time.Time
-}
-
-func (q *Queries) GetPropertyById(ctx context.Context, id uuid.UUID) (GetPropertyByIdRow, error) {
+func (q *Queries) GetPropertyById(ctx context.Context, id uuid.UUID) (Property, error) {
 	row := q.db.QueryRow(ctx, getPropertyById, id)
-	var i GetPropertyByIdRow
+	var i Property
 	err := row.Scan(
 		&i.ID,
 		&i.UserID,
+		&i.Name,
 		&i.RentAmount,
+		&i.Address,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
@@ -80,7 +82,7 @@ func (q *Queries) GetPropertyById(ctx context.Context, id uuid.UUID) (GetPropert
 }
 
 const listProperty = `-- name: ListProperty :many
-SELECT p.id, p.user_id, p.name, p.rent_amount, p.created_at, p.updated_at
+SELECT p.id, p.user_id, p.name, p.rent_amount, p.address, p.created_at, p.updated_at
 FROM property p
 WHERE
     p.user_id = $1
@@ -100,6 +102,7 @@ func (q *Queries) ListProperty(ctx context.Context, userID uuid.UUID) ([]Propert
 			&i.UserID,
 			&i.Name,
 			&i.RentAmount,
+			&i.Address,
 			&i.CreatedAt,
 			&i.UpdatedAt,
 		); err != nil {
@@ -114,7 +117,7 @@ func (q *Queries) ListProperty(ctx context.Context, userID uuid.UUID) ([]Propert
 }
 
 const listUnoccupiedProperty = `-- name: ListUnoccupiedProperty :many
-SELECT p.id, p.user_id, p.name, p.rent_amount, p.created_at, p.updated_at
+SELECT p.id, p.user_id, p.name, p.rent_amount, p.address, p.created_at, p.updated_at
 FROM property p
     LEFT JOIN lease l ON p.id = l.property_id
 WHERE
@@ -136,6 +139,7 @@ func (q *Queries) ListUnoccupiedProperty(ctx context.Context, userID uuid.UUID) 
 			&i.UserID,
 			&i.Name,
 			&i.RentAmount,
+			&i.Address,
 			&i.CreatedAt,
 			&i.UpdatedAt,
 		); err != nil {

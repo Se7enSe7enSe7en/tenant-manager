@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS property (
     CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES "user" (id),
     name TEXT NOT NULL,
     rent_amount NUMERIC(10, 2) NOT NULL,
+    address TEXT,
     created_at TIMESTAMP NOT NULL DEFAULT now(),
     updated_at TIMESTAMP NOT NULL DEFAULT now()
 );

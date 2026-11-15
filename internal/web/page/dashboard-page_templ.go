@@ -17,9 +17,8 @@ import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/components/layout
 import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/components/button"
 
 type DashboardPageProps struct {
-	TenantList   []tenantcard.TenantCardProps
-	PropertyList []propertycard.PropertyCardProps
-	StatCardList StatCardListProps
+	CardListProps CardListProps
+	StatCardList  StatCardListProps
 }
 
 func DashboardPage(props DashboardPageProps) templ.Component {
@@ -92,10 +91,7 @@ func DashboardPage(props DashboardPageProps) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = CardList(CardListProps{
-				PropertyList: props.PropertyList,
-				TenantList:   props.TenantList,
-			}).Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = CardList(props.CardListProps).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

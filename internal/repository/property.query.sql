@@ -4,25 +4,27 @@ INSERT INTO
         id,
         user_id,
         name,
-        rent_amount
+        rent_amount,
+        address
     )
 VALUES (
         gen_random_uuid (),
         $1,
         $2,
-        $3
+        $3,
+        $4
     )
 RETURNING
     *;
 
 -- name: ListProperty :many
-SELECT p.id, p.user_id, p.name, p.rent_amount, p.created_at, p.updated_at
+SELECT p.id, p.user_id, p.name, p.rent_amount, p.address, p.created_at, p.updated_at
 FROM property p
 WHERE
     p.user_id = $1;
 
 -- name: ListUnoccupiedProperty :many
-SELECT p.id, p.user_id, p.name, p.rent_amount, p.created_at, p.updated_at
+SELECT p.id, p.user_id, p.name, p.rent_amount, p.address, p.created_at, p.updated_at
 FROM property p
     LEFT JOIN lease l ON p.id = l.property_id
 WHERE
@@ -30,7 +32,7 @@ WHERE
     AND p.user_id = $1;
 
 -- name: GetPropertyById :one
-SELECT p.id, p.user_id, p.rent_amount, p.created_at, p.updated_at
+SELECT p.id, p.user_id, p.name, p.rent_amount, p.address, p.created_at, p.updated_at
 FROM property p
 WHERE
     p.id = $1;
