@@ -36,3 +36,6 @@ SELECT p.id, p.user_id, p.name, p.rent_amount, p.address, p.created_at, p.update
 FROM property p
 WHERE
     p.id = $1;
+
+-- name: DeleteProperty :exec
+DELETE FROM property WHERE id = $1;

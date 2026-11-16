@@ -3,12 +3,14 @@ package handler
 import (
 	"net/http"
 
+	"github.com/Se7enSe7enSe7en/go-toolkit/pkg/logger"
 	"github.com/Se7enSe7enSe7en/tenant-manager/internal/ctxkeys"
 	repo "github.com/Se7enSe7enSe7en/tenant-manager/internal/database/generated"
 	"github.com/Se7enSe7enSe7en/tenant-manager/internal/errs"
 	"github.com/Se7enSe7enSe7en/tenant-manager/internal/service"
 	"github.com/Se7enSe7enSe7en/tenant-manager/internal/store"
 	"github.com/Se7enSe7enSe7en/tenant-manager/internal/validation"
+	"github.com/google/uuid"
 	"github.com/shopspring/decimal"
 	"github.com/starfederation/datastar-go/datastar"
 )
@@ -39,32 +41,6 @@ func (h *propertyHandler) CreateProperty(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	// // parse the form data
-	// if err := r.ParseForm(); err != nil {
-	// 	http.Error(w, "Unable to parse form", http.StatusBadRequest)
-	// 	return
-	// }
-	// // get form values
-	// name := r.FormValue("name")
-	// rentAmount := r.FormValue("rent_amount")
-
-	// // TODO: make adapters or combine with validation step to make these more straight forward
-	// // string conversions
-	// rentAmountDecimal, err := decimal.NewFromString(rentAmount)
-	// if err != nil {
-	// 	http.Error(w, err.Error(), http.StatusInternalServerError)
-	// 	return
-	// }
-
-	// TODO: validate form values, this function is not yet complete
-	// if err := validation.CheckCreatePropertyForm(validation.CreatePropertyForm{
-	// 	Name:       name,
-	// 	RentAmount: rentAmountDecimal,
-	// }); err != nil {
-	// 	// TODO: handle error, with datastar
-	// 	http.Error(w, err.Error(), http.StatusInternalServerError) // TMP
-	// 	return
-	// }
 	err = validation.CheckCreatePropertySignals(payload.CreatePropertySignals)
 	if err != nil {
 		sse := datastar.NewSSE(w, r)
@@ -99,4 +75,26 @@ func (h *propertyHandler) CreateProperty(w http.ResponseWriter, r *http.Request)
 	sse.Redirect("/dashboard") // TMP
 }
 
-// TOCHECK
+func (h *propertyHandler) DeleteProperty(w http.ResponseWriter, r *http.Request) {
+	// parse URL query
+	propertyId := r.URL.Query().Get("id")
+	logger.Debug("DeleteProperty id: %v", propertyId)
+
+	id, err := uuid.Parse(propertyId)
+	if err != nil {
+		errs.Http(w, r, err, http.StatusBadRequest)
+		return
+	}
+
+	err = h.service.DeleteProperty(r.Context(), id)
+	if err != nil {
+		errs.Http(w, r, err, http.StatusInternalServerError)
+		return
+	}
+
+	// tell dashboard to refresh its content
+	sse := datastar.NewSSE(w, r)
+	sse.DispatchCustomEvent("refresh-dashboard", nil)
+
+	logger.Debug("DeleteProperty success")
+}

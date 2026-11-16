@@ -14,6 +14,7 @@ type PropertyService interface {
 	ListProperty(ctx context.Context, userId uuid.UUID) ([]repo.Property, error)
 	ListUnoccupiedProperty(ctx context.Context, userId uuid.UUID) ([]repo.Property, error)
 	GetProperty(ctx context.Context, propertyId uuid.UUID) (repo.Property, error)
+	DeleteProperty(ctx context.Context, propertyId uuid.UUID) error
 }
 
 type propertyService struct {
@@ -38,4 +39,8 @@ func (s *propertyService) ListUnoccupiedProperty(ctx context.Context, userId uui
 
 func (s *propertyService) GetProperty(ctx context.Context, propertyId uuid.UUID) (repo.Property, error) {
 	return s.queries.GetPropertyById(ctx, propertyId)
+}
+
+func (s *propertyService) DeleteProperty(ctx context.Context, propertyId uuid.UUID) error {
+	return s.queries.DeleteProperty(ctx, propertyId)
 }

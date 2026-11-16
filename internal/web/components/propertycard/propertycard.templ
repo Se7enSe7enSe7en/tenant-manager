@@ -1,6 +1,10 @@
 package propertycard
 
-import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/components/button"
+import (
+	"fmt"
+	"github.com/Se7enSe7enSe7en/tenant-manager/internal/utils"
+	"github.com/Se7enSe7enSe7en/tenant-manager/internal/web/components/button"
+)
 
 type PropertyCardProps struct {
 	Id         string
@@ -9,8 +13,27 @@ type PropertyCardProps struct {
 	Address    string
 }
 
+type PropertyCardSignals struct {
+	IsBodyPanelOpen bool `json:"is_body_panel_open"`
+}
+
 templ PropertyCard(props PropertyCardProps) {
-	<div class="h-69 flex flex-col justify-between p-4 bg-card rounded-xl border shadow-sm">
+	{{
+		// unique card id
+		cardId := fmt.Sprintf("property_card_%v", props.Id)
+
+		// state
+		signals := utils.Signals(cardId, PropertyCardSignals{
+			IsBodyPanelOpen: false,
+		})
+
+		isBodyPanelOpen := signals.Signal("is_body_panel_open")
+	}}
+	<div
+		id={ cardId }
+		class="h-69 flex flex-1 flex-col overflow-auto justify-between p-4 bg-card rounded-xl border shadow-sm"
+		data-signals={ signals.DataSignals }
+	>
 		//// header section
 		<div class="h-[30.9%] flex justify-between mb-2 gap-2">
 			<div class="flex gap-2">
@@ -40,44 +63,55 @@ templ PropertyCard(props PropertyCardProps) {
 		</div>
 		//// body section
 		<div class="h-[50%] flex flex-col pt-2 border-t gap-2">
-			if props.Address != "" {
+			// if $is_body_panel_open == true
+			<div class="flex flex-col gap-2" data-show={ isBodyPanelOpen }>
+				@button.Button(button.ButtonArgs{
+					Class:   "flex flex-1",
+					Variant: "secondary",
+				}) {
+					Property Details
+				}
+				@button.Button(button.ButtonArgs{
+					Class:   "flex flex-1",
+					Variant: "destructive",
+					Attributes: templ.Attributes{
+						"data-on:click": fmt.Sprintf("confirm('Are you sure?') ? @delete('/property/delete?id=%v') : null", props.Id),
+					},
+				}) {
+					Delete Property
+				}
+			</div>
+			// if $is_body_panel_open == false
+			<div class="flex flex-col gap-2" data-show={ signals.Not("is_body_panel_open") }>
+				if props.Address != "" {
+					<div>
+						<p class="text-xs">Address: </p>
+						<p>{ props.Address }</p>
+					</div>
+				}
 				<div>
-					<p class="text-xs">Address: </p>
-					<p>{ props.Address }</p>
+					<p class="text-xs">Monthly Rent: </p>
+					<p>{ props.RentAmount }</p>
 				</div>
-			}
-			// note: we currently now have 2 different ways to do conditional rendering
-			// this is the templ way, there is also the datastar way with `data-show="expression"`
-			// this is potentially confusing when to use depending on the situation
-			<div>
-				<p class="text-xs">Monthly Rent: </p>
-				<p>{ props.RentAmount }</p>
 			</div>
 		</div>
 		//// footer section
-		<div class="h-[19.1%] flex justify-center border-t pt-2">
+		<div class="h-[19.1%] flex justify-center border-t pt-2 gap-3">
 			@button.LinkButton(button.LinkButtonArgs{
-				Class:   "w-full",
+				Class:   "flex flex-5/6",
 				Variant: "secondary",
 				Href:    "/tenant/create?property_id=" + props.Id,
 			}) {
 				Add tenant
 			}
-			// @button.Button(button.ButtonArgs{
-			// 	Class: "w-full",
-			// 	Variant: "secondary",
-			// 	Attributes: templ.Attributes{
-			// 		"data-on:click": fmt.Sprint(`@get("/tenant/create?property_id=`, props.Id, `")`), // TODO: how to pass a query
-			// 	},
-			// }) {
-			// 	Add tenant
-			// }
+			@button.Button(button.ButtonArgs{
+				Variant: "secondary",
+				Attributes: templ.Attributes{
+					"data-on:click": signals.Toggle("is_body_panel_open"),
+				},
+			}) {
+				...
+			}
 		</div>
-		// <div class="flex justify-between border-t pt-2">
-		// 	<div class="flex-col">
-		// 		<p class="text-xs">Monthly Rent: </p>
-		// 		<p>{ props.RentAmount }</p>
-		// 	</div>
-		// </div>
 	</div>
 }

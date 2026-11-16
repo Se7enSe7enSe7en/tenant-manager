@@ -49,7 +49,7 @@ func main() {
 			return
 		}
 
-		fmt.Println("Migration success wahoo!\n")
+		fmt.Println("Migration success wahoo!")
 		os.Exit(0)
 		return
 	}
@@ -129,6 +129,7 @@ func main() {
 
 	// CRUD handlers
 	mux.Handle("POST /property/create", protect(propertyHandler.CreateProperty))
+	mux.Handle("DELETE /property/delete", protect(propertyHandler.DeleteProperty))
 	mux.Handle("POST /tenant/create", protect(tenantHandler.CreateTenant))
 	mux.Handle("DELETE /tenant/delete", protect(tenantHandler.DeleteTenant))
 	mux.Handle("POST /trade/create", protect(tradeHandler.CreateTrade)) // TODO

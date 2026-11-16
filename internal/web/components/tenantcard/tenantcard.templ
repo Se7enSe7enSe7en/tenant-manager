@@ -92,7 +92,7 @@ templ TenantCard(props TenantCardProps) {
 				}
 			</div>
 			// if $is_body_panel_open == false
-			<div class="flex flex-col gap-2" data-show={ "!" + isBodyPanelOpen }>
+			<div class="flex flex-col gap-2" data-show={ signals.Not("is_body_panel_open") }>
 				<div class="flex justify-between gap-2">
 					<div>
 						<p class="text-xs">Email: </p>

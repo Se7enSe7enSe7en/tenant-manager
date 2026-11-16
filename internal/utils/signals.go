@@ -55,6 +55,12 @@ func (sm *SignalManager) Signal(property string) string {
 	return fmt.Sprintf("$%s.%s", sm.ID, property)
 }
 
+// Not returns a negated reference to a specific signal property
+// Example: signals.Not("open") returns "!$myComponent.open"
+func (sm *SignalManager) Not(property string) string {
+	return fmt.Sprintf("!%s", sm.Signal(property))
+}
+
 // Toggle returns a toggle expression for a boolean signal property
 // Example: signals.Toggle("open") returns "$myComponent.open = !$myComponent.open"
 func (sm *SignalManager) Toggle(property string) string {
