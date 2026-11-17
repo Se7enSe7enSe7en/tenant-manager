@@ -25,7 +25,7 @@ type Lease struct {
 	PropertyID      uuid.UUID
 	ExpectedRentDay int16
 	StartDate       time.Time
-	ExpiryDate      *time.Time
+	ExpiryDate      time.Time
 	IsMonthAdvance  bool
 	DepositAmount   decimal.Decimal
 	CreatedAt       time.Time

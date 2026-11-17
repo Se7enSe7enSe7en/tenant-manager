@@ -38,7 +38,7 @@ func (s *transactionService) CollectRent(ctx context.Context, params CollectRent
 	// update the lease, move the expiry date to next month
 	updatedLease, err := s.queries.UpdateLease(ctx, repo.UpdateLeaseParams{
 		ID:         params.LeaseId,
-		ExpiryDate: new(utils.ComputeNextExpiryDate(*lease.ExpiryDate, int(lease.ExpectedRentDay))),
+		ExpiryDate: new(utils.ComputeNextExpiryDate(lease.ExpiryDate, int(lease.ExpectedRentDay))),
 	})
 	if err != nil {
 		return repo.Trade{}, err
@@ -49,8 +49,8 @@ func (s *transactionService) CollectRent(ctx context.Context, params CollectRent
 		LeaseID:    lease.ID,
 		Type:       int16(constants.RENT),
 		PaidAmount: lease.PropertyRentAmount.Decimal,
-		StartDate:  lease.ExpiryDate,
-		EndDate:    updatedLease.ExpiryDate,
+		StartDate:  new(lease.ExpiryDate),
+		EndDate:    new(updatedLease.ExpiryDate),
 	})
 	if err != nil {
 		return repo.Trade{}, err

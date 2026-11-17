@@ -20,7 +20,3 @@ VALUES (
     )
 RETURNING
     *;
-
--- notes:
---  - '@' is a shortcut to "sqlc.arg('column')"
---  - sqlc.arg infers nullability of params, if column is nullable then param is nullable

@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS lease (
     CONSTRAINT fk_property FOREIGN KEY (property_id) REFERENCES property (id) ON DELETE CASCADE,
     expected_rent_day SMALLINT NOT NULL DEFAULT 1,
     start_date TIMESTAMP NOT NULL DEFAULT now(),
-    expiry_date TIMESTAMP,
+    expiry_date TIMESTAMP NOT NULL,
     is_month_advance BOOLEAN NOT NULL DEFAULT FALSE,
     deposit_amount NUMERIC(10, 2) NOT NULL DEFAULT 0,
     created_at TIMESTAMP NOT NULL DEFAULT now(),

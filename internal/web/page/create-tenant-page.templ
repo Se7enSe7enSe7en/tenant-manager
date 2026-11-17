@@ -25,7 +25,7 @@ templ CreateTenantPage(props CreateTenantPageProps) {
 			StartDate:       time.Now().Format("2006-01-02"),
 			IsMonthAdvance:  false,
 			DepositAmount:   props.DefaultDepositAmount,
-			NextDueDate:     utils.ComputeNextExpiryDate(time.Now(), 1).Format("Jan 02 2006"),
+			NextDueDate:     utils.ComputeNextExpiryDate(time.Now(), 1).Format("2006-01-02"),
 			FormError:       "",
 		})
 	}}
@@ -36,7 +36,7 @@ templ CreateTenantPage(props CreateTenantPageProps) {
 			>
 				@form.Form(form.FormArgs{
 					ID:     "tenant-form",
-					Class:  "flex flex-col gap-2",
+					Class:  "flex flex-col gap-6",
 					Action: "/tenant/create",
 					Attributes: templ.Attributes{
 						"data-signals":            signals.DataSignals,
@@ -44,8 +44,7 @@ templ CreateTenantPage(props CreateTenantPageProps) {
 						// note: prevents default behavior of submitting a form, we don't need it because we send data through signals
 					},
 				}) {
-					// // DEBUG
-					// <pre data-json-signals></pre>
+					// <pre data-json-signals></pre> // DEBUG
 					<p data-show="$create_tenant_signals.form_error" data-text="'Error: ' + $create_tenant_signals.form_error" class="text-destructive"></p>
 					@form.FormItem(form.FormItemArgs{}) {
 						@form.FormLabel(form.FormLabelArgs{For: "name", HasError: true}) {
@@ -98,46 +97,62 @@ templ CreateTenantPage(props CreateTenantPageProps) {
 							Type: "date",
 							// Placeholder: "now()",
 							Attributes: templ.Attributes{
-								"data-bind":      "create_tenant_signals.start_date",
-								"data-on:change": "@post('/ds/tenant/create/compute_next_due_date')",
-							},
-						})
-					}
-					// Rent day input field
-					@form.FormItem(form.FormItemArgs{}) {
-						@form.FormLabel(form.FormLabelArgs{For: "expected_rent_day"}) {
-							lease rent day
-						}
-						@input.Input(input.InputArgs{
-							ID:          "expected_rent_day",
-							Name:        "expected_rent_day",
-							Placeholder: "1",
-							Attributes: templ.Attributes{
-								"data-bind":      "create_tenant_signals.expected_rent_day",
-								"data-on:change": "@post('/ds/tenant/create/compute_next_due_date')",
+								"data-bind": "create_tenant_signals.start_date",
 							},
 						})
 						@form.FormDescription(form.FormDescriptionArgs{}) {
-							Choose a number from 1 to 31, If empty, this will default to the first day of the month which is 1
+							When does/did the tenant start? 
 						}
-						// Next due date based on the current start_date and expected_rent_day
-						// @form.FormDescription(form.FormDescriptionArgs{}) {
-						// 	Next due date: $create_tenant_signals.next_due_date
-						// }
 					}
-					@form.FormItem(form.FormItemArgs{}) {
-						@form.FormLabel(form.FormLabelArgs{For: "expected_rent_day"}) {
-							lease expected next due date
+					// next due date and rent day group
+					<div class="flex gap-3">
+						// Expected next due date input field
+						@form.FormItem(form.FormItemArgs{
+							Class: "flex flex-col flex-auto",
+						}) {
+							@form.FormLabel(form.FormLabelArgs{For: "expected_rent_day"}) {
+								lease expected next due date
+							}
+							// TODO: refactor, find a better way to write the "data-computed:create_tenant_signals.expected_rent_day" part
+							// - expected_rent_day is a computed signal which is just the "dd" part of "mm/dd/yyyy" in next_due_date
+							// - the reason why we put the data-computed attribute here instead in the expected_rent_day input field below 
+							// is because it is a side effect of next_due_date, also it doesn't work if we put it there for some reason
+							@input.Input(input.InputArgs{
+								ID:   "next_due_date",
+								Name: "next_due_date",
+								Type: "date",
+								Attributes: templ.Attributes{
+									"data-bind": "create_tenant_signals.next_due_date",
+									"data-computed:create_tenant_signals.expected_rent_day": "Number($create_tenant_signals.next_due_date.split('-')[2])",
+								},
+							})
+							@form.FormDescription(form.FormDescriptionArgs{}) {
+								When is the next expected payment of rent?
+							}
 						}
-						@input.Input(input.InputArgs{
-							ID:   "next_due_date",
-							Name: "next_due_date",
-							Attributes: templ.Attributes{
-								"data-bind": "create_tenant_signals.next_due_date",
-								"readonly":  true,
-							},
-						})
-					}
+						// Rent day input field
+						@form.FormItem(form.FormItemArgs{
+							Class: "flex flex-col flex-auto",
+						}) {
+							@form.FormLabel(form.FormLabelArgs{For: "expected_rent_day"}) {
+								lease rent day
+							}
+							@input.Input(input.InputArgs{
+								ID:          "expected_rent_day",
+								Name:        "expected_rent_day",
+								Placeholder: "1",
+								Type:        "text",
+								Disabled:    true,
+								Attributes: templ.Attributes{
+									"data-attr:value": "$create_tenant_signals.expected_rent_day",
+									"readonly":        true,
+								},
+							})
+							@form.FormDescription(form.FormDescriptionArgs{}) {
+								Expected day of the month the tenant pays
+							}
+						}
+					</div>
 					// Is Month advance checkbox
 					@form.FormItem(form.FormItemArgs{}) {
 						@form.FormLabel(form.FormLabelArgs{For: "is_month_advance"}) {

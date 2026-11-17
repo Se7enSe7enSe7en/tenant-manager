@@ -8,7 +8,6 @@ import (
 	"github.com/Se7enSe7enSe7en/tenant-manager/internal/errs"
 	"github.com/Se7enSe7enSe7en/tenant-manager/internal/service"
 	"github.com/Se7enSe7enSe7en/tenant-manager/internal/store"
-	"github.com/Se7enSe7enSe7en/tenant-manager/internal/utils"
 	"github.com/Se7enSe7enSe7en/tenant-manager/internal/validation"
 	"github.com/google/uuid"
 	"github.com/shopspring/decimal"
@@ -67,6 +66,12 @@ func (h *TenantHandler) CreateTenant(w http.ResponseWriter, r *http.Request) {
 		errs.Http(w, r, err, http.StatusInternalServerError)
 		return
 	}
+	nextDueDateTime, err := time.Parse("2006-01-02", form.NextDueDate)
+	if err != nil {
+		errs.Http(w, r, err, http.StatusInternalServerError)
+		return
+	}
+
 	depositAmountDecimal := decimal.NewFromFloat(form.DepositAmount)
 
 	_, _, err = h.RegistrationService.RegisterTenantWithLease(r.Context(), service.RegisterTenantWithLeaseParams{
@@ -75,7 +80,8 @@ func (h *TenantHandler) CreateTenant(w http.ResponseWriter, r *http.Request) {
 		PhoneNumber:     form.PhoneNumber,
 		PropertyID:      propertyIdUuid,
 		ExpectedRentDay: form.ExpectedRentDay,
-		StartDate:       &startDateTime,
+		StartDate:       startDateTime,
+		NextDueDate:     nextDueDateTime,
 		IsMonthAdvance:  form.IsMonthAdvance,
 		DepositAmount:   depositAmountDecimal,
 	})
@@ -113,29 +119,4 @@ func (h *TenantHandler) DeleteTenant(w http.ResponseWriter, r *http.Request) {
 
 	// TODO: send success signal
 	logger.Debug("DeleteTenant success")
-}
-
-func (h *TenantHandler) ComputeNextDueDate(w http.ResponseWriter, r *http.Request) {
-	// parse using datastar signals
-	var payload struct {
-		CreateTenantSignals store.CreateTenantSignals `json:"create_tenant_signals"`
-	}
-	if err := datastar.ReadSignals(r, &payload); err != nil {
-		errs.Http(w, r, err, http.StatusInternalServerError)
-		return
-	}
-
-	// type conversions
-	startDateTime, err := time.Parse("2006-01-02", payload.CreateTenantSignals.StartDate)
-	if err != nil {
-		errs.Http(w, r, err, http.StatusInternalServerError)
-		return
-	}
-
-	// recompute next_due_date
-	payload.CreateTenantSignals.NextDueDate = utils.ComputeNextExpiryDate(startDateTime, payload.CreateTenantSignals.ExpectedRentDay).Format("Jan 02 2006")
-
-	sse := datastar.NewSSE(w, r)
-
-	sse.MarshalAndPatchSignals(payload)
 }

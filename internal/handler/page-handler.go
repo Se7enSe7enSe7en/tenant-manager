@@ -50,7 +50,7 @@ func (h *PageHandler) getDashboardData(ctx context.Context, userId uuid.UUID) (p
 			Id:          l.TenantID.UUID.String(),
 			Name:        *l.TenantName,
 			Unit:        *l.PropertyName,
-			Status:      utils.ComputeStatus(*l.ExpiryDate),
+			Status:      utils.ComputeStatus(l.ExpiryDate),
 			RentAmount:  l.PropertyRentAmount.Decimal.String(),
 			NextDueDate: l.ExpiryDate.Format("Jan-02-2006"),
 			Email:       l.TenantEmail,
@@ -188,7 +188,7 @@ func (h *PageHandler) CreateTradePage(w http.ResponseWriter, r *http.Request) {
 		PropertyName: *leaseDetails.PropertyName,
 
 		// current month until next month (prev rent day to next rent day)
-		RentValidityPeriod: leaseDetails.ExpiryDate.Format("Jan-02-2006") + " to " + utils.ComputeNextExpiryDate(*leaseDetails.ExpiryDate, int(leaseDetails.ExpectedRentDay)).Format("Jan-02-2006"),
+		RentValidityPeriod: leaseDetails.ExpiryDate.Format("Jan-02-2006") + " to " + utils.ComputeNextExpiryDate(leaseDetails.ExpiryDate, int(leaseDetails.ExpectedRentDay)).Format("Jan-02-2006"),
 		RentAmount:         leaseDetails.PropertyRentAmount.Decimal.String(),
 		TransactionDate:    time.Now().Format("Jan-02-2006"),
 	}).Render(r.Context(), w)

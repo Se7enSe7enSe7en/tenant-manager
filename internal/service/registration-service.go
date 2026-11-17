@@ -7,7 +7,6 @@ import (
 	"time"
 
 	repo "github.com/Se7enSe7enSe7en/tenant-manager/internal/database/generated"
-	"github.com/Se7enSe7enSe7en/tenant-manager/internal/utils"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/shopspring/decimal"
@@ -38,8 +37,9 @@ type RegisterTenantWithLeaseParams struct {
 
 	// create lease params
 	PropertyID      uuid.UUID
-	ExpectedRentDay int
-	StartDate       *time.Time
+	ExpectedRentDay int // note: this is derived from NextDueDate in the frontend
+	NextDueDate     time.Time
+	StartDate       time.Time
 	IsMonthAdvance  bool
 	DepositAmount   decimal.Decimal
 }
@@ -64,13 +64,13 @@ func (s *registrationService) RegisterTenantWithLease(ctx context.Context, param
 	)
 
 	//// get expiry date
-	expiryDate := utils.ComputeNextExpiryDate(*params.StartDate, params.ExpectedRentDay)
+	expiryDate := params.NextDueDate
 
 	lease, err := qtx.CreateLease(ctx, repo.CreateLeaseParams{
 		PropertyID:      params.PropertyID,
 		ExpectedRentDay: int16(params.ExpectedRentDay),
 		StartDate:       startDateNoHMS,
-		ExpiryDate:      &expiryDate,
+		ExpiryDate:      expiryDate,
 		IsMonthAdvance:  params.IsMonthAdvance,
 		DepositAmount:   params.DepositAmount,
 	})

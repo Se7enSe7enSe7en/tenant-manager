@@ -135,7 +135,6 @@ func main() {
 	mux.Handle("POST /trade/create", protect(tradeHandler.CreateTrade)) // TODO
 
 	// Datastar handlers
-	mux.Handle("POST /ds/tenant/create/compute_next_due_date", protect(tenantHandler.ComputeNextDueDate))
 	mux.Handle("GET /ds/dashboard/content", protect(pageHandler.DashboardContent))
 
 	// init server
