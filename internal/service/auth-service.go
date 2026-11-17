@@ -30,7 +30,7 @@ type authService struct {
 }
 
 func NewAuthService(db *pgxpool.Pool) *authService {
-	dummyHashedPassword, _ := auth.HashPassword("a$$word")
+	dummyHashedPassword, _ := auth.HashPassword("password")
 
 	return new(authService{
 		db:                  db,

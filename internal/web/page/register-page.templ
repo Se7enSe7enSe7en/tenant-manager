@@ -25,9 +25,10 @@ templ RegisterPage() {
 							email *
 						}
 						@input.Input(input.InputArgs{
-							Type: "email",
-							Name: "email",
-							ID:   "email",
+							Type:     "email",
+							Name:     "email",
+							ID:       "email",
+							Required: true,
 						})
 					}
 					@form.FormItem(form.FormItemArgs{}) {
@@ -40,6 +41,21 @@ templ RegisterPage() {
 							Type: "password",
 							Name: "password",
 							ID:   "password",
+						})
+						@form.FormDescription(form.FormDescriptionArgs{}) {
+							password must be at least 8 characters
+						}
+					}
+					@form.FormItem(form.FormItemArgs{}) {
+						@form.FormLabel(form.FormLabelArgs{
+							For: "confirm-password",
+						}) {
+							confirm password *
+						}
+						@input.Input(input.InputArgs{
+							Type: "password",
+							Name: "confirm-password",
+							ID:   "confirm-password",
 						})
 					}
 					@form.FormItem(form.FormItemArgs{}) {

@@ -5,7 +5,11 @@ import (
 	"strings"
 )
 
-func RegisterInput(email, password, name string) error {
+func RegisterInput(email, password, name, confirmPassword string) error {
+	if confirmPassword != password {
+		return errors.New("confirm password does not match with actual password")
+	}
+
 	if email == "" {
 		return errors.New("email is required")
 	}

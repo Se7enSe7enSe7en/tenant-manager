@@ -57,13 +57,14 @@ func (h *authHandler) Register(w http.ResponseWriter, r *http.Request) {
 	email := r.FormValue("email")
 	password := r.FormValue("password")
 	name := r.FormValue("name") // optional (returns "" if empty)
+	confirmPassword := r.FormValue("confirm-password")
 
 	type ErrorSignal struct {
 		RegisterError string `json:"registerError"`
 	}
 
 	// validation
-	if err := validation.RegisterInput(email, password, name); err != nil {
+	if err := validation.RegisterInput(email, password, name, confirmPassword); err != nil {
 
 		sse := datastar.NewSSE(w, r)
 		sse.MarshalAndPatchSignals(ErrorSignal{RegisterError: err.Error()})
