@@ -116,7 +116,7 @@ func main() {
 	// auth handlers
 	mux.HandleFunc("POST /login", authHandler.Login)
 	mux.HandleFunc("POST /register", authHandler.Register)
-	mux.HandleFunc("POST /logout", authHandler.Logout)
+	mux.HandleFunc("DELETE /logout", authHandler.Logout)
 
 	// TODO: find a better way to write, .Handle() and HandleFunc(), they both serve the same purpose, only difference is that .Handle() needs you to convert the handler functions you pass
 	// page handlers

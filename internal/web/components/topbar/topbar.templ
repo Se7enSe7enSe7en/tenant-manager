@@ -1,7 +1,9 @@
 package topbar
 
+import "github.com/Se7enSe7enSe7en/tenant-manager/internal/web/components/button"
+
 templ Topbar() {
-	<div class="flex h-16 border sticky top-0 bg-card items-center p-4 gap-4">
+	<div class="flex h-16 border sticky top-0 bg-card items-center p-4 gap-4 justify-between">
 		// @button.LinkButton(button.LinkButtonArgs{
 		// 	Variant: "secondary",
 		// 	Href:    "",
@@ -15,5 +17,14 @@ templ Topbar() {
 			<img class="h-12 rounded-sm" src="/assets/tenant-manager-logo-dark.svg"/>
 			<h1 class="font-libron text-xl">Tenant manager</h1>
 		</div>
+		@button.Button(button.ButtonArgs{
+			Variant: "outline",
+			Attributes: templ.Attributes{
+				"data-on:click": "@delete('/logout')",
+			},
+		}) {
+			<svg class="size-6 fill-current"><use href="/assets/logout-icon.svg"></use></svg>
+			<span>Logout</span>
+		}
 	</div>
 }
