@@ -196,7 +196,7 @@ EOF
 sudo systemctl reload caddy
 ```
 
-- to access just go to http://vps-ip:80/
+- to access just go to http://vps-ip-address:80/
 - notice its http and not https, thats because Let's Encrypt (free automated Certificate Authority) wont create a TLS certificate for you (no TLS cert no https), but it will be a working reverse proxy using http
 
 ### Step 1.10: configure firewall (UFW)

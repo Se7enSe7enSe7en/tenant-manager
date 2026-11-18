@@ -120,6 +120,7 @@ func main() {
 
 	// TODO: find a better way to write, .Handle() and HandleFunc(), they both serve the same purpose, only difference is that .Handle() needs you to convert the handler functions you pass
 	// page handlers
+	mux.HandleFunc("/", pageHandler.LoginPage) // TODO: temporarily redirect to login page, should make a cover page
 	mux.HandleFunc("GET /login", pageHandler.LoginPage)
 	mux.HandleFunc("GET /register", pageHandler.RegisterPage)
 	mux.Handle("GET /dashboard", protect(pageHandler.DashboardPage))
