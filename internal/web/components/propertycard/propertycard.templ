@@ -26,8 +26,6 @@ templ PropertyCard(props PropertyCardProps) {
 		signals := utils.Signals(cardId, PropertyCardSignals{
 			IsBodyPanelOpen: false,
 		})
-
-		isBodyPanelOpen := signals.Signal("is_body_panel_open")
 	}}
 	<div
 		id={ cardId }
@@ -63,8 +61,25 @@ templ PropertyCard(props PropertyCardProps) {
 		</div>
 		//// body section
 		<div class="h-[50%] flex flex-col pt-2 border-t gap-2">
+			// if $is_body_panel_open == false
+			<div class="flex flex-col gap-3" data-class:hidden={ signals.Signal("is_body_panel_open") } data-show={ signals.Not("is_body_panel_open") }>
+				<div>
+					<p class="text-xs">Monthly Rent: </p>
+					<p>{ props.RentAmount }</p>
+				</div>
+				<div>
+					<p class="text-xs">Address: </p>
+					<p>
+						if props.Address != "" {
+							{ props.Address }
+						} else {
+							--
+						}
+					</p>
+				</div>
+			</div>
 			// if $is_body_panel_open == true
-			<div class="flex flex-col gap-2" data-show={ isBodyPanelOpen }>
+			<div class="flex flex-col gap-2" data-class:hidden={ signals.Not("is_body_panel_open") } data-show={ signals.Signal("is_body_panel_open") }>
 				@button.Button(button.ButtonArgs{
 					Class:   "flex flex-1",
 					Variant: "secondary",
@@ -80,19 +95,6 @@ templ PropertyCard(props PropertyCardProps) {
 				}) {
 					Delete Property
 				}
-			</div>
-			// if $is_body_panel_open == false
-			<div class="flex flex-col gap-2" data-show={ signals.Not("is_body_panel_open") }>
-				if props.Address != "" {
-					<div>
-						<p class="text-xs">Address: </p>
-						<p>{ props.Address }</p>
-					</div>
-				}
-				<div>
-					<p class="text-xs">Monthly Rent: </p>
-					<p>{ props.RentAmount }</p>
-				</div>
 			</div>
 		</div>
 		//// footer section

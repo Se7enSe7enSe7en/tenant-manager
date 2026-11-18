@@ -2,6 +2,7 @@ package tenantcard
 
 import (
 	"fmt"
+	"github.com/Se7enSe7enSe7en/tenant-manager/internal/constants"
 	"github.com/Se7enSe7enSe7en/tenant-manager/internal/utils"
 	"github.com/Se7enSe7enSe7en/tenant-manager/internal/web/components/button"
 	"github.com/Se7enSe7enSe7en/tenant-manager/internal/web/components/status"
@@ -9,6 +10,23 @@ import (
 
 type TenantCardSignals struct {
 	IsBodyPanelOpen bool `json:"is_body_panel_open"`
+}
+
+type TenantCardProps struct {
+	// tenant
+	Id          string
+	Name        string
+	Email       *string // optional
+	PhoneNumber *string // optional
+
+	// lease
+	LeaseId            string
+	Unit               string
+	Status             constants.PaymentStatus
+	RentAmount         string
+	NextDueDate        string
+	DepositAmount      string
+	IsAdvanceMonthPaid bool
 }
 
 templ TenantCard(props TenantCardProps) {
@@ -20,8 +38,6 @@ templ TenantCard(props TenantCardProps) {
 		signals := utils.Signals(cardId, TenantCardSignals{
 			IsBodyPanelOpen: false,
 		})
-
-		isBodyPanelOpen := signals.Signal("is_body_panel_open")
 	}}
 	<div
 		id={ cardId }
@@ -45,7 +61,7 @@ templ TenantCard(props TenantCardProps) {
 				<div class="flex flex-col gap-2">
 					@status.Badge(status.BadgeProps{Status: props.Status})
 					<div class="flex flex-col p-1 justify-end">
-						<p class="truncate block text-xs">Next Due Date:</p>
+						<p class="flex justify-end truncate text-xs">Next Due Date:</p>
 						<p class="font-bold">{ props.NextDueDate }</p>
 					</div>
 				</div>
@@ -53,62 +69,69 @@ templ TenantCard(props TenantCardProps) {
 		</div>
 		//// body section
 		<div class="h-[50%] flex flex-col pt-2 border-t gap-2">
+			// if $is_body_panel_open == false
+			<div class="flex flex-col gap-3" data-class:hidden={ signals.Signal("is_body_panel_open") } data-show={ signals.Not("is_body_panel_open") }>
+				<div class="flex justify-between">
+					<div>
+						<p class="text-xs">Monthly Rent:</p>
+						<p>{ props.RentAmount }</p>
+					</div>
+					<div>
+						<p class="text-xs">Deposit Amount:</p>
+						<p>{ props.DepositAmount }</p>
+					</div>
+					<div class="flex flex-col">
+						<p class="flex justify-end truncate text-xs">Is advance month paid:</p>
+						<p class="flex justify-end font-semibold">
+							if props.IsAdvanceMonthPaid {
+								Yes
+							} else {
+								No
+							}
+						</p>
+					</div>
+				</div>
+				<div class="flex justify-between gap-2">
+					<div>
+						<p class="text-xs">Email: </p>
+						<p class="truncate block">
+							if *props.Email != "" {
+								{ *props.Email }
+							} else {
+								--
+							}
+						</p>
+					</div>
+					<div>
+						<p class="flex justify-end text-xs">Phone Number: </p>
+						<p class="truncate block">
+							if *props.PhoneNumber != "" {
+								{ *props.PhoneNumber }
+							} else {
+								--
+							}
+						</p>
+					</div>
+				</div>
+			</div>
 			// if $is_body_panel_open == true
-			<div class="flex flex-col gap-2" data-show={ isBodyPanelOpen }>
+			<div class="flex flex-col gap-3" data-class:hidden={ signals.Not("is_body_panel_open") } data-show={ signals.Signal("is_body_panel_open") }>
 				@button.Button(button.ButtonArgs{
-					Class:   "flex flex-1",
-					Variant: "secondary",
+					Class:    "flex flex-1",
+					Variant:  "secondary",
+					Disabled: true, // TODO: temporarily disabled, we haven't made Tenant Details Page yet
 				}) {
-					Tenant Details
+					More Tenant Details
 				}
-				// {{ dialogId := "dialog_" + cardId }}
-				// // Modal Dialog
-				// @dialog.Dialog(dialog.DialogArgs{
-				// 	ID: dialogId,
-				// }) {
-				// 	@dialog.DialogHeader(dialog.DialogHeaderArgs{}){
-				// 		Remove Tenant
-				// 	}
-				// 	@dialog.DialogDescription(dialog.DialogDescriptionArgs{}) {
-				// 		Are you sure you want to remove tenant?
-				// 	}
-				// 	@dialog.DialogFooter(dialog.DialogFooterArgs{}) {
-				// 		@dialog.DialogClose(dialog.DialogCloseArgs{
-				// 			DialogID: dialogId,
-				// 		})
-				// 	}
-				// }
-				// debug
-				// <pre data-json-signals></pre>
 				@button.Button(button.ButtonArgs{
 					Class:   "flex flex-1",
 					Variant: "destructive",
 					Attributes: templ.Attributes{
-						// "data-on:click":fmt.Sprintf("@delete('/tenant/delete?id=%v')", props.Id),
 						"data-on:click": fmt.Sprintf("confirm('Are you sure?') ? @delete('/tenant/delete?id=%v') : null", props.Id),
 					},
 				}) {
 					Remove Tenant
 				}
-			</div>
-			// if $is_body_panel_open == false
-			<div class="flex flex-col gap-2" data-show={ signals.Not("is_body_panel_open") }>
-				<div class="flex justify-between gap-2">
-					<div>
-						<p class="text-xs">Email: </p>
-						<p class="truncate block">{ *props.Email }</p>
-					</div>
-					<div>
-						<p class="text-xs">Phone Number: </p>
-						<p class="truncate block">{ *props.PhoneNumber }</p>
-					</div>
-				</div>
-				<div class="flex">
-					<div>
-						<p class="text-xs">Monthly Rent:</p>
-						<p>{ props.RentAmount }</p>
-					</div>
-				</div>
 			</div>
 		</div>
 		//// footer section	

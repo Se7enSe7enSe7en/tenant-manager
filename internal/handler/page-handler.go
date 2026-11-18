@@ -47,15 +47,20 @@ func (h *PageHandler) getDashboardData(ctx context.Context, userId uuid.UUID) (p
 	tenantList := make([]tenantcard.TenantCardProps, len(dbLeaseList))
 	for i, l := range dbLeaseList {
 		tenantList[i] = tenantcard.TenantCardProps{
+			// tenant
 			Id:          l.TenantID.UUID.String(),
 			Name:        *l.TenantName,
-			Unit:        *l.PropertyName,
-			Status:      utils.ComputeStatus(l.ExpiryDate),
-			RentAmount:  l.PropertyRentAmount.Decimal.String(),
-			NextDueDate: l.ExpiryDate.Format("Jan-02-2006"),
 			Email:       l.TenantEmail,
 			PhoneNumber: l.TenantPhoneNumber,
-			LeaseId:     l.ID.String(),
+
+			// lease
+			LeaseId:            l.ID.String(),
+			Unit:               *l.PropertyName,
+			Status:             utils.ComputeStatus(l.ExpiryDate),
+			RentAmount:         l.PropertyRentAmount.Decimal.String(),
+			NextDueDate:        l.ExpiryDate.Format("Jan-02-2006"),
+			DepositAmount:      l.DepositAmount.String(),
+			IsAdvanceMonthPaid: l.IsMonthAdvance,
 		}
 	}
 
