@@ -43,7 +43,7 @@ func RegisterPage() templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"flex items-center justify-center w-screen h-screen\"><div class=\"border bg-card items-center justify-center p-4 rounded-md flex flex-col gap-4\"><h1 class=\"text-xl\">Tenant manager</h1>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"flex items-center justify-center w-screen h-screen\"><div class=\"border bg-card items-center justify-center p-4 rounded-md flex flex-col gap-4\"><div class=\"flex flex-col items-center gap-3\"><img class=\"h-24 rounded-sm\" src=\"/assets/tenant-manager-logo-optimized.svg\"><h1 class=\"font-libron text-xl\">Tenant manager</h1></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
