@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 10 20">
+  <g id="cube-group" transform="translate(0 2.4)">
+    <g id="cube">
+      <!--Left face-->
+      <path fill="rgba(128,128,128,0.56)" d="M0 0l5 3v5l-5-3z"/>
+      <!--Right face-->
+      <path fill="rgba(128,128,128,0.28)" d="M10 0l-5 3v5l5-3"/>
+      <!--Door-->
+      <path fill="rgba(128,128,128,0.60)" d="M1.5 5.9 L3 6.8 L3 3.8 L1.5 2.9 Z"/>
+      <!--Long kitchen window (right face, smaller)-->
+      <path fill="rgba(128,128,128,0.60)" d="M6.5 3.9 L8.5 2.7 L8.5 4.2 L6.5 5.4 Z"/>
+    </g>
+    <use href="#cube" x="5" y="8"/>
+    <use href="#cube" x="-5" y="8"/>
+  </g>
+</svg>

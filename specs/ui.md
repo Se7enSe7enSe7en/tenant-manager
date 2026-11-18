@@ -21,3 +21,7 @@
   <use href="/path/to/icon.svg"></use>
 </svg>
 ```
+
+### Edit Logo svg using this web app
+
+- https://www.svgviewer.dev/
